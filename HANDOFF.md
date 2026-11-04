@@ -4,6 +4,8 @@
 
 ## 2026-11-04 — GitHub и ссылка для Александра
 
+**Сайт:** https://fkrotovworked-netizen.github.io/alex-media-site/ · **репо:** https://github.com/fkrotovworked-netizen/alex-media-site (аккаунт Ромы, ветка `main`, Pages: Source — GitHub Actions).
+
 Рома попросил выложить сайт, чтобы Саня (Александр) посмотрел и прислал правки и данные. Решили так: репозиторий публичный, сайт на GitHub Pages, сборка через Actions на каждый пуш в `main`. Публичный — значит, код, этот файл и черновики текстов видны всем; Рома согласился.
 - `vite.config.ts`: `base` берётся из `BASE_PATH` (в workflow — `/<имя репо>/`), локально — `/`.
 - `src/asset.ts`: пути к `public/` в коде идут через `asset()`. Сборка под подпутём проверена локально (`vite preview`): форма, картинки и обложки грузятся, ошибок нет.
