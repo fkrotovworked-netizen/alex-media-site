@@ -1,0 +1,108 @@
+.status-mark {
+  --sm-size: 20px;
+  --sm-stroke: 2;
+  --sm-color: var(--ink-2);
+  --sm-done: var(--lime);
+  --sm-fill: 0.08;
+  --sm-draw: 240ms;
+  --sm-check-delay: 120ms;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--sm-size) * 0.5);
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.status-mark__glyph {
+  flex: none;
+  overflow: visible;
+  color: var(--sm-color);
+  transition: color 200ms var(--ease-out);
+}
+
+.status-mark[data-status='done'] .status-mark__glyph {
+  color: var(--sm-done);
+}
+
+.status-mark__track {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: var(--sm-stroke);
+  fill-opacity: 0;
+  stroke-opacity: 0;
+  transition:
+    fill-opacity 180ms var(--ease-out),
+    stroke-opacity 200ms var(--ease-out);
+}
+
+.status-mark[data-status='running'] .status-mark__track {
+  stroke-opacity: 0.2;
+}
+
+.status-mark[data-status='done'] .status-mark__track {
+  fill-opacity: var(--sm-fill);
+}
+
+.status-mark__ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--sm-stroke);
+  stroke-linecap: round;
+  opacity: 0.55;
+  transition: opacity 200ms var(--ease-out);
+}
+
+.status-mark[data-status='running'] .status-mark__ring,
+.status-mark[data-status='done'] .status-mark__ring {
+  opacity: 1;
+}
+
+.status-mark__check {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--sm-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.05;
+  opacity: 0;
+  transition:
+    stroke-dashoffset 160ms var(--ease-out),
+    opacity 0ms linear 160ms;
+}
+
+.status-mark[data-status='done'] .status-mark__check {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition:
+    stroke-dashoffset var(--sm-draw) var(--ease-out) var(--sm-check-delay),
+    opacity 0ms linear var(--sm-check-delay);
+}
+
+.status-mark__label {
+  color: var(--ink-2);
+  transition: color 200ms var(--ease-out);
+}
+
+.status-mark[data-status='done'] .status-mark__label {
+  color: var(--ink);
+}
+
+@keyframes sm-breathe {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-mark[data-indeterminate] .status-mark__ring {
+    animation: sm-breathe 1400ms ease-in-out infinite;
+  }
+
+  .status-mark__check {
+    stroke-dashoffset: 0;
+    transition: opacity 200ms ease;
+  }
+}

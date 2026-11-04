@@ -1,0 +1,180 @@
+/* one sheet of raised paper, scored into six */
+.price-sheet {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: clamp(36px, 4vw, 60px);
+  padding: 8px;
+  border-radius: 32px;
+  background: linear-gradient(170deg, #f7f6f1, #efede6);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 1px 0 rgb(20 21 19 / 0.06),
+    0 28px 56px -36px rgb(20 21 19 / 0.4);
+}
+
+.price {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: clamp(260px, 22vw, 320px);
+  padding: clamp(20px, 2vw, 30px);
+  border-radius: 24px;
+  scroll-margin-top: calc(var(--nav-h) + 40px);
+}
+
+.price:nth-child(3n + 2):not(.price--popular),
+.price:nth-child(3n + 3) {
+  background: var(--facet-v);
+}
+
+.price:nth-child(n + 4) {
+  background: var(--facet-h);
+}
+
+.price:nth-child(n + 5) {
+  background: var(--facet-v), var(--facet-h);
+}
+
+/* the cell to the right of the acrylic has no score to its left */
+.price--popular + .price {
+  background: none;
+}
+
+.price__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.price__name {
+  font: 500 clamp(1.0625rem, 1.35vw, 1.25rem) / 1.2 var(--font-display);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.price__value {
+  margin-top: 6px;
+  font: 540 clamp(1.75rem, 2.6vw, 2.5rem) / 1 var(--font-display);
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+
+.price__from,
+.price__per {
+  font-size: 0.5em;
+  letter-spacing: -0.01em;
+  color: var(--ink-3);
+}
+
+.price--popular .price__value {
+  color: var(--lime);
+}
+
+.price__confirm {
+  margin-top: -4px;
+}
+
+.price__text {
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.price__cta {
+  margin-top: auto;
+}
+
+/* ——— below the sheet: the budget line and the way out for the undecided ——— */
+.prices__foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px 40px;
+  align-items: center;
+  margin-top: 28px;
+}
+
+.prices__budget {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9375rem;
+  color: var(--ink-2);
+}
+
+.pick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  padding: 12px 12px 12px 26px;
+  border-radius: 999px;
+}
+
+.pick__copy {
+  font-size: 1rem;
+}
+
+.pick__copy span {
+  color: var(--ink-2);
+}
+
+@media (max-width: 1080px) {
+  .price-sheet {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .price:not(.price--popular) {
+    background: var(--facet-h);
+  }
+
+  .price:nth-child(2n) {
+    background: var(--facet-v), var(--facet-h);
+  }
+
+  .price:nth-child(2) {
+    background: none;
+  }
+
+  .prices__foot {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .price-sheet {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .price {
+    min-height: 0;
+  }
+
+  .price:not(.price--popular),
+  .price:nth-child(n + 2) {
+    background: var(--facet-h);
+  }
+
+  .price--popular + .price {
+    background: none;
+  }
+
+  .price__cta {
+    margin-top: 6px;
+  }
+
+  .pick {
+    padding: 20px;
+    border-radius: 28px;
+  }
+
+  .pick .btn {
+    width: 100%;
+  }
+}

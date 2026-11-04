@@ -1,0 +1,56 @@
+/* The root provides, in its own pixel space:
+   --sweep-x            the entrance sweep
+   --key-x / --key-y    the key light
+   --key-i              how much of the key light is on (0–1) */
+.shiny-text {
+  --ox: 0px;
+  --oy: 0px;
+  --base: var(--ink-satin);
+  display: inline-block;
+  color: var(--base);
+  background-image:
+    linear-gradient(
+      100deg,
+      transparent calc(var(--sweep-x, -999px) - var(--ox) - 13vw),
+      #fff calc(var(--sweep-x, -999px) - var(--ox)),
+      transparent calc(var(--sweep-x, -999px) - var(--ox) + 13vw)
+    ),
+    radial-gradient(
+      46vw 34vw at calc(var(--key-x, 0px) - var(--ox)) calc(var(--key-y, 0px) - var(--oy)),
+      rgb(255 255 255 / calc(0.9 * var(--key-i, 0))),
+      transparent 72%
+    ),
+    linear-gradient(var(--base), var(--base));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* the line closest to the form picks up its colour from below */
+.shiny-text--bounce {
+  background-image:
+    linear-gradient(
+      100deg,
+      transparent calc(var(--sweep-x, -999px) - var(--ox) - 13vw),
+      #fff calc(var(--sweep-x, -999px) - var(--ox)),
+      transparent calc(var(--sweep-x, -999px) - var(--ox) + 13vw)
+    ),
+    radial-gradient(
+      46vw 34vw at calc(var(--key-x, 0px) - var(--ox)) calc(var(--key-y, 0px) - var(--oy)),
+      rgb(255 255 255 / calc(0.9 * var(--key-i, 0))),
+      transparent 72%
+    ),
+    radial-gradient(
+      120% 105% at 62% 128%,
+      rgb(206 238 20 / calc(0.85 * var(--lime-i, 0))),
+      transparent 64%
+    ),
+    linear-gradient(var(--base), var(--base));
+}
+
+@media (forced-colors: active) {
+  .shiny-text {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}

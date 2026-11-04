@@ -1,0 +1,52 @@
+:root {
+  color-scheme: dark;
+
+  /* graphite — the ground */
+  --g-950: #0c0d0e;
+  --g-900: #131415;
+  --g-800: #1a1b1d;
+  --g-700: #232527;
+  --g-600: #2e3033;
+
+  /* black acrylic — small controls */
+  --acrylic: #060707;
+
+  /* lime, measured from the logo render (hue 66–71°): highlight → body → shade */
+  --lime-hi: #e4f929;
+  --lime: #c1e507;
+  --lime-mid: #aacc03;
+  --lime-shade: #859e04;
+  --lime-deep: #516306;
+
+  --ink: #f1f3ec;
+  --ink-satin: #d6d9cf; /* headline at rest; pure white is reserved for light */
+  --ink-2: #b6baae;
+  --ink-3: #868a80;
+  /* the quiet half of a two-tone title */
+  --ink-quiet: #9da195;
+  /* the colour lime takes as text: light on graphite, a deep shade on paper */
+  --lime-text: var(--lime);
+
+  /* paper — the light sheets laid on the graphite */
+  --paper-hi: #f4f2ec;
+  --paper: #eceae2;
+  --paper-lo: #e2dfd5;
+
+  --font-display: 'Unbounded Variable', 'Unbounded', system-ui, sans-serif;
+  --font-text: 'Onest Variable', 'Onest', system-ui, sans-serif;
+  --font-mono: 'Martian Mono Variable', 'Martian Mono', ui-monospace, monospace;
+
+  --gutter: clamp(20px, 4.4vw, 64px);
+  --measure: 1600px;
+  --nav-h: 76px;
+
+  /* how far a light sheet stands in from the edges, and how round it is, while in the air */
+  --sheet-inset: clamp(8px, 2.6vw, 40px);
+  --sheet-radius: clamp(26px, 3.2vw, 52px);
+
+  /* colour and opacity changes only; anything that moves is on a spring */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* direction of the scene's key light, written by the scene every frame */
+  --light-angle: 300deg;
+}

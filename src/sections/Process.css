@@ -1,0 +1,173 @@
+.process__body {
+  margin-top: clamp(36px, 5vw, 68px);
+}
+
+/* ——— the track: five equal cells of black acrylic, and a lens that rides over them ——— */
+.track-scroll {
+  /* room for the shadow of the track, and for scrolling it on a phone */
+  margin: -24px calc(-1 * var(--gutter)) -40px;
+  padding: 24px var(--gutter) 40px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.track-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.track {
+  --pad: 6px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  min-width: 720px;
+  height: 68px;
+  padding: var(--pad);
+  border-radius: 999px;
+}
+
+.track__cell {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  color: var(--ink-3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 200ms var(--ease-out);
+}
+
+.track__cell[aria-selected='true'] {
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .track__cell:hover {
+    color: var(--ink);
+  }
+}
+
+.track__cell:focus-visible {
+  outline-offset: -3px;
+  border-radius: 999px;
+}
+
+.track__num {
+  font: 500 0.625rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+}
+
+.track__name {
+  overflow: hidden;
+  font: 500 clamp(0.8125rem, 1.08vw, 0.9375rem) / 1.2 var(--font-display);
+  letter-spacing: -0.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track .track__lens {
+  position: absolute;
+  top: var(--pad);
+  bottom: var(--pad);
+  left: var(--pad);
+  z-index: 2;
+  width: calc((100% - 2 * var(--pad)) / 5);
+  pointer-events: none;
+  will-change: transform;
+}
+
+.track__lens .track__glass {
+  position: absolute;
+  inset: 0;
+}
+
+/* ——— what the active stage says ——— */
+.stagebox {
+  display: grid;
+  margin-top: clamp(34px, 4.4vw, 60px);
+  /* panels that have left wait just outside; they must not widen the page */
+  overflow-x: clip;
+}
+
+.stagebox__panel {
+  grid-area: 1 / 1;
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 4fr) minmax(0, 3fr);
+  grid-template-rows: auto 1fr;
+  gap: 14px clamp(24px, 4vw, 72px);
+  align-items: start;
+}
+
+.stagebox__num {
+  grid-column: 1 / -1;
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.stagebox__name {
+  font: 500 clamp(2rem, 3.5vw, 3.25rem) / 1.05 var(--font-display);
+  letter-spacing: -0.045em;
+}
+
+.stagebox__text {
+  max-width: 24rem;
+  padding-top: 0.5em;
+  font-size: clamp(1.0625rem, 1.28vw, 1.25rem);
+  line-height: 1.48;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.stagebox__result {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding: 0.5em 0 0.2em 20px;
+}
+
+/* the result is what is lit */
+.stagebox__result::before {
+  content: '';
+  position: absolute;
+  inset: 0.6em auto 0.2em 0;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(var(--lime-hi), var(--lime-mid));
+}
+
+.stagebox__label {
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.stagebox__value {
+  font: 500 clamp(1.125rem, 1.6vw, 1.5rem) / 1.15 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+/* on paper the bar is a deep shade of lime, or it disappears */
+.tone-light .stagebox__result::before {
+  background: linear-gradient(var(--lime-mid), var(--lime-deep));
+}
+
+@media (max-width: 900px) {
+  .stagebox__panel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: 16px;
+  }
+
+  .stagebox__text {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,320 @@
+/* Everything below the stage stands on plain graphite: layered CSS gradients and
+   a grain tile. The live scene stays where it matters — the opening and the close. */
+.ground {
+  position: relative;
+  background: var(--g-900);
+}
+
+/* the grain comes in gradually under the stage, so the two grounds meet without a line */
+.ground::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/brand/grain.png') 0 0 / 256px 256px;
+  opacity: 0.6;
+  -webkit-mask-image: linear-gradient(transparent, #000 260px);
+  mask-image: linear-gradient(transparent, #000 260px);
+  pointer-events: none;
+}
+
+.ground > * {
+  position: relative;
+}
+
+section[id] {
+  scroll-margin-top: calc(var(--nav-h) + 12px);
+}
+
+.eyebrow {
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.head__title {
+  margin-top: clamp(18px, 2vw, 28px);
+  font: 500 clamp(1.75rem, 3.5vw, 3.4rem) / 1.06 var(--font-display);
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+/* hierarchy by tone, as on the slab: the claim is lit, the setup is not */
+.head__quiet {
+  color: var(--ink-quiet);
+}
+
+.head__lead {
+  max-width: 30rem;
+  margin-top: clamp(18px, 2vw, 28px);
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* ——— black acrylic as a panel: the same material as the small controls, at rest ——— */
+.acrylic {
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(168deg, #16171a 0%, #0a0b0c 42%, #0c0d0e 100%);
+  box-shadow:
+    inset 0 -1px 0 rgb(0 0 0 / 0.8),
+    0 40px 80px -48px rgb(0 0 0 / 0.95),
+    0 12px 28px -18px rgb(0 0 0 / 0.8);
+}
+
+/* rim: brightest on the edge that faces the key light */
+.acrylic::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    calc(var(--light-angle) + 180deg),
+    rgb(255 255 255 / 0.55) 0%,
+    rgb(255 255 255 / 0.16) 30%,
+    rgb(255 255 255 / 0.05) 62%,
+    rgb(214 245 40 / 0.16) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+
+/* a standing reflection across the upper part of the sheet */
+.acrylic::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: 0;
+  border-radius: inherit;
+  background: linear-gradient(176deg, rgb(255 255 255 / 0.055), transparent 34%);
+  pointer-events: none;
+}
+
+.acrylic > * {
+  position: relative;
+  z-index: 1;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 22px;
+  padding-inline: 9px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+  font: 500 0.625rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.tag--lit::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--lime);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ——— tones: a section on paper or on lime re-maps the ink, everything else follows ——— */
+.tone-light,
+.tone-lime {
+  color-scheme: light;
+  --ink: #141513;
+  --ink-satin: #141513;
+  --ink-2: #43453f;
+  --ink-3: #5c5e56;
+  --ink-quiet: #7a7c73;
+  --lime-text: var(--lime-deep);
+  color: var(--ink);
+}
+
+.tone-lime {
+  --ink-2: #2b3006;
+  --ink-3: #3c4507;
+  --ink-quiet: #4f5a0a;
+}
+
+/* ——— the light sheet ——— */
+.sheet {
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+}
+
+.sheet__plate {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* lit from the same corner as everything else: the key light is up and to the left */
+  background:
+    radial-gradient(70% 60% at 18% 0%, var(--paper-hi), transparent 70%),
+    linear-gradient(176deg, var(--paper) 0%, var(--paper) 55%, var(--paper-lo) 100%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9);
+  /* painted once; the opening is a clip on this layer (Sheet.tsx) */
+  will-change: transform;
+}
+
+/* paper has a tooth: the same grain as the graphite, multiplied in */
+.sheet__plate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: url('/brand/grain.png') 0 0 / 256px 256px;
+  mix-blend-mode: multiply;
+  opacity: 0.22;
+  pointer-events: none;
+}
+
+/* The shadow it casts on the graphite; longest while it is still in the air.
+   A layer of its own under the plate, so that only its opacity changes. Its negative
+   spread keeps it inside the inset plate's sides, so it need not follow the inset. */
+.sheet__shadow {
+  position: absolute;
+  inset: 0 var(--sheet-inset);
+  z-index: -2;
+  border-radius: var(--sheet-radius);
+  box-shadow:
+    0 -24px 60px -36px rgb(0 0 0 / 0.9),
+    0 48px 110px -40px rgb(0 0 0 / 0.95);
+  opacity: 0.35;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.sheet--lime .sheet__plate {
+  background:
+    radial-gradient(80% 90% at 14% 0%, #eefb6a 0%, transparent 62%),
+    linear-gradient(170deg, var(--lime-hi) 0%, var(--lime) 52%, var(--lime-mid) 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.75),
+    inset 0 -2px 0 rgb(81 99 6 / 0.35);
+}
+
+.sheet--lime .sheet__plate::before {
+  opacity: 0.14;
+}
+
+.sheet__body {
+  position: relative;
+}
+
+/* a lit dot before a label: lime as light, never as a fill */
+.eyebrow--dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--lime-text);
+}
+
+.eyebrow--dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 0 3px rgb(193 229 7 / 0.16);
+}
+
+.tone-light .eyebrow--dot {
+  color: var(--ink-2);
+}
+
+.tone-light .eyebrow--dot::before {
+  background: var(--lime-shade);
+  box-shadow: 0 0 0 3px rgb(133 158 4 / 0.18);
+}
+
+.tone-lime .eyebrow--dot {
+  color: var(--ink-2);
+}
+
+.tone-lime .eyebrow--dot::before {
+  background: #141513;
+  box-shadow: none;
+}
+
+/* an unconfirmed figure says so */
+.confirm {
+  display: inline-flex;
+  align-items: center;
+  height: 18px;
+  padding-inline: 7px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px currentColor;
+  font: 500 0.5625rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-3);
+  vertical-align: middle;
+}
+
+/* a section of the page: room above and below, the same on every one */
+.block {
+  padding-block: clamp(72px, 10vw, 140px);
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* a facet cut into paper: a dark score with light on its lower edge */
+.tone-light {
+  --facet-v:
+    linear-gradient(rgb(20 21 19 / 0.12), rgb(20 21 19 / 0.12)) left / 1px 100% no-repeat,
+    linear-gradient(rgb(255 255 255 / 0.8), rgb(255 255 255 / 0.8)) 1px 0 / 1px 100% no-repeat;
+  --facet-h:
+    linear-gradient(rgb(20 21 19 / 0.12), rgb(20 21 19 / 0.12)) top / 100% 1px no-repeat,
+    linear-gradient(rgb(255 255 255 / 0.8), rgb(255 255 255 / 0.8)) 0 1px / 100% 1px no-repeat;
+}
+
+/* …and into graphite or acrylic, wherever the acrylic lies */
+:root,
+.acrylic {
+  --facet-v:
+    linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.6)) left / 1px 100% no-repeat,
+    linear-gradient(rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.07)) 1px 0 / 1px 100% no-repeat;
+  --facet-h:
+    linear-gradient(rgb(0 0 0 / 0.6), rgb(0 0 0 / 0.6)) top / 100% 1px no-repeat,
+    linear-gradient(rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.07)) 0 1px / 100% 1px no-repeat;
+}
+
+/* black acrylic keeps its own ink wherever it lies — on paper and on lime too */
+.tone-light .acrylic,
+.tone-lime .acrylic {
+  color-scheme: dark;
+  --ink: #f1f3ec;
+  --ink-satin: #d6d9cf;
+  --ink-2: #b6baae;
+  --ink-3: #868a80;
+  --ink-quiet: #9da195;
+  --lime-text: var(--lime);
+  color: var(--ink);
+}

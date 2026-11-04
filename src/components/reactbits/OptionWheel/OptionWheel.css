@@ -1,0 +1,42 @@
+/* Sized by the font size of the root: one row is `spacing` × that size. */
+.option-wheel {
+  --ow-text-color: var(--ink-3);
+  --ow-active-color: var(--ink);
+  --ow-inset: 22px;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font: 500 clamp(1.5rem, 2.75vw, 2.75rem) / 1 var(--font-display);
+  letter-spacing: -0.035em;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  /* a touch is left to the page: scrolling is what turns the wheel */
+  touch-action: pan-y;
+}
+
+.option-wheel--dragging {
+  cursor: grabbing;
+}
+
+/* Each option is anchored to the middle, then placed along the curve through
+   transform / opacity / filter as the position changes. */
+.option-wheel__item {
+  position: absolute;
+  top: 50%;
+  left: var(--ow-inset);
+  white-space: nowrap;
+  transform-origin: left center;
+  cursor: pointer;
+  will-change: transform, opacity;
+  /* --ow-p goes 0 → 1 as an option approaches the middle of the wheel */
+  color: color-mix(in srgb, var(--ow-active-color) calc(var(--ow-p, 0) * 100%), var(--ow-text-color));
+}
+
+.option-wheel--right .option-wheel__item {
+  right: var(--ow-inset);
+  left: auto;
+  transform-origin: right center;
+}

@@ -1,0 +1,252 @@
+/* Copy on the left (≈55%), the founder on the right. The next sheet peeks in at the
+   foot of the screen, so the page reads as something to scroll from the first frame. */
+.hero {
+  --peek: clamp(56px, 7vh, 84px);
+  min-height: max(calc(100svh - var(--peek)), 640px);
+  padding-top: calc(var(--nav-h) + clamp(16px, 4vh, 48px));
+  padding-bottom: calc(var(--sheet-radius) + clamp(28px, 5vh, 56px));
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+  grid-template-rows: auto auto auto 1fr;
+  grid-template-areas:
+    'eyebrow photo'
+    'title   photo'
+    'lead    photo'
+    'actions photo';
+  column-gap: clamp(32px, 5vw, 96px);
+  align-items: start;
+  /* the title is sized from this box, so the long word always clears the portrait */
+  container-type: inline-size;
+}
+
+.hero__eyebrow {
+  grid-area: eyebrow;
+  padding-top: clamp(12px, 5vh, 64px);
+}
+
+.hero__title {
+  grid-area: title;
+  margin-top: clamp(16px, 2vw, 26px);
+  font: 540 clamp(2.5rem, 5.1cqi, 6.4rem) / 0.98 var(--font-display);
+  letter-spacing: -0.05em;
+}
+
+.hero__word {
+  position: relative;
+  display: inline-block;
+  overflow: clip;
+  padding-block: 0.04em 0.2em;
+  margin-block: -0.04em -0.2em;
+  vertical-align: top;
+}
+
+.hero__word > span {
+  position: relative;
+  display: inline-block;
+  will-change: transform;
+}
+
+/* the claim is lit: the lime of the form behind the portrait reaches it */
+.hero__lit {
+  --base: #dbe0c8;
+}
+
+.hero__lead {
+  grid-area: lead;
+  max-width: 35rem;
+  margin-top: clamp(20px, 2.4vw, 32px);
+  font-size: clamp(1.0625rem, 1.25vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+.hero__actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: clamp(24px, 2.6vw, 36px);
+}
+
+/* ——— the portrait on its pane of glass ——— */
+.hero__photo {
+  grid-area: photo;
+  position: relative;
+  align-self: stretch;
+  min-height: clamp(460px, calc(100svh - var(--nav-h) - 170px), 720px);
+  margin: 0;
+  border-radius: clamp(28px, 2.6vw, 40px);
+}
+
+.hero__portrait {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.hero__placeholder {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  font: 500 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(241 243 236 / 0.72);
+}
+
+.hero__placeholder svg {
+  width: clamp(72px, 7vw, 108px);
+  margin-bottom: 8px;
+  fill: none;
+  stroke: rgb(241 243 236 / 0.4);
+  stroke-width: 2;
+}
+
+.hero__placeholder-note {
+  max-width: 16rem;
+  color: rgb(241 243 236 / 0.5);
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.hero__plaque {
+  position: absolute;
+  right: clamp(14px, 1.6vw, 22px);
+  bottom: clamp(14px, 1.6vw, 22px);
+  left: clamp(14px, 1.6vw, 22px);
+  min-height: 72px;
+}
+
+.hero__plaque-glass {
+  position: absolute !important;
+  inset: 0;
+}
+
+.hero__plaque-text {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+  padding: 16px 20px;
+}
+
+.hero__name {
+  font: 500 clamp(0.9375rem, 1.1vw, 1.0625rem) / 1.25 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.hero__role {
+  font-family: var(--font-text);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-2);
+}
+
+.hero__line {
+  font-size: 0.875rem;
+  color: var(--ink-2);
+}
+
+/* Without WebGL the form stands still behind a frosted pane */
+.stage[data-gl='off'] .hero__photo {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.06), transparent 40%), rgb(18 20 23 / 0.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 0 0 0 1px rgb(255 255 255 / 0.07),
+    0 28px 60px -30px rgb(0 0 0 / 0.9);
+}
+
+@media (max-width: 980px) {
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      'eyebrow'
+      'title'
+      'photo'
+      'lead'
+      'actions';
+  }
+
+  .hero__eyebrow {
+    padding-top: 8px;
+  }
+
+  .hero__title {
+    font-size: clamp(2.25rem, 8.8cqi, 4.6rem);
+  }
+
+  .hero__photo {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+    margin-top: 24px;
+  }
+}
+
+/* Phone: the button has to be on the first screen, so the portrait is a band */
+@media (max-width: 560px) {
+  .hero {
+    min-height: 0;
+    padding-top: calc(var(--nav-h) + 4px);
+  }
+
+  .hero__title {
+    margin-top: 12px;
+    /* the long word has to fit the narrowest phone on one line */
+    font-size: clamp(1.75rem, 9.4cqi, 3rem);
+  }
+
+  .hero__photo {
+    aspect-ratio: auto;
+    height: clamp(220px, 34svh, 300px);
+    margin-top: 18px;
+    border-radius: 24px;
+  }
+
+  .hero__plaque {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    min-height: 0;
+  }
+
+  .hero__plaque-text {
+    padding: 11px 14px;
+  }
+
+  .hero__line {
+    display: none;
+  }
+
+  .hero__placeholder {
+    padding-bottom: 64px;
+  }
+
+  .hero__placeholder svg {
+    width: 56px;
+  }
+
+  .hero__lead {
+    margin-top: 18px;
+    font-size: 1rem;
+  }
+
+  .hero__actions {
+    margin-top: 20px;
+  }
+
+  .hero__actions .btn {
+    flex: 1 1 auto;
+  }
+}
