@@ -10,7 +10,9 @@ import './Faq.css';
 
 const OPEN = { type: 'spring' as const, ...toMotion(springs.ui) };
 
-const Item = ({ q, a, open, onToggle }: { q: string; a: string; open: boolean; onToggle: () => void }) => {
+type Answer = (typeof content.faq.items)[number]['a'];
+
+const Item = ({ q, a, open, onToggle }: { q: string; a: Answer; open: boolean; onToggle: () => void }) => {
   const { reduced } = useStage();
   const id = useId();
   return (
@@ -31,7 +33,19 @@ const Item = ({ q, a, open, onToggle }: { q: string; a: string; open: boolean; o
             exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
             transition={OPEN}
           >
-            <p>{a}</p>
+            <div className="faq__body">
+              {a.map((block, i) =>
+                typeof block === 'string' ? (
+                  <p key={i}>{block}</p>
+                ) : (
+                  <ul key={i}>
+                    {block.map((line) => (
+                      <li key={line}>{line}</li>
+                    ))}
+                  </ul>
+                )
+              )}
+            </div>
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -40,7 +54,7 @@ const Item = ({ q, a, open, onToggle }: { q: string; a: string; open: boolean; o
 };
 
 export const Faq = () => {
-  const { label, title, lead, draft, items } = content.faq;
+  const { label, title, lead, items } = content.faq;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
   const [open, setOpen] = useState(0);
 
@@ -49,7 +63,6 @@ export const Faq = () => {
       <div className="faq__grid wrap block">
         <div ref={head.ref} className="faq__head">
           <SectionHead label={label} title={title} lead={lead} progress={head.progress} />
-          <span className="confirm faq__draft">{draft}</span>
         </div>
         <ul className="faq__list">
           {items.map((item, i) => (

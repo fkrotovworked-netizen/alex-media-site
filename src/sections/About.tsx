@@ -1,5 +1,6 @@
 import { motion, useTransform } from 'motion/react';
 import { SectionHead } from '../components/SectionHead';
+import { asset } from '../asset';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
 import { clamp01 } from '../motion/tokens';
@@ -19,14 +20,12 @@ export const About = () => {
           <SectionHead label={label} title={title} progress={head.progress} />
 
           <motion.figure className="quote" style={{ opacity: quoteIn }}>
-            <div className="quote__photo" aria-hidden="true">
-              <span>фото</span>
-            </div>
+            <img className="quote__photo" src={asset(quote.photo)} alt="" width={168} height={168} loading="lazy" decoding="async" />
             <blockquote className="quote__text">
               <p>«{quote.text}»</p>
             </blockquote>
             <figcaption className="quote__who">
-              {quote.name} <span>— {quote.role}</span> <span className="confirm">{quote.draft}</span>
+              {quote.name} <span>— {quote.role}</span>
             </figcaption>
           </motion.figure>
         </div>

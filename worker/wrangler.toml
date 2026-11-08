@@ -1,0 +1,7 @@
+# Lead receiver (see lead.js). Deploy: npx wrangler deploy --config worker/wrangler.toml
+name = "alex-media-lead"
+main = "lead.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+ALLOWED_ORIGINS = "https://fkrotovworked-netizen.github.io,http://localhost:5183"

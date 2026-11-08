@@ -206,6 +206,12 @@
   width: 100%;
 }
 
+/* Telegram moves from the bar into the menu only where the bar has no room for it */
+.menu__tg {
+  display: none;
+  margin-top: -8px;
+}
+
 @media (max-width: 1080px) {
   .nav__links a {
     padding-inline: 11px;
@@ -250,6 +256,16 @@
 @media (max-width: 380px) {
   .brand__note {
     display: none;
+  }
+}
+
+@media (max-width: 350px) {
+  .nav__tg {
+    display: none;
+  }
+
+  .menu__tg {
+    display: inline-flex;
   }
 }
 

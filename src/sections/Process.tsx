@@ -15,7 +15,7 @@ const LENS = { type: 'spring' as const, ...toMotion(springs.glide) };
 
 export const Process = () => {
   const stage = useStage();
-  const { label, title, lead, stageLabel, resultLabel, stages } = content.process;
+  const { label, title, lead, note, stageLabel, resultLabel, stages } = content.process;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
 
   const [active, setActive] = useState(0);
@@ -116,8 +116,9 @@ export const Process = () => {
               </motion.div>
             ))}
           </div>
-        </motion.div>
 
+          <p className="process__note">{note}</p>
+        </motion.div>
       </div>
     </Sheet>
   );

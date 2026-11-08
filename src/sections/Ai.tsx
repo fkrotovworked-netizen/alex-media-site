@@ -1,5 +1,6 @@
 import { motion, useTransform, type MotionValue } from 'motion/react';
-import { ChatDemo, useDialogue } from '../components/ChatDemo';
+import { asset } from '../asset';
+import { useDialogue } from '../components/ChatDemo';
 import { SectionHead } from '../components/SectionHead';
 import { Sheet } from '../components/Sheet';
 import BlurText from '../components/reactbits/BlurText/BlurText';
@@ -34,10 +35,10 @@ const Note = ({ index, time }: { index: number; time: MotionValue<number> }) => 
   );
 };
 
-/** One object in the middle of the room — the AI manager at work — and the directions written around it. */
+/** One object in the middle of the room — Sanya's AI android — and the directions written around it. */
 export const Ai = () => {
   const stage = useStage();
-  const { label, title, lead, duties, cta } = content.ai;
+  const { label, title, lead, android, duties, cta } = content.ai;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
   const talk = useDialogue(0.3);
 
@@ -64,7 +65,9 @@ export const Ai = () => {
           </ul>
           <div className="ai__panel">
             <div className="ai__pool" aria-hidden="true" />
-            <ChatDemo time={talk.time} style={stage.reduced ? undefined : { rotateX, rotateY, opacity: panelIn, y: panelY }} />
+            <motion.figure className="ai__android" style={stage.reduced ? undefined : { rotateX, rotateY, opacity: panelIn, y: panelY }}>
+              <img src={asset(android.src)} alt={android.alt} width={1448} height={1086} loading="lazy" decoding="async" />
+            </motion.figure>
           </div>
           <ul className="ai__side ai__side--right">
             {indices.slice(LEFT).map((i) => (

@@ -1,5 +1,6 @@
 // The agency's published cases. Every figure is taken from the case article it links to
-// (vk.ru/@alexgirin_blog) — nothing here is estimated or rounded up.
+// (vk.ru/@alexgirin_blog) — nothing here is estimated or rounded up. The one exception is
+// Автосим, laid out the way the client wrote it (his notes, 2026-11-06): its figure is his.
 //
 // Covers are the articles' own cover images. The arguments of `cover()` describe the
 // original on the VK CDN; `npm run covers` fetches it once into public/cases/ as webp,
@@ -18,6 +19,11 @@ export interface CaseStudy {
   unit: string;
   /** Where it started, or what else was achieved. */
   note: string;
+  /** Optional story line over the figure, with the kind of work in the tag above it. */
+  headline?: string;
+  kicker?: string;
+  /** What was done, listed under the case instead of the channel. */
+  services?: readonly string[];
   /** Set for the case that did not work out — it is shown as honestly as the rest. */
   anti?: boolean;
   href: string;
@@ -199,9 +205,12 @@ const published: CaseStudy[] = [
     niche: 'Клуб автосимуляторов',
     city: 'Оренбург',
     channel: 'Бренд, приложение, сайт',
-    value: '10 → 30%',
-    unit: 'доля повторных визитов',
-    note: '170 регистраций в приложении за два месяца.',
+    kicker: 'Комплексный маркетинг',
+    headline: 'От неизвестного клуба до узнаваемого бренда города.',
+    value: '2 800+',
+    unit: 'новых подписчиков за 4 месяца по 32 ₽',
+    note: '',
+    services: ['Брендинг', 'Реклама', 'Сайт', 'Карты', 'Лояльность', 'Автоматизация'],
     href: article('keis-kak-iz-prikolnogo-mesta-o-kotorom-nikto-ne-znaet-sdelat'),
     cover: cover(
       50,

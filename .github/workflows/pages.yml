@@ -30,6 +30,8 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
+          # the lead receiver (worker/): Settings → Secrets and variables → Actions → Variables
+          VITE_LEAD_ENDPOINT: ${{ vars.LEAD_ENDPOINT }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

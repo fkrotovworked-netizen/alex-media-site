@@ -32,14 +32,20 @@ export const Prices = () => {
                 {item.popular ? <span className="tag tag--lit">{popular}</span> : null}
               </header>
               <p className="price__value">
-                <span className="price__from">{from}</span> {item.price} <span className="price__per">{item.per}</span>
+                {item.per ? (
+                  <>
+                    <span className="price__from">{from}</span> {item.price} <span className="price__per">{item.per}</span>
+                  </>
+                ) : (
+                  <span className="price__word">{item.price}</span>
+                )}
               </p>
               {item.confirm ? <span className="confirm price__confirm">{confirm}</span> : null}
               <p className="price__text">{item.text}</p>
               <a
                 className={`btn btn--sm price__cta ${item.popular ? 'btn--lime' : 'btn--acrylic'}`}
                 href="#contact"
-                onClick={() => chooseService(item.name)}
+                onClick={() => chooseService(item.service)}
               >
                 <span className="btn__label">{request}</span>
               </a>

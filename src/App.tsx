@@ -4,6 +4,7 @@ import { Nav } from './components/Nav';
 import { StageProvider, useStage } from './motion/stage';
 import { Scene } from './scene/Scene';
 import { About } from './sections/About';
+import { Audit } from './sections/Audit';
 import { Ai } from './sections/Ai';
 import { Cases } from './sections/Cases';
 import { Faq } from './sections/Faq';
@@ -14,6 +15,7 @@ import { Process } from './sections/Process';
 import { Reviews } from './sections/Reviews';
 import { Services } from './sections/Services';
 import { Stats } from './sections/Stats';
+import { Trust } from './sections/Trust';
 
 /**
  * Dark sections stand on the graphite; light ones are sheets laid on it (see Sheet).
@@ -38,9 +40,11 @@ const Page = () => {
           <Hero />
         </div>
         <Stats />
+        <Trust />
         <Services />
         <Ai />
         <Cases />
+        <Audit />
         <Process />
         <About />
         <Prices />

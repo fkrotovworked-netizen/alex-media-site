@@ -160,6 +160,14 @@
   background: linear-gradient(var(--lime-mid), var(--lime-deep));
 }
 
+.process__note {
+  max-width: 34rem;
+  margin-top: clamp(20px, 2.4vw, 32px);
+  font-size: 0.9375rem;
+  color: var(--ink-3);
+  text-wrap: pretty;
+}
+
 @media (max-width: 900px) {
   .stagebox__panel {
     grid-template-columns: minmax(0, 1fr);

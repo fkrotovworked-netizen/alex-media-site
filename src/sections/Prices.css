@@ -71,6 +71,11 @@
   color: var(--ink-3);
 }
 
+.price__word {
+  font-size: 0.62em;
+  letter-spacing: -0.03em;
+}
+
 .price--popular .price__value {
   color: var(--lime);
 }
@@ -93,13 +98,14 @@
 /* ——— below the sheet: the budget line and the way out for the undecided ——— */
 .prices__foot {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr);
   gap: 20px 40px;
   align-items: center;
   margin-top: 28px;
 }
 
 .prices__budget {
+  max-width: 46rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

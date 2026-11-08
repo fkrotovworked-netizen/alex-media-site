@@ -1,5 +1,5 @@
 import { motion, useTransform } from 'motion/react';
-import { Icon } from '../components/Icon';
+import { asset } from '../asset';
 import { SectionHead } from '../components/SectionHead';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
@@ -7,39 +7,60 @@ import { clamp01 } from '../motion/tokens';
 import './Reviews.css';
 
 /**
- * Only real reviews, with the client's consent. Until the videos and letters arrive
- * the slots say what belongs in them — nothing is made up to fill the space.
+ * Only real reviews. One sheet of acrylic in two bands cut by a facet: the letters, each
+ * with its scan and a line quoted word for word, then the vertical video reviews. A review
+ * without its file is left out — nothing is made up to fill the space.
  */
 export const Reviews = () => {
-  const { label, title, lead, slots, empty } = content.reviews;
+  const r = content.reviews;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
-  const sheet = useReveal<HTMLUListElement>({ duration: 1 });
+  const sheet = useReveal<HTMLDivElement>({ duration: 1 });
   const sheetY = useTransform(sheet.progress, (p) => (1 - clamp01(p * 1.4)) * 24);
 
   return (
     <section className="reviews block" id="reviews">
       <div className="wrap">
         <div ref={head.ref}>
-          <SectionHead className="head--split" label={label} title={title} lead={lead} progress={head.progress} />
+          <SectionHead className="head--split" label={r.label} title={r.title} lead={r.lead} progress={head.progress} />
         </div>
 
-        <motion.ul ref={sheet.ref} className="reviews__sheet acrylic" style={{ opacity: sheet.progress, y: sheetY }}>
-          {slots.map((slot, i) => (
-            <li key={i} className="review">
-              <div className={`review__media review__media--${slot.kind}`}>
-                <span className="review__icon">
-                  <Icon name={slot.kind === 'video' ? 'play' : 'letter'} />
-                </span>
-                <span className="review__kind">{slot.label}</span>
-              </div>
-              <p className="review__who">
-                {slot.who}
-                <span>{slot.company}</span>
-              </p>
-              <span className="confirm">{empty}</span>
-            </li>
-          ))}
-        </motion.ul>
+        <motion.div ref={sheet.ref} className="reviews__sheet acrylic" style={{ opacity: sheet.progress, y: sheetY }}>
+          <ul className="reviews__band reviews__band--letters">
+            {r.letters.map((letter) => (
+              <li key={letter.company} className="review">
+                <a className="review__media review__media--letter" href={asset(letter.scan.src)} target="_blank" rel="noreferrer" aria-label={`${r.open}: ${letter.company}`}>
+                  <img src={asset(letter.scan.src)} alt="" width={letter.scan.width} height={letter.scan.height} loading="lazy" decoding="async" />
+                </a>
+                <blockquote className="review__quote">«{letter.quote}»</blockquote>
+                <p className="review__who">
+                  {letter.who}
+                  <span>{letter.company}</span>
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          <ul className="reviews__band reviews__band--videos">
+            {r.videos.map((video) =>
+              video.src ? (
+                <li key={video.company} className="review">
+                  <video
+                    className="review__media review__media--video"
+                    src={asset(video.src)}
+                    poster={asset(video.poster)}
+                    controls
+                    playsInline
+                    preload="none"
+                  />
+                  <p className="review__who">
+                    {video.who}
+                    <span>{video.company}</span>
+                  </p>
+                </li>
+              ) : null
+            )}
+          </ul>
+        </motion.div>
       </div>
     </section>
   );

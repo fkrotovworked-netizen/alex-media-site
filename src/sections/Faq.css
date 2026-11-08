@@ -10,10 +10,6 @@
   top: calc(var(--nav-h) + 32px);
 }
 
-.faq__draft {
-  margin-top: 20px;
-}
-
 .faq__item {
   background: var(--facet-h);
 }
@@ -88,11 +84,24 @@
   overflow: hidden;
 }
 
-.faq__a p {
+.faq__body {
+  display: grid;
+  gap: 12px;
   max-width: 40rem;
   padding-bottom: 24px;
   color: var(--ink-2);
   text-wrap: pretty;
+}
+
+.faq__body ul {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.faq__body li::marker {
+  color: var(--ink-3);
 }
 
 @media (max-width: 860px) {

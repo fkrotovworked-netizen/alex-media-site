@@ -10,17 +10,36 @@ import { clamp01, springs, toMotion } from '../motion/tokens';
 import './Final.css';
 
 type Step = 'contact' | 'details' | 'thanks';
-type Problem = '' | 'empty' | 'consent';
+type Problem = '' | 'empty' | 'consent' | 'send';
 
-/** Where requests go. There is no backend yet, so nothing is sent — and the form says so. */
-const LEAD_ENDPOINT: string | null = null;
+/**
+ * Where requests go: the Cloudflare Worker in `worker/`, which passes them to Telegram and email.
+ * The address comes from the build (VITE_LEAD_ENDPOINT); without it nothing is sent — and the form says so.
+ */
+const LEAD_ENDPOINT: string | null = import.meta.env.VITE_LEAD_ENDPOINT || null;
+
+type Lead = { stage: 'contact' | 'details'; contact: string; service?: string; task?: string; niche?: string; budget?: string; website?: string };
+
+const sendLead = async (lead: Lead) => {
+  if (LEAD_ENDPOINT === null) return;
+  const res = await fetch(LEAD_ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ...lead, page: location.href }),
+    keepalive: true
+  });
+  if (!res.ok) throw new Error(`lead ${res.status}`);
+};
 
 const STEP = { type: 'spring' as const, ...toMotion(springs.ui) };
 
 /** The form is replaced between steps, so focus moves to the heading of the new one. */
 const takeFocus = (el: HTMLElement | null) => el?.focus({ preventScroll: true });
 
-/** The close, on a sheet of lime: one field first, two optional questions after, then what happens next. */
+/**
+ * The close, on a sheet of lime: the service and a line about the task, then the one field that is required;
+ * two optional questions after, then what happens next.
+ */
 export const Final = () => {
   const { reduced } = useStage();
   const f = content.final;
@@ -33,13 +52,17 @@ export const Final = () => {
   const [contact, setContact] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [problem, setProblem] = useState<Problem>('');
+  const [task, setTask] = useState('');
   const [niche, setNiche] = useState('');
   const [budget, setBudget] = useState('');
+  const [sending, setSending] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const trapRef = useRef<HTMLInputElement>(null);
   const id = useId();
 
-  const onContact = (event: FormEvent) => {
+  const onContact = async (event: FormEvent) => {
     event.preventDefault();
+    if (sending) return;
     if (contact.trim() === '') {
       setProblem('empty');
       inputRef.current?.focus();
@@ -50,12 +73,21 @@ export const Final = () => {
       return;
     }
     setProblem('');
-    setStep('details');
+    setSending(true);
+    try {
+      await sendLead({ stage: 'contact', contact: contact.trim(), service, task: task.trim(), website: trapRef.current?.value });
+      setStep('details');
+    } catch {
+      setProblem('send');
+    } finally {
+      setSending(false);
+    }
   };
 
   const onDetails = (event: FormEvent) => {
     event.preventDefault();
-    // here the request — contact, service, niche, budget — would go to LEAD_ENDPOINT
+    // the answers come as an addition to the request already sent; a failure here loses nothing essential
+    if (niche.trim() || budget) sendLead({ stage: 'details', contact: contact.trim(), niche: niche.trim(), budget }).catch(() => {});
     setStep('thanks');
   };
 
@@ -72,49 +104,82 @@ export const Final = () => {
             <BlurText as="span" text={f.title[0]} progress={titleIn} stagger={0.12} />{' '}
             <BlurText as="span" className="final__title-rest" text={f.title[1]} progress={titleIn} stagger={0.07} />
           </h2>
+          <BlurText className="final__lead" text={f.lead} progress={formIn} stagger={0.03} blur={5} rise={8} />
         </div>
 
         <motion.div className="final__box" style={{ opacity: formIn }}>
           <AnimatePresence mode="wait" initial={false}>
             {step === 'contact' ? (
               <motion.form key="contact" className="lead" onSubmit={onContact} noValidate {...swap} transition={STEP}>
-                {service ? (
-                  <p className="lead__service">
-                    <span>
-                      {f.service}: <strong>{service}</strong>
-                    </span>
-                    <button type="button" onClick={() => chooseService('')}>
-                      {f.clear}
+                {/* One piece of black acrylic, scored into rows: what is needed, the task, how to reach you */}
+                <div className="form-sheet acrylic">
+                  <div className="form-row form-row--select">
+                    <label className="form-row__label" htmlFor={`${id}-service`}>
+                      {f.service}
+                    </label>
+                    {/* the same store a price or a section writes to: the choice travels with the visitor */}
+                    <select
+                      id={`${id}-service`}
+                      className="form-row__select"
+                      name="service"
+                      value={service}
+                      data-empty={service === '' || undefined}
+                      onChange={(event) => chooseService(event.target.value)}
+                    >
+                      <option value="">{f.servicePick}</option>
+                      {f.services.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="form-row__chevron" aria-hidden="true" />
+                  </div>
+                  <div className="form-row form-row--task">
+                    <label className="form-row__label" htmlFor={`${id}-task`}>
+                      {f.task}
+                      <span className="form-row__optional">{f.optional}</span>
+                    </label>
+                    <textarea
+                      id={`${id}-task`}
+                      className="form-row__area"
+                      name="task"
+                      rows={2}
+                      placeholder={f.taskText}
+                      value={task}
+                      onChange={(event) => setTask(event.target.value)}
+                    />
+                  </div>
+                  <div className="form-row field">
+                    <label className="form-row__label" htmlFor={id}>
+                      {f.contactLabel}
+                    </label>
+                    <input
+                      ref={inputRef}
+                      id={id}
+                      className="field__input"
+                      name="contact"
+                      type="text"
+                      autoComplete="tel"
+                      placeholder={f.field}
+                      value={contact}
+                      aria-describedby={`${id}-status`}
+                      aria-invalid={problem === 'empty' || undefined}
+                      onChange={(event) => {
+                        setContact(event.target.value);
+                        if (problem === 'empty') setProblem('');
+                      }}
+                    />
+                    <button className="btn btn--lime btn--sm field__submit" type="submit" disabled={sending} aria-busy={sending || undefined}>
+                      <span className="btn__label field__submit-label">{f.submit}</span>
+                      <span className="btn__label field__submit-arrow" aria-hidden="true">
+                        →
+                      </span>
                     </button>
-                  </p>
-                ) : null}
-                <div className="field acrylic">
-                  <label className="sr-only" htmlFor={id}>
-                    {f.field}
-                  </label>
-                  <input
-                    ref={inputRef}
-                    id={id}
-                    className="field__input"
-                    name="contact"
-                    type="text"
-                    autoComplete="tel"
-                    placeholder={f.field}
-                    value={contact}
-                    aria-describedby={`${id}-status`}
-                    aria-invalid={problem === 'empty' || undefined}
-                    onChange={(event) => {
-                      setContact(event.target.value);
-                      if (problem === 'empty') setProblem('');
-                    }}
-                  />
-                  <button className="btn btn--lime btn--sm field__submit" type="submit">
-                    <span className="btn__label field__submit-label">{f.submit}</span>
-                    <span className="btn__label field__submit-arrow" aria-hidden="true">
-                      →
-                    </span>
-                  </button>
+                  </div>
                 </div>
+                {/* left empty by people, filled by bots: the receiver drops such requests */}
+                <input ref={trapRef} className="lead__trap" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
                 <label className="consent">
                   <input
                     type="checkbox"
@@ -134,10 +199,10 @@ export const Final = () => {
                   </span>
                 </label>
                 <p className="lead__status" id={`${id}-status`} role="status">
-                  {problem === 'empty' ? f.empty : problem === 'consent' ? f.noConsent : ''}
+                  {problem === 'empty' ? f.empty : problem === 'consent' ? f.noConsent : problem === 'send' ? f.sendFailed : ''}
                 </p>
                 <div className="lead__foot">
-                  <p>{f.reply}</p>
+                  <p>{f.hint}</p>
                   <a className="btn btn--outline btn--sm" href={f.direct.href} target="_blank" rel="noreferrer">
                     <span className="btn__label">{f.direct.label}</span>
                   </a>

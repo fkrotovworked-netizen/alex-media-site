@@ -23,60 +23,131 @@
   gap: 16px;
 }
 
-.lead__service {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 14px;
-  font-size: 0.9375rem;
+.final__lead {
+  max-width: 28rem;
+  margin-top: clamp(18px, 2vw, 26px);
+  font-size: clamp(1.0625rem, 1.25vw, 1.1875rem);
+  line-height: 1.5;
   color: var(--ink-2);
 }
 
-.lead__service strong {
-  color: var(--ink);
+/* ——— step one: a single piece of black acrylic, scored into three rows ———
+   The label stands in a narrow column on the left, the answer on the right; the lime action
+   sits in the last row. On the lime sheet this is the one dark object. */
+.form-sheet {
+  display: grid;
+  border-radius: 28px;
 }
 
-.lead__service button {
-  padding: 0;
-  border: 0;
-  background: none;
-  font: 500 0.625rem/1 var(--font-mono);
-  letter-spacing: 0.09em;
+.form-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 8px 8px 8px 24px;
+}
+
+.form-row + .form-row {
+  background: var(--facet-h);
+}
+
+.form-row__label {
+  display: grid;
+  gap: 4px;
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--ink-3);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
 }
 
-/* ——— the one field: a capsule of black acrylic with the lime action inside ——— */
-.field {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  height: 64px;
-  padding: 8px 8px 8px 24px;
-  border-radius: 999px;
+.form-row__optional {
+  font-size: 0.5625rem;
+  letter-spacing: 0.06em;
+  color: rgb(241 243 236 / 0.38);
 }
 
+.form-row__select,
+.form-row__area,
 .field__input {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
+  width: 100%;
   border: 0;
   background: none;
-  font: 400 1.0625rem/1 var(--font-text);
+  font: 400 1.0625rem/1.45 var(--font-text);
   color: var(--ink);
   outline: none;
 }
 
+.form-row__select {
+  height: 48px;
+  padding-right: 40px;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-row__select[data-empty] {
+  color: var(--ink-3);
+}
+
+.form-row__select option {
+  color: #141513;
+  background: #f1f3ec;
+}
+
+.form-row__chevron {
+  position: absolute;
+  top: 50%;
+  right: 26px;
+  width: 8px;
+  height: 8px;
+  margin-top: -6px;
+  border: solid var(--ink-2);
+  border-width: 0 1.5px 1.5px 0;
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+.form-row--task {
+  align-items: start;
+  padding-block: 18px 14px;
+}
+
+.form-row--task .form-row__label {
+  padding-top: 5px;
+}
+
+.form-row__area {
+  min-height: 2.9em;
+  padding: 0 16px 0 0;
+  resize: none;
+  field-sizing: content;
+}
+
+.form-row__area::placeholder,
 .field__input::placeholder {
   color: var(--ink-3);
 }
 
-.field:has(.field__input:focus-visible) {
-  outline: 2px solid #141513;
-  outline-offset: 3px;
+/* a row lights its own label when it is being answered */
+.form-row:focus-within .form-row__label {
+  color: var(--lime);
+}
+
+.form-row:has(:focus-visible) {
+  box-shadow: inset 0 0 0 2px rgb(228 249 41 / 0.5);
+  border-radius: inherit;
+}
+
+/* ——— the last row: the contact and the lime action inside ——— */
+.field {
+  grid-template-columns: 92px minmax(0, 1fr) auto;
+}
+
+.field__input {
+  min-width: 0;
+  height: 48px;
 }
 
 .field__submit {
@@ -310,8 +381,40 @@
 }
 
 @media (max-width: 520px) {
+  /* the label goes above its answer */
+  .form-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    padding: 14px 8px 8px 18px;
+  }
+
+  .form-row__label {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 10px;
+  }
+
+  .form-row--task .form-row__label {
+    padding-top: 0;
+  }
+
+  .form-row--task .form-row__area {
+    padding-top: 4px;
+  }
+
+  .form-row__chevron {
+    top: auto;
+    bottom: 30px;
+    margin-top: 0;
+    right: 24px;
+  }
+
   .field {
-    padding-left: 18px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .field .form-row__label {
+    grid-column: 1 / -1;
   }
 
   .field__submit {
@@ -339,4 +442,12 @@
 
 .block--final {
   padding-block: clamp(64px, 8vw, 120px);
+}
+
+.lead__trap {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }

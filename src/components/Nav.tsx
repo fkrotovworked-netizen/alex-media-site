@@ -266,6 +266,9 @@ export const Nav = () => {
               <a className="btn btn--lime menu__cta" href={cta.href} onClick={go}>
                 <span className="btn__label">{cta.label}</span>
               </a>
+              <a className="btn btn--acrylic menu__cta menu__tg" href={telegram.href} target="_blank" rel="noreferrer" onClick={go}>
+                <span className="btn__label">{telegram.label}</span>
+              </a>
             </motion.nav>
           </motion.div>
         ) : null}

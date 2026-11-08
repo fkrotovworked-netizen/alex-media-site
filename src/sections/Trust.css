@@ -1,0 +1,49 @@
+.trust {
+  padding-block: clamp(36px, 4.4vw, 64px) 0;
+}
+
+.trust__row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: center;
+}
+
+.trust__logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px clamp(24px, 3vw, 48px);
+}
+
+/* one ink for every client: the marks are white in their alpha, dimmed into the graphite */
+.trust__logo img {
+  display: block;
+  width: auto;
+  height: calc(var(--h) * var(--logo-k, 1));
+  opacity: 0.56;
+  transition: opacity 200ms var(--ease-out);
+}
+
+@media (hover: hover) {
+  .trust__logo img:hover {
+    opacity: 0.9;
+  }
+}
+
+@media (max-width: 900px) {
+  .trust__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  .trust__logos {
+    justify-content: flex-start;
+    gap: 22px 32px;
+  }
+
+  .trust__logos {
+    --logo-k: 0.8;
+  }
+}

@@ -3,6 +3,7 @@ import { motion, useTransform, type MotionStyle } from 'motion/react';
 import BlurText from '../components/reactbits/BlurText/BlurText';
 import GlassSurface from '../components/reactbits/GlassSurface/GlassSurface';
 import ShinyText from '../components/reactbits/ShinyText/ShinyText';
+import { asset } from '../asset';
 import { content } from '../content';
 import { useStage } from '../motion/stage';
 import { clamp01, easeInOut, lerp, settle } from '../motion/tokens';
@@ -18,18 +19,6 @@ const Rise = ({ index, children }: { index: number; children: ReactNode }) => {
     </span>
   );
 };
-
-/** Stand-in for the portrait until the shoot: it says what belongs here. */
-const Placeholder = () => (
-  <div className="hero__placeholder">
-    <svg viewBox="0 0 120 140" aria-hidden="true">
-      <circle cx="60" cy="44" r="24" />
-      <path d="M14 140c0-30 20-50 46-50s46 20 46 50" />
-    </svg>
-    <p>{content.hero.photo.placeholder}</p>
-    <p className="hero__placeholder-note">{content.hero.photo.note}</p>
-  </div>
-);
 
 export const Hero = () => {
   const stage = useStage();
@@ -112,7 +101,11 @@ export const Hero = () => {
         {/* the glass of the pane is drawn by the scene; the form glows through it from behind */}
         <figure className="hero__photo" data-scene="pane">
           <motion.div className="hero__portrait" style={{ opacity: paneIn }}>
-            <Placeholder />
+            {/* the cut-out stands in the scene's light: a shadow behind him, shade across him */}
+            <div className="hero__person">
+              <img className="hero__img" src={asset(photo.src)} alt={photo.alt} width={1254} height={1254} decoding="async" fetchPriority="high" />
+              <span className="hero__shade" aria-hidden="true" />
+            </div>
           </motion.div>
           <motion.figcaption className="hero__plaque" style={{ opacity: plaqueIn, y: plaqueY }}>
             <GlassSurface className="hero__plaque-glass" borderRadius={20} bezelRatio={0.4} dispersion={0.03} strength={0.9} />
@@ -121,6 +114,7 @@ export const Hero = () => {
                 {photo.name} <span className="hero__role">— {photo.role}</span>
               </span>
               <span className="hero__line">{photo.line}</span>
+              <span className="hero__quote">«{photo.quote}»</span>
             </span>
           </motion.figcaption>
         </figure>
