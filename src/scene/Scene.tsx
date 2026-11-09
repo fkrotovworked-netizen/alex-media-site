@@ -57,8 +57,12 @@ export const Scene = ({ stageRef }: { stageRef: RefObject<HTMLDivElement | null>
       const ly = stage.light.y.get();
 
       // Small controls share one light direction, as under a distant key light.
-      // a custom property on the root restyles the whole page, so it is written only when it moves
-      const angle = `${((Math.atan2((ly - 0.5) * L.viewH, (lx - 0.5) * L.stageW) * 180) / Math.PI + 90).toFixed(1)}deg`;
+      // A custom property on the root restyles the whole page — written every frame while the light
+      // followed the cursor, that recalc took most of each frame (Safari dropped the price folders to
+      // ~20 fps). So the angle moves in 4° steps: a 1px rim shows no step, and a sweep of the cursor
+      // now costs a dozen recalcs instead of one per frame.
+      const raw = (Math.atan2((ly - 0.5) * L.viewH, (lx - 0.5) * L.stageW) * 180) / Math.PI + 90;
+      const angle = `${Math.round(raw / 4) * 4}deg`;
       if (angle !== lastAngle) {
         lastAngle = angle;
         document.documentElement.style.setProperty('--light-angle', angle);

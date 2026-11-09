@@ -233,6 +233,7 @@ export const content = {
     from: 'от',
     request: 'Оставить заявку',
     popular: 'чаще всего',
+    folder: 'Кейсы',
     confirm: 'уточнить',
     items: [
       {
@@ -243,9 +244,11 @@ export const content = {
         per: '₽/мес',
         confirm: false,
         text: 'Яндекс Директ, таргет ВКонтакте, еженедельные отчёты, работа с воронкой',
-        popular: true
+        popular: true,
+        // the cases filed under the service: names from cases.ts, only where the article shows that work
+        cases: ['Ёбидоёби', 'Сушиселл', 'Balcon', 'City Beach Club']
       },
-      { id: 'site', service: 'Разработка сайта', name: 'Сайт, лендинг или воронка', price: '40 000', per: '₽', confirm: true, text: 'Прототип, дизайн, моушн, разработка, аналитика', popular: false },
+      { id: 'site', service: 'Разработка сайта', name: 'Сайт, лендинг или воронка', price: '40 000', per: '₽', confirm: true, text: 'Прототип, дизайн, моушн, разработка, аналитика', popular: false, cases: ['КЭФ', 'Автосим'] },
       {
         id: 'ai',
         service: 'AI-решения',
@@ -254,10 +257,11 @@ export const content = {
         per: '₽',
         confirm: true,
         text: 'AI-ассистенты, автоматизация процессов, чат-боты, интеграции и внедрение AI-инструментов',
-        popular: false
+        popular: false,
+        cases: []
       },
-      { id: 'crm', service: 'CRM и автоматизация', name: 'CRM и автоматизация', price: 'индивидуально', per: '', confirm: false, text: 'Разработка или внедрение CRM, автоматизация заявок, интеграции', popular: false },
-      { id: 'maps', service: 'Продвижение на картах', name: 'Продвижение на картах', price: '25 000', per: '₽/мес', confirm: true, text: 'Яндекс Карты и 2ГИС: карточки, отзывы, репутация', popular: false },
+      { id: 'crm', service: 'CRM и автоматизация', name: 'CRM и автоматизация', price: 'индивидуально', per: '', confirm: false, text: 'Разработка или внедрение CRM, автоматизация заявок, интеграции', popular: false, cases: ['Автосим'] },
+      { id: 'maps', service: 'Продвижение на картах', name: 'Продвижение на картах', price: '25 000', per: '₽/мес', confirm: true, text: 'Яндекс Карты и 2ГИС: карточки, отзывы, репутация', popular: false, cases: ['Муза', 'Автосим'] },
       {
         id: 'audit',
         service: 'Аудит и консультации',
@@ -266,7 +270,8 @@ export const content = {
         per: '₽',
         confirm: true,
         text: 'Сайт, реклама, воронка и аналитика: PDF-отчёт, видеоразбор, встреча и план на 30–60 дней. Стратегию оцениваем отдельно',
-        popular: false
+        popular: false,
+        cases: []
       }
     ],
     budget: 'Рекламный бюджет оплачивается отдельно и идёт напрямую в рекламные системы. Стартовый ориентир — от 60 000 ₽ в месяц с НДС площадок.',

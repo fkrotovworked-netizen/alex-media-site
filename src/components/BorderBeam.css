@@ -1,0 +1,59 @@
+/* a band of lime light running round the edge, clipped to a hairline ring */
+.border-beam,
+.acrylic > .border-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  padding: var(--beam-width, 1.5px);
+  border-radius: inherit;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box exclude,
+    linear-gradient(#fff 0 0);
+}
+
+/* A square 1.6× the ring's width, centred on it (vertical margins resolve against the width):
+   it covers the ring at every turn for any cell up to 1.25 times as tall as wide, without
+   a layer much larger than it needs; only its transform changes. */
+.border-beam__band {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 160%;
+  aspect-ratio: 1;
+  margin: -80% 0 0 -80%;
+  will-change: transform;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    transparent 33%,
+    rgb(81 99 6 / 0.55) 42%,
+    var(--lime-shade) 47%,
+    var(--lime) 52%,
+    var(--lime-hi) 56%,
+    rgb(244 255 150) 57.5%,
+    transparent 65%,
+    transparent 100%
+  );
+}
+
+/* on paper the bright head nearly vanishes: lean on the deeper half of the ramp */
+.tone-light .price:not(.acrylic) > .border-beam .border-beam__band {
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    transparent 33%,
+    rgb(81 99 6 / 0.35) 42%,
+    var(--lime-deep) 47%,
+    var(--lime-shade) 52%,
+    var(--lime-mid) 56%,
+    var(--lime) 58%,
+    transparent 65%,
+    transparent 100%
+  );
+}

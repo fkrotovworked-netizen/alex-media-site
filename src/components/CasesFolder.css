@@ -1,0 +1,167 @@
+/* The folder stands on the cell's top edge and is cut off along it: it rises out of the cell.
+   The cut is a plain overflow box, tall and wide enough for the fan — no clip-path, which
+   Safari would repaint on every frame of the rise. */
+.case-folder,
+.acrylic > .case-folder {
+  --cf-room: 120px;
+  position: absolute;
+  right: calc(clamp(16px, 2vw, 30px) - var(--cf-room));
+  bottom: 100%;
+  z-index: 6;
+  width: calc(var(--cf-w) + 2 * var(--cf-room));
+  height: 520px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cf-rise {
+  position: absolute;
+  left: var(--cf-room);
+  bottom: 0;
+  /* the pointer may cross onto the folder without the tariff losing it; sunk, it is hidden away */
+  pointer-events: auto;
+}
+
+.cf-stage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 340px;
+  height: 272px;
+  transform-origin: 0 0;
+}
+
+.cf-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.cf-back {
+  width: 340px;
+  height: 272px;
+}
+
+/* ——— the files: case covers ——— */
+.cf-files {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+.cf-sheet {
+  position: absolute;
+  left: 34px;
+  top: 96px;
+  width: 272px;
+  height: 184px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #16171a;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.14),
+    0 12px 28px -8px rgb(0 0 0 / 0.6);
+  transform-origin: 50% 100%;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.cf-sheet:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 2px;
+}
+
+.cf-sheet-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* a shade along the top, so the name reads on any cover */
+.cf-sheet::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.66) 0%, rgb(0 0 0 / 0) 42%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+  pointer-events: none;
+}
+
+.cf-sheet-head {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 13px;
+  z-index: 1;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  white-space: nowrap;
+}
+
+.cf-sheet-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: 600 17px/1.2 var(--font-text);
+  letter-spacing: -0.01em;
+  color: #f6f7f2;
+}
+
+.cf-sheet-meta {
+  flex: none;
+  font: 400 11px/1 var(--font-mono);
+  letter-spacing: 0.02em;
+  color: rgb(246 247 242 / 0.66);
+}
+
+/* ——— smoked glass, hinged on its bottom edge ——— */
+.cf-front {
+  position: absolute;
+  left: 0;
+  top: 74px;
+  width: 340px;
+  height: 198px;
+  z-index: 10;
+  transform-origin: 50% 100%;
+}
+
+.cf-label {
+  position: absolute;
+  left: 28px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #f1f3ec;
+}
+
+.cf-title {
+  font: 500 22px/1.1 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.cf-meta {
+  font: 400 14px/1 var(--font-mono);
+  letter-spacing: 0.03em;
+  color: #9da195;
+}
+
+/* no hover, no folder — and its wide cut-off box must not widen a phone's page */
+@media (hover: none), (max-width: 620px) {
+  .case-folder,
+  .acrylic > .case-folder {
+    display: none;
+  }
+}
+
+/* its parts are layers only while it moves or stands open */
+.case-folder[data-live] :is(.cf-rise, .cf-sheet, .cf-front) {
+  will-change: transform;
+}

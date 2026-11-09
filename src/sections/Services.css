@@ -185,3 +185,9 @@
     display: inline-flex;
   }
 }
+
+/* the cells are square cuts of one sheet; their band of light runs a rounded path just inside the cut */
+.svc__cell > .border-beam {
+  inset: 6px;
+  border-radius: clamp(20px, 2vw, 30px);
+}

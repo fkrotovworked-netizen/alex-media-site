@@ -184,3 +184,8 @@
     width: 100%;
   }
 }
+
+/* the lit tariff lifts above its neighbours, so its folder can rise over them */
+.price--lit {
+  z-index: 5;
+}
