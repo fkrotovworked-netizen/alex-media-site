@@ -137,7 +137,7 @@ export const content = {
     lead: 'Каждый проект — отдельная стратегия и решения под задачи бизнеса: от локальных компаний до крупных проектов и франшиз.',
     hint: 'Листайте — колесо остановится на кейсе',
     read: 'Читать кейс',
-    all: { label: 'Все кейсы', href: 'https://vk.ru/@alexgirin_blog' },
+    all: { label: 'Посмотреть все кейсы', href: 'https://vk.ru/@alexgirin_blog' },
     anti: 'анти-кейс',
     // the last stop of the wheel is the visitor's own project
     yours: {

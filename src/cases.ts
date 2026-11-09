@@ -451,3 +451,11 @@ const rank = (item: CaseStudy) => {
 };
 
 export const cases: CaseStudy[] = [...published].sort((a, b) => rank(a) - rank(b));
+
+/** The wheel shows only these (Рома after the call with Саня, 2026-11-09); the rest stay for the price folders. */
+const WHEEL = ['Ёбидоёби', 'Сушиселл', 'City Beach Club', 'Автосим'];
+export const wheel: CaseStudy[] = WHEEL.map((name) => {
+  const found = published.find((item) => item.name === name);
+  if (!found) throw new Error(`cases.ts: no case named ${name}`);
+  return found;
+});

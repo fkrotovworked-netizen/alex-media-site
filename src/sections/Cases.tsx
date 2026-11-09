@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 import { motion, useInView, useMotionValue, useMotionValueEvent, useSpring, useTransform, type MotionStyle, type MotionValue } from 'motion/react';
 import { SectionHead } from '../components/SectionHead';
 import OptionWheel from '../components/reactbits/OptionWheel/OptionWheel';
-import { cases } from '../cases';
+import { wheel as cases } from '../cases';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
@@ -288,12 +288,12 @@ export const Cases = () => {
               />
             </motion.div>
 
-            <motion.p className="cases__hint" style={{ opacity: bodyIn }}>
+            <motion.div className="cases__hint" style={{ opacity: bodyIn }}>
               <span>{hint}</span>
-              <a className="cases__all" href={all.href} target="_blank" rel="noreferrer">
-                {all.label} →
+              <a className="btn btn--acrylic btn--sm cases__all" href={all.href} target="_blank" rel="noreferrer">
+                <span className="btn__label">{all.label}</span>
               </a>
-            </motion.p>
+            </motion.div>
           </div>
 
           <motion.div className="cases__right" style={{ opacity: bodyIn }}>

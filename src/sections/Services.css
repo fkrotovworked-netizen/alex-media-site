@@ -36,158 +36,240 @@
   }
 }
 
-.svc {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-top: clamp(36px, 4vw, 60px);
-  border-radius: clamp(26px, 2.4vw, 36px);
-  overflow: clip;
+.sv-num {
+  flex: none;
+  width: 2.2rem;
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
 }
 
-.svc__cell {
+.sv-more {
+  display: inline-flex;
+  gap: 8px;
+  font: 500 0.625rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+/* buttons as plain text; :where keeps the reset weaker than every rule below */
+:where(.services) button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sv button:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 4px;
+}
+
+/* ——— phone: an index of names, one unfolded ——— */
+.sv-index {
+  margin-top: clamp(32px, 4vw, 56px);
+  padding: 0;
+  list-style: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.07);
+}
+
+.sv-index__row {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: clamp(200px, 17vw, 250px);
-  padding: clamp(22px, 2.2vw, 34px);
-  transition: background-color 200ms var(--ease-out);
+  /* the scored line between rows, black under white like the sheet's facets */
+  box-shadow:
+    inset 0 1px 0 rgb(0 0 0 / 0.6),
+    inset 0 2px 0 rgb(255 255 255 / 0.06);
 }
 
-/* the scored lines only run between cells, not along the outer edge */
-.svc__cell:nth-child(2),
-.svc__cell:nth-child(3) {
-  background: var(--facet-v);
-}
-
-.svc__cell:nth-child(4) {
-  background: var(--facet-h);
-}
-
-.svc__cell:nth-child(n + 5) {
-  background: var(--facet-v), var(--facet-h);
-}
-
-.svc__cell--main {
-  grid-column: span 2;
-}
-
-/* Lead generation is lit, not painted: lime light falls into the cell from the key light's corner. */
-.svc__cell--main::before {
+/* the open row is lit along its score from the key light's side: light, not paint */
+.sv-index__row::before {
   content: '';
   position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(90% 120% at 0% 0%, rgb(193 229 7 / 0.2), rgb(193 229 7 / 0.05) 46%, transparent 72%),
-    linear-gradient(90deg, rgb(228 249 41 / 0.7), rgb(228 249 41 / 0) 60%) top left / 100% 1px no-repeat;
-  pointer-events: none;
+  left: 0;
+  top: 0;
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, rgb(228 249 41 / 0.75), rgb(228 249 41 / 0));
+  opacity: 0;
+  transition: opacity 240ms var(--ease-out);
 }
 
-.svc__title {
-  font: 500 clamp(1.125rem, 1.45vw, 1.375rem) / 1.15 var(--font-display);
-  letter-spacing: -0.03em;
-  text-wrap: balance;
+.sv-index__row[data-open]::before {
+  opacity: 1;
 }
 
-.svc__title--main {
-  margin-top: auto;
-  font-size: clamp(1.875rem, 3.2vw, 3rem);
+.sv-index__head {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(16px, 3vw, 48px);
+  width: 100%;
+  padding-block: clamp(18px, 1.8vw, 26px);
+}
+
+.sv-index__title {
+  font: 500 clamp(1.5rem, 3vw, 2.75rem) / 1.05 var(--font-display);
   letter-spacing: -0.045em;
+  color: var(--ink-3);
+  transition: color 240ms var(--ease-out);
 }
 
-.svc__text {
-  max-width: 26rem;
-  font-size: 1rem;
-  line-height: 1.45;
+.sv-index__row[data-open] .sv-index__title,
+.sv-index__head:hover .sv-index__title {
+  color: var(--ink);
+}
+
+.sv-index__body {
+  overflow: hidden;
+}
+
+.sv-index__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 34rem) auto;
+  align-items: end;
+  gap: 16px 48px;
+  padding: 0 0 clamp(22px, 2.2vw, 32px) calc(clamp(16px, 3vw, 48px) + 2.2rem);
+}
+
+.sv-index__text {
+  font-size: clamp(1rem, 1.25vw, 1.1875rem);
+  line-height: 1.5;
   color: var(--ink-2);
   text-wrap: pretty;
 }
 
-.svc__cell--main .svc__text {
-  font-size: clamp(1rem, 1.2vw, 1.125rem);
+/* ——— desktop: the list and the stage ——— */
+.sv-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: stretch;
+  margin-top: clamp(32px, 4vw, 56px);
 }
 
-.svc__more {
-  display: inline-flex;
-  gap: 8px;
-  margin-top: auto;
-  padding-top: 8px;
-  font: 500 0.625rem/1 var(--font-mono);
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
+.sv-stage__list {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  list-style: none;
+}
+
+.sv-stage__item {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  width: 100%;
+  padding: 13px 0 13px 22px;
+  font: 500 clamp(1.0625rem, 1.5vw, 1.375rem) / 1.2 var(--font-display);
+  letter-spacing: -0.03em;
   color: var(--ink-3);
-  transition: color 160ms var(--ease-out);
+  transition: color 200ms var(--ease-out);
 }
 
-.svc__cell--main .svc__more {
-  margin-top: 0;
+/* the mark of the open one is the same lit stroke that stands beside the case wheel */
+.sv-stage__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 2px;
+  height: 1.3em;
+  translate: 0 -50%;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--lime-hi), var(--lime-shade));
+  opacity: 0;
+  scale: 1 0.4;
+  transition:
+    opacity 200ms var(--ease-out),
+    scale 320ms var(--ease-out);
 }
 
-.svc__more-arrow {
-  transition: transform 220ms var(--ease-out);
+.sv-stage__item[data-open] {
+  color: var(--ink);
 }
 
-@media (hover: hover) {
-  .svc__cell:hover {
-    background-color: rgb(255 255 255 / 0.025);
-  }
-
-  .svc__cell:hover .svc__more {
-    color: var(--lime);
-  }
-
-  .svc__cell:hover .svc__more-arrow {
-    transform: translateX(4px);
-  }
+.sv-stage__item[data-open]::before {
+  opacity: 1;
+  scale: 1 1;
 }
 
-@media (max-width: 1080px) {
-  .svc {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .svc__cell:nth-child(n + 2) {
-    background: var(--facet-h);
-  }
-
-  .svc__cell:nth-child(2n + 3) {
-    background: var(--facet-h), var(--facet-v);
-  }
+.sv-stage__panel {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(380px, 32vw, 460px);
+  padding: clamp(28px, 3vw, 48px);
+  border-radius: clamp(26px, 2.4vw, 36px);
 }
 
-@media (max-width: 560px) {
-  .svc {
+/* a large engraved number: the panel's only ornament */
+.sv-stage__big {
+  position: absolute;
+  right: clamp(16px, 2vw, 32px);
+  bottom: -0.18em;
+  z-index: 0;
+  font: 600 clamp(9rem, 16vw, 15rem) / 1 var(--font-display);
+  letter-spacing: -0.06em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.09);
+  pointer-events: none;
+}
+
+.sv-stage__panel {
+  display: grid;
+  align-items: start;
+}
+
+/* the leaving and the arriving service share one place and cross-fade */
+.sv-stage__panel > .sv-stage__content {
+  grid-area: 1 / 1;
+}
+
+.sv-stage__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  max-width: 34rem;
+}
+
+.sv-stage__title {
+  font: 500 clamp(2rem, 3.4vw, 3.25rem) / 1.02 var(--font-display);
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.sv-stage__text {
+  margin-bottom: 8px;
+  font-size: clamp(1.0625rem, 1.3vw, 1.25rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+@media (max-width: 760px) {
+  .sv-index__head {
+    flex-wrap: wrap;
+    gap: 8px 14px;
+  }
+
+  .sv-index .sv-num {
+    flex-basis: 100%;
+  }
+
+  .sv-index__inner {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .svc__cell--main {
-    grid-column: auto;
-  }
-
-  .svc__cell {
-    min-height: 0;
-  }
-
-  .svc__cell:nth-child(n + 2) {
-    background: var(--facet-h);
-  }
-
-  .svc__cell--main {
-    padding-block: 28px 30px;
-  }
-
-  .svc__more {
-    display: none;
-  }
-
-  .svc__cell--main .svc__more {
-    display: inline-flex;
+    padding-left: 0;
   }
 }
 
-/* the cells are square cuts of one sheet; their band of light runs a rounded path just inside the cut */
-.svc__cell > .border-beam {
-  inset: 6px;
-  border-radius: clamp(20px, 2vw, 30px);
+/* the panel's band of light, when the pointer is on it */
+.sv-stage__panel > .border-beam {
+  z-index: 4;
 }

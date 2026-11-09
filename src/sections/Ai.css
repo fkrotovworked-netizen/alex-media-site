@@ -8,166 +8,171 @@
   margin-inline: auto;
 }
 
-.ai__rig {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) min(44%, 600px) minmax(0, 1fr);
-  align-items: center;
-  margin-top: clamp(36px, 4.4vw, 64px);
-}
-
-.ai__side {
+/* ——— the android as a map of the six directions ——— */
+.ai__map {
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  gap: 28px;
-}
-
-.ai__side--right {
-  justify-content: space-around;
-  text-align: right;
-}
-
-.ai__lead {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-}
-
-.ai__side--right .ai__lead {
-  flex-direction: row-reverse;
-}
-
-.ai__name {
-  flex: none;
-  max-width: 70%;
-  font: 500 clamp(1.0625rem, 1.45vw, 1.375rem) / 1.15 var(--font-display);
-  letter-spacing: -0.03em;
-}
-
-/* a line scored into the paper: dark cut, light on its lower edge */
-.ai__line {
-  flex: 1;
-  min-width: 24px;
-  height: 2px;
-  background:
-    linear-gradient(90deg, rgb(20 21 19 / 0.05), rgb(20 21 19 / 0.22)) top / 100% 1px no-repeat,
-    linear-gradient(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.9)) bottom / 100% 1px no-repeat;
-  transform-origin: 0 50%;
-}
-
-.ai__side--right .ai__line {
-  transform-origin: 100% 50%;
-  background:
-    linear-gradient(270deg, rgb(20 21 19 / 0.05), rgb(20 21 19 / 0.22)) top / 100% 1px no-repeat,
-    linear-gradient(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.9)) bottom / 100% 1px no-repeat;
-}
-
-/* where the line meets the panel, a point of light */
-.ai__node {
-  flex: none;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--lime);
-  box-shadow:
-    0 0 0 1px rgb(81 99 6 / 0.5),
-    0 0 0 4px rgb(193 229 7 / 0.2);
-}
-
-.ai__text {
-  max-width: min(17.5rem, 100% - 32px);
-  margin-top: 10px;
-  color: var(--ink-2);
-  text-wrap: pretty;
-}
-
-.ai__side--right .ai__text {
-  margin-left: auto;
-}
-
-.ai__panel {
-  position: relative;
-  perspective: 1600px;
-}
-
-/* the panel's shadow on the paper, under the key light */
-.ai__pool {
-  position: absolute;
-  inset: 12% -4% -8% 6%;
-  border-radius: 40px;
-  background: radial-gradient(50% 50% at 54% 58%, rgb(20 21 19 / 0.28), transparent 72%);
-  filter: blur(18px);
-  pointer-events: none;
+  justify-content: center;
+  margin-top: clamp(32px, 4vw, 56px);
 }
 
 .ai__android {
   position: relative;
+  width: min(100%, 980px);
   margin: 0;
-  overflow: hidden;
   border-radius: 28px;
   background: #0b0c0b;
   /* the picture's own black meets the paper through a thin bevel, lit from the top left */
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.1),
     0 0 0 1px rgb(20 21 19 / 0.5),
-    0 2px 3px rgb(20 21 19 / 0.18);
-  transform-style: preserve-3d;
+    0 30px 60px -36px rgb(20 21 19 / 0.6);
 }
 
 .ai__android img {
   display: block;
   width: 100%;
   height: auto;
+  border-radius: 28px;
+}
+
+.ai__pic {
+  position: relative;
+}
+
+.ai__spot {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  translate: -7px -7px;
+  cursor: pointer;
+}
+
+.ai__spot:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 4px;
+  border-radius: 999px;
+}
+
+/* a point on the panel it stands for: dim glass, lit lime when its direction is open */
+.ai__dot {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.18);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.5),
+    0 0 0 5px rgb(255 255 255 / 0.06);
+  transition:
+    background-color 200ms var(--ease-out),
+    box-shadow 200ms var(--ease-out);
+}
+
+.ai__spot[data-open] .ai__dot {
+  background: var(--lime-hi);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.6),
+    0 0 0 5px rgb(193 229 7 / 0.22);
+}
+
+.ai__tag {
+  padding: 5px 9px;
+  border-radius: 999px;
+  font: 500 0.625rem/1 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #e9ebe3;
+  background: rgb(10 11 12 / 0.62);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
+  transition: opacity 200ms var(--ease-out);
+}
+
+/* the open one's name is on its card */
+.ai__spot[data-open] .ai__tag {
+  opacity: 0;
+}
+
+.ai__card-slot {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* the open direction: a card of smoked glass beside its point */
+.ai__card {
+  position: absolute;
+  width: min(290px, 40%);
+  padding: 18px 20px 20px;
+  border-radius: 20px;
+  translate: 22px -24px;
+  transform-origin: 0 0;
+  color: #f1f3ec;
+  background: rgb(14 15 16 / 0.88);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.14),
+    0 0 0 1px rgb(0 0 0 / 0.5),
+    0 24px 40px -20px rgb(0 0 0 / 0.8);
+}
+
+.ai__card--left {
+  translate: calc(-100% - 22px) -24px;
+  transform-origin: 100% 0;
+}
+
+.ai__num {
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  color: #868a80;
+}
+
+.ai__card-title {
+  margin-top: 10px;
+  font: 500 1.25rem/1.15 var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+.ai__card-text {
+  margin-top: 8px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: #b6baae;
 }
 
 .ai__cta {
   display: flex;
   justify-content: center;
-  margin-top: clamp(36px, 4vw, 56px);
+  margin-top: clamp(28px, 3vw, 44px);
 }
 
-@media (max-width: 900px) {
-  .ai__rig {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-  }
-
-  .ai__panel {
-    grid-row: 1;
-    justify-self: center;
-    width: min(100%, 560px);
-    margin-bottom: 20px;
-  }
-
-  .ai__side,
-  .ai__side--right {
-    gap: 0;
-    text-align: left;
-  }
-
-  /* in one column there is nothing to point across: the directions become a scored list */
-  .ai__line,
-  .ai__node {
+/* on a phone the names would cover the picture: points only, the card under it */
+@media (max-width: 760px) {
+  .ai__tag {
     display: none;
   }
 
-  .ai__note {
-    padding-block: 18px;
-    background: var(--facet-h);
+  .ai__card-slot {
+    position: relative;
+    inset: auto;
+    display: grid;
+    padding: 12px;
   }
 
-  .ai__side--right .ai__lead {
-    flex-direction: row;
-  }
-
-  .ai__name {
-    max-width: none;
-  }
-
-  .ai__text,
-  .ai__side--right .ai__text {
-    max-width: none;
-    margin: 6px 0 0;
+  .ai__card,
+  .ai__card--left {
+    position: relative;
+    grid-area: 1 / 1;
+    left: auto !important;
+    top: auto !important;
+    width: auto;
+    translate: none;
   }
 }
