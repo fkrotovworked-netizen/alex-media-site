@@ -8,7 +8,7 @@ import './Reviews.css';
 
 /**
  * Only real reviews. One sheet of acrylic in two bands cut by a facet: the letters, each
- * with its scan and a line quoted word for word, then the vertical video reviews. A review
+ * with its scan and who signed it (no quotes — Рома, 2026-11-09), then the vertical video reviews. A review
  * without its file is left out — nothing is made up to fill the space.
  */
 export const Reviews = () => {
@@ -31,7 +31,6 @@ export const Reviews = () => {
                 <a className="review__media review__media--letter" href={asset(letter.scan.src)} target="_blank" rel="noreferrer" aria-label={`${r.open}: ${letter.company}`}>
                   <img src={asset(letter.scan.src)} alt="" width={letter.scan.width} height={letter.scan.height} loading="lazy" decoding="async" />
                 </a>
-                <blockquote className="review__quote">«{letter.quote}»</blockquote>
                 <p className="review__who">
                   {letter.who}
                   <span>{letter.company}</span>

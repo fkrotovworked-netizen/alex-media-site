@@ -317,25 +317,22 @@ export const content = {
     label: 'Отзывы',
     title: ['Что говорят', 'клиенты.'],
     lead: 'Не рассказываем о себе сами — лучше всего о нашей работе говорят клиенты.',
-    // Letters: the quote is copied word for word from the scan (scans from Sanya's case articles on VK and Dzen).
+    // Letters: the scan and who signed it (scans from Sanya's case articles on VK and Dzen); no quotes on the page.
     letters: [
       {
         scan: { src: 'reviews/letter-kvanta.webp', width: 1240, height: 1754 },
         who: 'Дмитрий Шпарага, генеральный директор',
-        company: 'KVANTA · электромобили · Москва',
-        quote: 'Благодаря Вашим инициативам, профессионализму в сфере маркетинга и продаж — наша компания стремительно развивается, приобретает все больше новых клиентов и укрепляет свои позиции среди конкурентов.'
+        company: 'KVANTA · электромобили · Москва'
       },
       {
         scan: { src: 'reviews/letter-marsala.webp', width: 1170, height: 924 },
         who: 'Ольга Солозобова, арт-директор',
-        company: 'Банкетный зал «Марсала» · Санкт-Петербург',
-        quote: 'Ваш профессионализм и экспертиза в лидогенерации стали залогом успешной реализации нашего проекта.'
+        company: 'Банкетный зал «Марсала» · Санкт-Петербург'
       },
       {
         scan: { src: 'reviews/letter-okean.webp', width: 753, height: 1080 },
         who: 'Е. В. Михайлова, генеральный директор',
-        company: 'Ресторан «Океан» · Калининград',
-        quote: 'Вы полностью воплотили наши идеи, подчеркнули уникальные черты заведения и помогли сделать старт нашего ресторана успешным.'
+        company: 'Ресторан «Океан» · Калининград'
       }
     ],
     // Videos: vertical clips from Sanya's VK, re-encoded to 720p (scripts: none — yt-dlp + ffmpeg by hand).
