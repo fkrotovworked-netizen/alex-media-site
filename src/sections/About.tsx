@@ -1,16 +1,66 @@
-import { motion, useTransform } from 'motion/react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, type MotionValue } from 'motion/react';
+import '@fontsource-variable/oswald/wght.css';
 import { SectionHead } from '../components/SectionHead';
 import { asset } from '../asset';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
+import { useStage } from '../motion/stage';
 import { clamp01 } from '../motion/tokens';
 import './About.css';
 
-/** Four reasons on one sheet of acrylic, and the founder's word beside them — the second meeting with him. */
+const q = content.about.quote;
+
+/* ——— the founder's word, as a manifesto (Рома's pick of three concepts, 2026-11-12) ———
+   The core of the quote in huge condensed capitals (Oswald), three lines drifting sideways in turn as they
+   pass through the screen and filling in from an outline as they reach the middle, the last one in lime light;
+   the full quote small under it, beside the photo. Reduced motion: the lines stand still, filled. */
+
+const ManifestLine = ({ text, index, progress, lit }: { text: string; index: number; progress: MotionValue<number>; lit: boolean }) => {
+  const { reduced } = useStage();
+  const dir = index % 2 === 0 ? 1 : -1;
+  // drifts across as the line passes through the screen; the ink fills in as it reaches the middle
+  const x = useTransform(progress, (p) => `${(dir * (0.5 - p) * 26).toFixed(2)}vw`);
+  const fill = useTransform(progress, (p) => clamp01((p - 0.22 - index * 0.06) / 0.22));
+  const clipPath = useTransform(fill, (f) => `inset(-0.3em ${((1 - f) * 100).toFixed(1)}% -0.3em 0)`);
+  return (
+    <motion.p className={`manifest__line${lit ? ' manifest__line--lit' : ''}`} style={reduced ? undefined : { x }}>
+      <span className="manifest__outline">{text}</span>
+      <motion.span className="manifest__ink" style={reduced ? undefined : { clipPath }} aria-hidden="true">
+        {text}
+      </motion.span>
+    </motion.p>
+  );
+};
+
+const Manifest = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
+  const tail = useReveal<HTMLDivElement>({ duration: 1.2 });
+  const tailY = useTransform(tail.progress, (p) => (1 - clamp01(p)) * 20);
+  return (
+    <figure className="founder manifest">
+      <div ref={ref} className="manifest__lines" aria-hidden="true">
+        {q.manifesto.map((line, i) => (
+          <ManifestLine key={line} text={line} index={i} progress={scrollYProgress} lit={i === q.manifesto.length - 1} />
+        ))}
+      </div>
+      <motion.div ref={tail.ref} className="manifest__tail wrap" style={{ opacity: tail.progress, y: tailY }}>
+        <img className="manifest__photo" src={asset(q.photo)} alt="" width={72} height={72} loading="lazy" decoding="async" />
+        <blockquote className="manifest__quote">«{q.text}»</blockquote>
+        <figcaption className="manifest__who">
+          {q.name}
+          <span>{q.role}</span>
+        </figcaption>
+      </motion.div>
+    </figure>
+  );
+};
+
+/** Four reasons on one sheet of acrylic beside the heading; the founder's word closes the section. */
 export const About = () => {
-  const { label, title, reasons, quote } = content.about;
+  const { label, title, reasons } = content.about;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
-  const quoteIn = useTransform(head.progress, (p) => clamp01((p - 0.45) / 0.55));
   const sheet = useReveal<HTMLUListElement>({ duration: 1.2, to: 1.2 });
 
   return (
@@ -18,16 +68,6 @@ export const About = () => {
       <div className="about__grid wrap">
         <div ref={head.ref} className="about__left">
           <SectionHead label={label} title={title} progress={head.progress} />
-
-          <motion.figure className="quote" style={{ opacity: quoteIn }}>
-            <img className="quote__photo" src={asset(quote.photo)} alt="" width={168} height={168} loading="lazy" decoding="async" />
-            <blockquote className="quote__text">
-              <p>«{quote.text}»</p>
-            </blockquote>
-            <figcaption className="quote__who">
-              {quote.name} <span>— {quote.role}</span>
-            </figcaption>
-          </motion.figure>
         </div>
 
         <ul ref={sheet.ref} className="reasons acrylic">
@@ -36,6 +76,7 @@ export const About = () => {
           ))}
         </ul>
       </div>
+      <Manifest />
     </section>
   );
 };
