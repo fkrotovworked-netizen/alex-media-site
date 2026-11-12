@@ -154,14 +154,42 @@ export const content = {
     label: 'Аудит маркетинга',
     title: ['Не знаете, что мешает', 'вашему бизнесу расти?'],
     lead: 'Разберём ваш маркетинг, найдём слабые места и покажем, какие инструменты помогут улучшить ситуацию.',
-    cta: { label: 'Получить бесплатный разбор', href: '#contact', service: 'Аудит и консультации' },
+    // opens the sign-up window (src/components/AuditDialog.tsx), not the form at the end of the page
+    cta: { label: 'Записаться на разбор' },
     caption: 'что разбираем',
     plans: [
-      { name: 'Экспресс-разбор', price: 'Бесплатно', confirm: false, format: 'Короткий видеоразбор или текстовый отчёт' },
-      { name: 'Комплексный аудит', price: 'от 9 990 ₽', confirm: true, format: 'PDF-отчёт, видеопрезентация и онлайн-встреча' }
+      {
+        name: 'Экспресс-разбор',
+        price: 'Бесплатно',
+        confirm: false,
+        format: 'Короткий видеоразбор или текстовый отчёт',
+        service: 'Аудит — экспресс-разбор (бесплатно)'
+      },
+      {
+        name: 'Комплексный аудит',
+        price: 'от 9 990 ₽',
+        confirm: true,
+        format: 'PDF-отчёт, видеопрезентация и онлайн-встреча',
+        service: 'Аудит — комплексный (от 9 990 ₽)'
+      }
     ],
     confirm: 'уточнить',
-    order: { label: 'Заказать аудит', service: 'Аудит и консультации' },
+    order: { label: 'Заказать аудит' },
+    // the sign-up window: the plan, a line about the business, a contact; fields and consent as in the final form
+    dialog: {
+      label: 'Запись на разбор',
+      title: 'Какой разбор нужен?',
+      close: 'Закрыть',
+      plan: 'Формат',
+      task: 'Бизнес',
+      taskText: 'Ссылка на сайт или пару слов о бизнесе и рекламе',
+      submit: 'Записаться',
+      thanks: {
+        title: 'Записали вас на разбор.',
+        text: 'Александр или менеджер напишет вам в рабочее время и уточнит, что посмотреть в первую очередь.'
+      },
+      done: 'Готово'
+    },
     // true is a tick, false a dash, a string is said in words
     rows: [
       { name: 'Анализ сайта', free: true, paid: true },

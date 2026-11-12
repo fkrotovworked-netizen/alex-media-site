@@ -1,0 +1,315 @@
+/* The audit sign-up: a native modal dialog laid over the whole page.
+   The dialog itself is only a transparent frame; the dimmed graphite and the acrylic panel are inside it,
+   so both can move on Motion (the ::backdrop pseudo-element can't). */
+.audit-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: clamp(12px, 3vw, 40px);
+  border: 0;
+  background: none;
+  color: var(--ink);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.audit-dialog[open] {
+  display: grid;
+  place-items: center;
+}
+
+.audit-dialog::backdrop {
+  background: none;
+}
+
+.audit-dialog__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgb(8 9 10 / 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.audit-dialog__panel {
+  width: min(100%, 600px);
+  padding: clamp(22px, 2.6vw, 34px);
+  border-radius: clamp(26px, 2.4vw, 34px);
+  transform-origin: 50% 100%;
+}
+
+.audit-dialog__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: -6px;
+}
+
+.audit-dialog__close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -8px;
+  border: 0;
+  border-radius: 50%;
+  background: rgb(241 243 236 / 0.06);
+  color: var(--ink-2);
+  cursor: pointer;
+  transition:
+    background-color 160ms var(--ease-out),
+    color 160ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+.audit-dialog__close:active {
+  transform: scale(0.94);
+  transition-duration: 100ms;
+}
+
+.audit-dialog__close svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+@media (hover: hover) {
+  .audit-dialog__close:hover {
+    background: rgb(241 243 236 / 0.12);
+    color: var(--ink);
+  }
+}
+
+.audit-dialog__close:focus-visible {
+  outline: 2px solid rgb(228 249 41 / 0.6);
+  outline-offset: 2px;
+}
+
+.audit-dialog__title {
+  margin-top: clamp(14px, 1.6vw, 20px);
+  font: 540 clamp(1.5rem, 2.4vw, 2rem) / 1.08 var(--font-display);
+  letter-spacing: -0.045em;
+  color: var(--ink-satin);
+  outline: none;
+}
+
+.audit-dialog__form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+/* ——— the two plans: one inset sheet, two rows ——— */
+.audit-plans {
+  display: grid;
+  margin: 8px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  background: rgb(0 0 0 / 0.32);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.6);
+  overflow: clip;
+}
+
+.audit-plan {
+  position: relative;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out);
+}
+
+.audit-plan + .audit-plan {
+  box-shadow: inset 0 1px 0 rgb(241 243 236 / 0.07);
+}
+
+.audit-plan input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* the chosen row is lifted a step toward the light; its mark is lit */
+.audit-plan:has(input:checked) {
+  background: rgb(241 243 236 / 0.055);
+}
+
+.audit-plan__mark {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px rgb(241 243 236 / 0.28);
+  transition: box-shadow 160ms var(--ease-out);
+}
+
+.audit-plan__mark::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--lime);
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity 160ms var(--ease-out),
+    transform 240ms var(--ease-out);
+}
+
+.audit-plan input:checked + .audit-plan__mark {
+  box-shadow: inset 0 0 0 1.5px rgb(193 229 7 / 0.7);
+}
+
+.audit-plan input:checked + .audit-plan__mark::after {
+  opacity: 1;
+  transform: none;
+}
+
+.audit-plan input:focus-visible + .audit-plan__mark {
+  outline: 2px solid rgb(228 249 41 / 0.6);
+  outline-offset: 3px;
+}
+
+.audit-plan__body {
+  display: grid;
+  gap: 5px;
+}
+
+.audit-plan__name {
+  font: 500 0.6875rem/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+.audit-plan:has(input:checked) .audit-plan__name {
+  color: var(--ink);
+}
+
+.audit-plan__format {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--ink-3);
+}
+
+.audit-plan__price {
+  display: grid;
+  justify-items: end;
+  gap: 6px;
+  font: 540 1.125rem/1.1 var(--font-display);
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  color: var(--ink-satin);
+}
+
+@media (hover: hover) {
+  .audit-plan:hover:not(:has(input:checked)) {
+    background: rgb(241 243 236 / 0.03);
+  }
+}
+
+/* ——— the contact rows, borrowed from the final form, inset like the plans ——— */
+.audit-dialog__sheet {
+  border-radius: 22px;
+  background: rgb(0 0 0 / 0.32);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.6);
+}
+
+/* the final form's consent is drawn for the lime sheet; on acrylic it takes the light ink */
+.audit-dialog__consent {
+  font-size: 0.8125rem;
+}
+
+.audit-dialog__consent .consent__box {
+  box-shadow: inset 0 0 0 1.5px rgb(241 243 236 / 0.32);
+}
+
+.audit-dialog__consent input:checked + .consent__box {
+  background: rgb(241 243 236 / 0.1);
+  box-shadow: inset 0 0 0 1.5px rgb(193 229 7 / 0.6);
+}
+
+.audit-dialog__consent input:focus-visible + .consent__box {
+  outline-color: rgb(228 249 41 / 0.6);
+}
+
+.audit-dialog__consent input[aria-invalid] + .consent__box {
+  box-shadow: inset 0 0 0 1.5px rgb(241 243 236 / 0.8);
+}
+
+.audit-dialog__status {
+  min-height: 1.2em;
+  margin-top: -8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.audit-dialog__done {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+}
+
+.audit-dialog__text {
+  max-width: 30rem;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.audit-dialog__offline {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+/* ——— phone: the panel sits at the bottom, under the thumb ——— */
+@media (max-width: 520px) {
+  .audit-dialog {
+    padding: 8px;
+  }
+
+  .audit-dialog[open] {
+    place-items: end center;
+  }
+
+  .audit-dialog__panel {
+    padding: 20px 16px 18px;
+  }
+
+  .audit-plan {
+    grid-template-columns: 20px minmax(0, 1fr);
+    padding: 16px;
+  }
+
+  .audit-plan__price {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-items: start;
+    gap: 8px;
+    font-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .audit-plan__mark::after {
+    transition: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .audit-plan {
+    align-items: start;
+  }
+}

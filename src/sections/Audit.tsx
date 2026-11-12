@@ -1,7 +1,8 @@
+import { useCallback, useState } from 'react';
 import { motion, useTransform, type MotionValue } from 'motion/react';
+import { AuditDialog } from '../components/AuditDialog';
 import { SectionHead } from '../components/SectionHead';
 import { content } from '../content';
-import { chooseService } from '../lead';
 import { useReveal } from '../motion/reveal';
 import { clamp01 } from '../motion/tokens';
 import './Audit.css';
@@ -50,6 +51,9 @@ export const Audit = () => {
   const sheet = useReveal<HTMLDivElement>({ duration: 1.2, to: 1.2 });
   const ctaIn = useTransform(head.progress, (p) => clamp01((p - 0.55) / 0.45));
   const sheetY = useTransform(sheet.progress, (p) => (1 - clamp01(p * 1.4)) * 24);
+  // the plan the sign-up window opens on, null while it is closed
+  const [dialog, setDialog] = useState<number | null>(null);
+  const close = useCallback(() => setDialog(null), []);
 
   return (
     <section className="audit block" id="audit">
@@ -57,9 +61,9 @@ export const Audit = () => {
         <div ref={head.ref} className="audit__head">
           <SectionHead label={label} title={title} lead={lead} progress={head.progress} />
           <motion.div className="audit__cta" style={{ opacity: ctaIn }}>
-            <a className="btn btn--lime" href={cta.href} onClick={() => chooseService(cta.service)}>
+            <button className="btn btn--lime" type="button" aria-haspopup="dialog" onClick={() => setDialog(0)}>
               <span className="btn__label">{cta.label}</span>
-            </a>
+            </button>
           </motion.div>
         </div>
 
@@ -93,12 +97,13 @@ export const Audit = () => {
           <div className="audit__row audit__row--foot">
             <span />
             <span />
-            <a className="btn btn--outline btn--sm audit__order" href="#contact" onClick={() => chooseService(order.service)}>
+            <button className="btn btn--outline btn--sm audit__order" type="button" aria-haspopup="dialog" onClick={() => setDialog(1)}>
               <span className="btn__label">{order.label}</span>
-            </a>
+            </button>
           </div>
         </motion.div>
       </div>
+      <AuditDialog plan={dialog} onClose={close} />
     </section>
   );
 };

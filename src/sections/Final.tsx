@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useTransform } from 'motion/react';
 import { Sheet } from '../components/Sheet';
 import BlurText from '../components/reactbits/BlurText/BlurText';
 import { content } from '../content';
-import { chooseService, useService } from '../lead';
+import { chooseService, LEAD_ENDPOINT, sendLead, useService } from '../lead';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
 import { clamp01, springs, toMotion } from '../motion/tokens';
@@ -11,25 +11,6 @@ import './Final.css';
 
 type Step = 'contact' | 'details' | 'thanks';
 type Problem = '' | 'empty' | 'consent' | 'send';
-
-/**
- * Where requests go: the Cloudflare Worker in `worker/`, which passes them to Telegram and email.
- * The address comes from the build (VITE_LEAD_ENDPOINT); without it nothing is sent — and the form says so.
- */
-const LEAD_ENDPOINT: string | null = import.meta.env.VITE_LEAD_ENDPOINT || null;
-
-type Lead = { stage: 'contact' | 'details'; contact: string; service?: string; task?: string; niche?: string; budget?: string; website?: string };
-
-const sendLead = async (lead: Lead) => {
-  if (LEAD_ENDPOINT === null) return;
-  const res = await fetch(LEAD_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...lead, page: location.href }),
-    keepalive: true
-  });
-  if (!res.ok) throw new Error(`lead ${res.status}`);
-};
 
 const STEP = { type: 'spring' as const, ...toMotion(springs.ui) };
 

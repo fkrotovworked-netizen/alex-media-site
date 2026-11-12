@@ -1,0 +1,48 @@
+/* The window the strip runs through: its ends fade out by a mask, so whatever lies behind shows through. */
+.logo-loop {
+  --loop-gap: clamp(40px, 4.4vw, 72px);
+  --loop-fade: clamp(40px, 9%, 140px);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--loop-fade), #000 calc(100% - var(--loop-fade)), transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 var(--loop-fade), #000 calc(100% - var(--loop-fade)), transparent);
+}
+
+.logo-loop__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* every set ends with its own gap, so one set's width is exactly one step of the loop */
+.logo-loop__set {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--loop-gap);
+  padding-right: var(--loop-gap);
+  margin: 0;
+  list-style: none;
+}
+
+.logo-loop__item {
+  flex: none;
+}
+
+/* reduced motion: one still set, wrapping as the old row did */
+.logo-loop--still {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.logo-loop--still .logo-loop__track {
+  width: auto;
+  will-change: auto;
+}
+
+.logo-loop--still .logo-loop__set {
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: space-between;
+  gap: 22px var(--loop-gap);
+  padding-right: 0;
+}

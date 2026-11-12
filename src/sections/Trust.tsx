@@ -1,38 +1,46 @@
 import type { CSSProperties } from 'react';
-import { motion, useTransform, type MotionValue } from 'motion/react';
+import { motion } from 'motion/react';
 import { asset } from '../asset';
+import { BorderBeam } from '../components/BorderBeam';
+import { LogoLoop } from '../components/reactbits/LogoLoop/LogoLoop';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
-import { clamp01 } from '../motion/tokens';
 import './Trust.css';
 
 type Logo = (typeof content.trust.logos)[number];
 
-const Mark = ({ logo, index, time }: { logo: Logo; index: number; time: MotionValue<number> }) => {
-  const opacity = useTransform(time, (t) => clamp01((t - 0.1 - index * 0.06) / 0.5));
-  const width = Math.round((logo.w / 128) * logo.h);
-  return (
-    <motion.li className="trust__logo" style={{ opacity }}>
-      <img style={{ '--h': `${logo.h}px` } as CSSProperties} src={asset(logo.src)} alt={logo.name} width={width} height={logo.h} loading="lazy" decoding="async" />
-    </motion.li>
-  );
-};
+const Mark = ({ logo }: { logo: Logo }) => (
+  <img
+    className="trust__mark"
+    style={{ '--h': `${logo.h}px` } as CSSProperties}
+    src={asset(logo.src)}
+    alt={logo.name}
+    width={Math.round((logo.w / 128) * logo.h)}
+    height={logo.h}
+    decoding="async"
+  />
+);
 
-/** A low strip on the graphite between the figures and the services: the clients, one ink, no colours. */
+/** The label on a plate of black acrylic, a band of lime light running round its rim: the one moving light on the strip. */
+const Label = ({ text }: { text: string }) => (
+  <p className="trust__badge acrylic">
+    <span className="trust__dot" aria-hidden="true" />
+    <span>{text}</span>
+    <BorderBeam active duration={5} borderWidth={1.5} />
+  </p>
+);
+
+/** A low strip on the graphite between the figures and the services: the label, then the clients running past in one ink. */
 export const Trust = () => {
   const { label, logos } = content.trust;
   const strip = useReveal<HTMLDivElement>({ duration: 1.2 });
 
   return (
     <section className="trust" aria-label={label}>
-      <div ref={strip.ref} className="wrap trust__row">
-        <p className="eyebrow trust__label">{label}</p>
-        <ul className="trust__logos">
-          {logos.map((logo, i) => (
-            <Mark key={logo.src} logo={logo} index={i} time={strip.progress} />
-          ))}
-        </ul>
-      </div>
+      <motion.div ref={strip.ref} className="wrap trust__row" style={{ opacity: strip.progress }}>
+        <Label text={label} />
+        <LogoLoop className="trust__loop" items={logos} itemKey={(logo) => logo.src} render={(logo) => <Mark logo={logo} />} />
+      </motion.div>
     </section>
   );
 };
