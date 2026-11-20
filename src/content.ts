@@ -386,9 +386,9 @@ export const content = {
     ],
     // Videos: vertical clips from Sanya's VK, re-encoded to 720p (scripts: none — yt-dlp + ffmpeg by hand).
     // A video without `src` is not shown: «Океан» (YouTube Shorts m_xeupQvG08) is still to be added.
-    // First — Sanya's priority, the restaurateur from St Petersburg (the owner's clip from the «Марсала» case, VK clip-145053624_456240966).
+    // First — Sanya's priority, the restaurateur from St Petersburg (Андрей Ядошливый, owner of «Марсала», «Текстура», «Балкон», «Тетто», VK clip-145053624_456240966).
     videos: [
-      { src: 'reviews/video-marsala.mp4', poster: 'reviews/video-marsala.webp', who: 'Собственник, ресторатор', company: 'Банкетный зал «Марсала» · Санкт-Петербург' },
+      { src: 'reviews/video-marsala.mp4', poster: 'reviews/video-marsala.webp', who: 'Андрей Ядошливый', company: 'Популярный ресторатор Санкт-Петербурга · «Марсала», «Текстура», «Балкон», «Тетто»' },
       { src: 'reviews/video-prosto.mp4', poster: 'reviews/video-prosto.webp', who: 'Владелец магазина', company: 'Prosto Street Wear · Москва' },
       { src: 'reviews/video-bigmark.mp4', poster: 'reviews/video-bigmark.webp', who: 'Дима Красс, основатель BigMarkAgency', company: 'Небар, «Руки Вверх! Бар», Studio 57 · Самара' },
       { src: 'reviews/video-shameless.mp4', poster: 'reviews/video-shameless.webp', who: 'Анастасия, владелец клуба', company: 'SHAMELESS' },
