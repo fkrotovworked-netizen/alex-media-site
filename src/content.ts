@@ -385,15 +385,15 @@ export const content = {
       }
     ],
     // Videos: vertical clips from Sanya's VK, re-encoded to 720p (scripts: none — yt-dlp + ffmpeg by hand).
-    // A video without `src` is not shown: «Океан» (YouTube Shorts m_xeupQvG08) is still to be added.
     // First — Sanya's priority, the restaurateur from St Petersburg (Андрей Ядошливый, owner of «Марсала», «Текстура», «Балкон», «Тетто», VK clip-145053624_456240966).
     videos: [
       { src: 'reviews/video-marsala.mp4', poster: 'reviews/video-marsala.webp', who: 'Андрей Ядошливый', company: 'Популярный ресторатор Санкт-Петербурга · «Марсала», «Текстура», «Балкон», «Тетто»' },
+      // YouTube Shorts m_xeupQvG08: only 360p is served without a sign-in, kept at its own size.
+      { src: 'reviews/video-okean.mp4', poster: 'reviews/video-okean.webp', who: 'Анастасия Матвиевская', company: 'Ресторатор · Калининград · «Океан», «Пудл Нудл», «Муза»' },
       { src: 'reviews/video-prosto.mp4', poster: 'reviews/video-prosto.webp', who: 'Владелец магазина', company: 'Prosto Street Wear · Москва' },
       { src: 'reviews/video-bigmark.mp4', poster: 'reviews/video-bigmark.webp', who: 'Дима Красс, основатель BigMarkAgency', company: 'Небар, «Руки Вверх! Бар», Studio 57 · Самара' },
-      { src: 'reviews/video-shameless.mp4', poster: 'reviews/video-shameless.webp', who: 'Анастасия, владелец клуба', company: 'SHAMELESS' },
-      { src: 'reviews/video-bombinate.mp4', poster: 'reviews/video-bombinate.webp', who: 'Директор', company: 'Bombinate, клубничная мастерская · Оренбург' },
-      { src: null, poster: null, who: 'Анастасия', company: 'Ресторан «Океан» · Калининград' }
+      { src: 'reviews/video-shameless.mp4', poster: 'reviews/video-shameless.webp', who: 'Анастасия Золотарева', company: 'SHAMELESS, ресторан «Космос»' },
+      { src: 'reviews/video-bombinate.mp4', poster: 'reviews/video-bombinate.webp', who: 'Диана Хусаинова, основатель Bombinate', company: 'Клубничная мастерская · Оренбург' },
     ],
     open: 'Открыть письмо',
     play: 'Смотреть отзыв',

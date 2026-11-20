@@ -9,7 +9,7 @@
 }
 
 .reviews__band--videos {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   background: var(--facet-h);
 }
 
