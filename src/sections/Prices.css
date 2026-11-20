@@ -91,6 +91,13 @@
   text-wrap: pretty;
 }
 
+.price__note {
+  font: 500 0.6875rem/1.4 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
 .price__cta {
   margin-top: auto;
 }
@@ -114,17 +121,20 @@
   color: var(--ink-2);
 }
 
+/* the copy takes the room, the button closes the capsule at its right end, centred in its height */
 .pick {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px 28px;
-  padding: 12px 12px 12px 26px;
+  padding: 10px 10px 10px 28px;
   border-radius: 999px;
 }
 
 .pick__copy {
+  margin: 0;
   font-size: 1rem;
+  line-height: 1.4;
 }
 
 .pick__copy span {
@@ -176,6 +186,7 @@
   }
 
   .pick {
+    grid-template-columns: minmax(0, 1fr);
     padding: 20px;
     border-radius: 28px;
   }
@@ -185,7 +196,7 @@
   }
 }
 
-/* the lit tariff lifts above its neighbours, so its folder can rise over them */
+/* the lit tariff lifts above its neighbours, so its band of light is not overlapped */
 .price--lit {
   z-index: 5;
 }

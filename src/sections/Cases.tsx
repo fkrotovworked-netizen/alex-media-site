@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from
 import { motion, useInView, useMotionValue, useMotionValueEvent, useSpring, useTransform, type MotionStyle, type MotionValue } from 'motion/react';
 import { SectionHead } from '../components/SectionHead';
 import OptionWheel from '../components/reactbits/OptionWheel/OptionWheel';
-import { wheel as cases } from '../cases';
+import { locked as lockedCases, wheel, type CaseStudy } from '../cases';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
@@ -10,9 +10,13 @@ import { tick } from '../motion/tick';
 import { clamp01, lerp, smoother, springs, toMotion } from '../motion/tokens';
 import './Cases.css';
 
-/** The wheel ends on the visitor's own project, after the published cases. */
-const NAMES = [...cases.map((item) => item.name), content.cases.yours.name];
-const LAST = NAMES.length - 1;
+/**
+ * The wheel: four cases, then the visitor's own slot («Вы следующий»), then every other case behind a lock.
+ * While locked the section ends on that slot and the page scrolls on; opened, the wheel turns through all.
+ */
+const LIST: readonly (CaseStudy | null)[] = [...wheel, null, ...lockedCases];
+const YOURS = wheel.length;
+const NAMES = LIST.map((item) => item?.name ?? content.cases.yours.name);
 /** Rows of scroll the first and the last case hold before the section moves on. */
 const DWELL = 0.6;
 
@@ -30,7 +34,7 @@ const warmed = new Map<number, HTMLImageElement>();
  * The decoded image is kept, so the browser does not drop it before the wheel gets there.
  */
 const preload = (index: number) => {
-  const item = cases[index];
+  const item = LIST[index];
   if (!item || warmed.has(index)) return;
   const image = new Image();
   image.decoding = 'async';
@@ -40,9 +44,9 @@ const preload = (index: number) => {
 };
 
 /** The preview of one case. It is there only while the wheel rests on that case. */
-const Preview = ({ index, focus }: { index: number; focus: MotionValue<number> }) => {
+const Preview = ({ index, focus, total }: { index: number; focus: MotionValue<number>; total: number }) => {
   const stage = useStage();
-  const item = cases[index];
+  const item = LIST[index];
   const [loaded, setLoaded] = useState(-1);
 
   // it materialises: blur, scale and opacity arrive together
@@ -63,15 +67,15 @@ const Preview = ({ index, focus }: { index: number; focus: MotionValue<number> }
       {/* light crosses the acrylic as a case lands on it */}
       <span className="preview__glare" aria-hidden="true" />
       <motion.div className="preview__content" style={stage.reduced ? { opacity: focus } : { opacity: focus, y, scale, filter }}>
-        {item ? <Story index={index} loaded={loaded === index} onLoad={() => setLoaded(index)} /> : <Yours />}
+        {item ? <Story index={index} total={total} loaded={loaded === index} onLoad={() => setLoaded(index)} /> : <Yours />}
       </motion.div>
     </motion.article>
   );
 };
 
 /** One published case: what was done, the figure it is remembered by, and the article. */
-const Story = ({ index, loaded, onLoad }: { index: number; loaded: boolean; onLoad: () => void }) => {
-  const item = cases[index];
+const Story = ({ index, total, loaded, onLoad }: { index: number; total: number; loaded: boolean; onLoad: () => void }) => {
+  const item = LIST[index]!;
   const { read, anti } = content.cases;
   const contain = item.ratio < 1.3;
   const place = item.services ? item.services.join(' · ') : [item.city, item.channel].filter(Boolean).join(' · ');
@@ -81,7 +85,7 @@ const Story = ({ index, loaded, onLoad }: { index: number; loaded: boolean; onLo
     <>
       <div className="preview__bar">
         <span className="preview__count">
-          {two(index + 1)} / {two(cases.length)}
+          {two(index < YOURS ? index + 1 : index)} / {two(total)}
         </span>
         <span className="tag">{tag}</span>
         {item.anti ? <span className="tag tag--lit">{anti}</span> : null}
@@ -118,17 +122,20 @@ const Story = ({ index, loaded, onLoad }: { index: number; loaded: boolean; onLo
   );
 };
 
-/** The last stop of the wheel: an empty slot for the visitor's project, and the one way into it. */
+/** The visitor's own stop: an empty slot, set apart — «Вы следующий» — and the one way into it. */
 const Yours = () => {
   const { yours } = content.cases;
   return (
     <>
       <div className="preview__bar">
-        <span className="preview__count preview__count--word">{yours.name}</span>
-        <span className="tag">{yours.tag}</span>
+        <span className="preview__count preview__count--word">{yours.label}</span>
+        <span className="tag tag--lit">{yours.tag}</span>
       </div>
       <div className="preview__cover preview__cover--empty">
-        <span>{yours.slot}</span>
+        <span className="preview__next">
+          <span>{yours.slot[0]}</span> <span className="preview__next-lit">{yours.slot[1]}</span>
+        </span>
+        <span className="preview__slot-note">{yours.slotNote}</span>
       </div>
       <p className="preview__headline preview__headline--yours">{yours.title}</p>
       <p className="preview__note">{yours.text}</p>
@@ -144,7 +151,13 @@ const Yours = () => {
 export const Cases = () => {
   const stage = useStage();
   const { scrollY, reduced } = stage;
-  const { label, title, lead, hint, all } = content.cases;
+  const { label, title, lead, hint, all, unlock } = content.cases;
+
+  // the cases after the visitor's slot are locked until asked for
+  const [open, setOpen] = useState(false);
+  const last = open ? LIST.length - 1 : YOURS;
+  const lastRef = useRef(last);
+  lastRef.current = last;
 
   const sectionRef = useRef<HTMLElement>(null);
   const geo = useRef({ top: 0, step: 90 });
@@ -156,7 +169,7 @@ export const Cases = () => {
   const raw = useTransform(() => {
     version.get();
     const { top, step } = geo.current;
-    return Math.min(LAST, Math.max(0, (scrollY.get() - top) / step - DWELL));
+    return Math.min(lastRef.current, Math.max(0, (scrollY.get() - top) / step - DWELL));
   });
 
   // While the page moves the wheel follows it through its notches; once it stops, it closes on the nearest case.
@@ -206,7 +219,7 @@ export const Cases = () => {
   const [selected, setSelected] = useState(0);
   const selectedAt = useMotionValue(0);
   useMotionValueEvent(position, 'change', (v) => {
-    const index = Math.min(LAST, Math.max(0, Math.round(v)));
+    const index = Math.min(lastRef.current, Math.max(0, Math.round(v)));
     if (index === selectedAt.get()) return;
     selectedAt.set(index);
     setSelected(index);
@@ -247,16 +260,31 @@ export const Cases = () => {
   // the ones round the wheel's current case first.
   useEffect(() => {
     if (!near) return;
-    for (let d = 0; d <= LAST; d++) {
+    for (let d = 0; d <= last; d++) {
       preload(selected + d);
       preload(selected - d);
     }
-  }, [near, selected]);
+  }, [near, selected, last]);
 
   const scrollTo = (index: number, smooth = true) => {
     const { top, step } = geo.current;
     window.scrollTo({ top: top + (index + DWELL) * step, behavior: smooth && !reduced ? 'smooth' : 'auto' });
   };
+
+  // Opening the lock makes the section longer; once it is, the wheel turns on to the case asked for.
+  const seekAfterOpen = useRef<number | null>(null);
+  const openRest = (index = YOURS + 1) => {
+    seekAfterOpen.current = index;
+    setOpen(true);
+  };
+  useEffect(() => {
+    version.set(version.get() + 1);
+    if (!open || seekAfterOpen.current === null) return;
+    const index = seekAfterOpen.current;
+    seekAfterOpen.current = null;
+    requestAnimationFrame(() => scrollTo(index));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   const dragFrom = useRef(0);
   const onDrag = (rows: number, phase: 'start' | 'move' | 'end') => {
@@ -269,7 +297,7 @@ export const Cases = () => {
   const mark = useTransform(focus, (v) => lerp(0.35, 1, v));
 
   return (
-    <section ref={sectionRef} className="cases" id="cases" style={{ '--count': NAMES.length, '--dwell': DWELL } as CSSProperties}>
+    <section ref={sectionRef} className="cases" id="cases" style={{ '--count': last + 1, '--dwell': DWELL } as CSSProperties}>
       <div className="cases__pin">
         <div ref={head.ref} className="cases__grid wrap">
           <div className="cases__left">
@@ -285,19 +313,33 @@ export const Cases = () => {
                 onDrag={onDrag}
                 label={`${label}: выберите проект`}
                 blur={reduced ? 0 : 1.6}
+                lockedFrom={open ? undefined : YOURS + 1}
+                onLocked={openRest}
+                marked={YOURS}
               />
             </motion.div>
 
             <motion.div className="cases__hint" style={{ opacity: bodyIn }}>
               <span>{hint}</span>
-              <a className="btn btn--acrylic btn--sm cases__all" href={all.href} target="_blank" rel="noreferrer">
-                <span className="btn__label">{all.label}</span>
-              </a>
+              {open ? (
+                <a className="btn btn--acrylic btn--sm cases__all" href={all.href} target="_blank" rel="noreferrer">
+                  <span className="btn__label">{all.label}</span>
+                </a>
+              ) : (
+                <button type="button" className="btn btn--acrylic btn--sm cases__all" onClick={() => openRest()}>
+                  <svg className="cases__lock" viewBox="0 0 16 16" aria-hidden="true">
+                    <rect x="3" y="7" width="10" height="7.5" rx="1.6" />
+                    <path d="M5.4 7V5.2a2.6 2.6 0 0 1 5.2 0V7" />
+                  </svg>
+                  <span className="btn__label">{unlock.label}</span>
+                  <span className="cases__more">+{lockedCases.length}</span>
+                </button>
+              )}
             </motion.div>
           </div>
 
           <motion.div className="cases__right" style={{ opacity: bodyIn }}>
-            <Preview index={shown} focus={focus} />
+            <Preview index={shown} focus={focus} total={open ? LIST.length - 1 : wheel.length} />
           </motion.div>
         </div>
       </div>

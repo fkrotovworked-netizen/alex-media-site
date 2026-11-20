@@ -24,7 +24,7 @@ export const Hero = () => {
   const stage = useStage();
   const { intro, light, scrollY, layoutVersion } = stage;
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const { eyebrow, title, lead, primary, secondary, photo } = content.hero;
+  const { eyebrow, title, lead, scope, primary, secondary, photo } = content.hero;
 
   // The title needs the scene's light in its own pixel space. Its place on the
   // page is re-read only when the layout changes.
@@ -54,6 +54,7 @@ export const Hero = () => {
 
   const eyebrowIn = useTransform(intro, (t) => settle(t - 0.35, 0.6));
   const leadIn = useTransform(intro, (t) => clamp01((t - 0.95) / 1.1));
+  const scopeIn = useTransform(intro, (t) => settle(t - 1.3, 0.6));
   const actionsIn = useTransform(intro, (t) => settle(t - 1.45, 0.6));
   const actionsY = useTransform(actionsIn, (v) => (1 - v) * 10);
   // the portrait arrives with the glass it stands on
@@ -84,7 +85,20 @@ export const Hero = () => {
           </Rise>
         </motion.h1>
 
-        <BlurText className="hero__lead" text={lead} progress={leadIn} stagger={0.02} />
+        <div className="hero__lead">
+          <BlurText className="hero__lead-text" text={lead} progress={leadIn} stagger={0.03} />
+          {/* the range of work, from the first ad to the automated business: one ruled strip, not more prose */}
+          <motion.ol className="hero__scope" style={{ opacity: scopeIn }}>
+            {scope.map((item, i) => (
+              <li key={item}>
+                <span className="hero__scope-n" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {item}
+              </li>
+            ))}
+          </motion.ol>
+        </div>
 
         <motion.div className="hero__actions" style={{ opacity: actionsIn, y: actionsY }}>
           <a className="btn btn--lime" href={primary.href}>

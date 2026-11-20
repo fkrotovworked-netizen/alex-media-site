@@ -9,7 +9,7 @@
 }
 
 .reviews__band--videos {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   background: var(--facet-h);
 }
 
@@ -79,64 +79,6 @@
 }
 
 .review__who {
-  align-self: start;
-}
-
-/* where a letter or a video stands: a recess in the acrylic */
-.review__media {
-  position: relative;
-  display: grid;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border-radius: 20px;
-  background:
-    radial-gradient(80% 70% at 30% 0%, rgb(255 255 255 / 0.05), transparent 70%),
-    #0b0c0d;
-  box-shadow:
-    inset 0 2px 6px rgb(0 0 0 / 0.7),
-    inset 0 0 0 1px rgb(255 255 255 / 0.05);
-}
-
-.review__media--video {
-  width: 100%;
-  aspect-ratio: 9 / 16;
-  object-fit: cover;
-}
-
-/* the scan lies in the recess as a sheet of paper, its shadow thrown down-right by the key light */
-.review__media--letter {
-  padding: clamp(16px, 1.8vw, 26px) clamp(20px, 2.4vw, 34px) 0;
-}
-
-.review__media--letter img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 0;
-  border-radius: 6px 6px 0 0;
-  box-shadow:
-    6px 10px 24px rgb(0 0 0 / 0.55),
-    inset 0 0 0 1px rgb(0 0 0 / 0.1);
-  filter: brightness(0.9) saturate(0.85);
-  transition: filter 200ms var(--ease-out);
-}
-
-@media (hover: hover) {
-  .review__media--letter:hover img {
-    filter: brightness(1) saturate(0.95);
-  }
-}
-
-.review__quote {
-  margin: 0;
-  padding-inline: 6px;
-  font-size: 1.0625rem;
-  line-height: 1.5;
-  color: var(--ink);
-  text-wrap: pretty;
-}
-
-.review__who {
   display: grid;
   align-self: end;
   gap: 4px;
@@ -150,17 +92,22 @@
   color: var(--ink-2);
 }
 
+/* five clips do not split into rows: below the wide layout they become a strip to swipe */
 @media (max-width: 1100px) {
   .reviews__band--videos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
   }
 
-  .reviews__band--videos .review:nth-child(3) {
-    background: var(--facet-h);
+  .reviews__band--videos::-webkit-scrollbar {
+    display: none;
   }
 
-  .reviews__band--videos .review:nth-child(4) {
-    background: var(--facet-h), var(--facet-v);
+  .reviews__band--videos .review {
+    flex: 0 0 31%;
+    scroll-snap-align: start;
   }
 }
 
@@ -194,4 +141,105 @@
   .reviews__band--videos .review + .review {
     background: var(--facet-v);
   }
+}
+
+/* ——— the video player: the poster, one round button of black acrylic, a line of light for the time ——— */
+.clip {
+  position: relative;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
+.clip video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* the poster sinks a little into the recess until it plays */
+.clip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgb(0 0 0 / 0.45));
+  transition: opacity 240ms var(--ease-out);
+  pointer-events: none;
+}
+
+.clip[data-playing]::after {
+  opacity: 0;
+}
+
+.clip__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: linear-gradient(168deg, rgb(28 29 32 / 0.86), rgb(6 7 7 / 0.86));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 14px 30px -12px rgb(0 0 0 / 0.9);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
+
+.clip__play {
+  transition: opacity 200ms var(--ease-out);
+}
+
+/* while it plays the button steps back, and comes up again under the pointer */
+.clip[data-playing] .clip__play {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .clip[data-playing]:hover .clip__play {
+    opacity: 1;
+  }
+}
+
+.clip__play svg {
+  width: 22px;
+  height: 22px;
+  fill: var(--lime);
+}
+
+.clip__play--play svg {
+  margin-left: 3px;
+}
+
+/* time: a line of lime light along the foot of the clip */
+.clip__time {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  left: 14px;
+  z-index: 2;
+  height: 2px;
+  border-radius: 2px;
+  background: rgb(255 255 255 / 0.18);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.clip__time > span {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--lime-mid), var(--lime-hi));
+}
+
+.clip:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 3px;
 }

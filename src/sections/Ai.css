@@ -8,171 +8,155 @@
   margin-inline: auto;
 }
 
-/* ——— the android as a map of the six directions ——— */
+/* ——— the head, and the six directions on plates either side of it ——— */
 .ai__map {
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, min(36%, 500px)) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(16px, 2.2vw, 36px);
   margin-top: clamp(32px, 4vw, 56px);
 }
 
-.ai__android {
-  position: relative;
-  width: min(100%, 980px);
+.ai__face {
   margin: 0;
-  border-radius: 28px;
-  background: #0b0c0b;
-  /* the picture's own black meets the paper through a thin bevel, lit from the top left */
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.1),
-    0 0 0 1px rgb(20 21 19 / 0.5),
-    0 30px 60px -36px rgb(20 21 19 / 0.6);
+  /* the head stands on the paper by its own shadow, cast down-right from the key light */
+  filter: drop-shadow(18px 28px 30px rgb(20 21 19 / 0.28));
 }
 
-.ai__android img {
+.ai__face img {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 28px;
+  /* the picture is cut off at the shoulders: let it go into the paper instead of ending on a line */
+  -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent 98%);
+  mask-image: linear-gradient(to bottom, #000 74%, transparent 98%);
 }
 
-.ai__pic {
-  position: relative;
-}
-
-.ai__spot {
-  position: absolute;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.ai__plates {
+  display: grid;
+  gap: 12px;
+  margin: 0;
   padding: 0;
-  border: 0;
-  background: none;
-  translate: -7px -7px;
-  cursor: pointer;
+  list-style: none;
 }
 
-.ai__spot:focus-visible {
-  outline: 2px solid var(--lime);
-  outline-offset: 4px;
-  border-radius: 999px;
+/* the middle plate of each column steps towards the head, so the three follow its round */
+.ai__plates--left .ai__plate:nth-child(2) {
+  margin-right: clamp(-28px, -1.8vw, -8px);
+  margin-left: clamp(16px, 3vw, 48px);
 }
 
-/* a point on the panel it stands for: dim glass, lit lime when its direction is open */
-.ai__dot {
-  flex: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: rgb(255 255 255 / 0.18);
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.5),
-    0 0 0 5px rgb(255 255 255 / 0.06);
-  transition:
-    background-color 200ms var(--ease-out),
-    box-shadow 200ms var(--ease-out);
+.ai__plates--right .ai__plate:nth-child(2) {
+  margin-left: clamp(-28px, -1.8vw, -8px);
+  margin-right: clamp(16px, 3vw, 48px);
 }
 
-.ai__spot[data-open] .ai__dot {
-  background: var(--lime-hi);
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.6),
-    0 0 0 5px rgb(193 229 7 / 0.22);
-}
-
-.ai__tag {
-  padding: 5px 9px;
-  border-radius: 999px;
-  font: 500 0.625rem/1 var(--font-mono);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: #e9ebe3;
-  background: rgb(10 11 12 / 0.62);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
-  transition: opacity 200ms var(--ease-out);
-}
-
-/* the open one's name is on its card */
-.ai__spot[data-open] .ai__tag {
-  opacity: 0;
-}
-
-.ai__card-slot {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* the open direction: a card of smoked glass beside its point */
-.ai__card {
-  position: absolute;
-  width: min(290px, 40%);
-  padding: 18px 20px 20px;
+.ai__plate {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 14px;
+  row-gap: 6px;
+  padding: clamp(16px, 1.5vw, 22px) clamp(18px, 1.7vw, 24px);
   border-radius: 20px;
-  translate: 22px -24px;
-  transform-origin: 0 0;
-  color: #f1f3ec;
-  background: rgb(14 15 16 / 0.88);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.14),
-    0 0 0 1px rgb(0 0 0 / 0.5),
-    0 24px 40px -20px rgb(0 0 0 / 0.8);
-}
-
-.ai__card--left {
-  translate: calc(-100% - 22px) -24px;
-  transform-origin: 100% 0;
 }
 
 .ai__num {
-  font: 500 0.6875rem/1 var(--font-mono);
-  letter-spacing: 0.08em;
-  color: #868a80;
+  grid-row: 1 / 3;
+  padding-top: 0.35em;
+  font: 400 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  color: var(--lime-text);
 }
 
-.ai__card-title {
-  margin-top: 10px;
-  font: 500 1.25rem/1.15 var(--font-display);
-  letter-spacing: -0.03em;
+.ai__plate-title {
+  margin: 0;
+  font: 540 clamp(1rem, 1.15vw, 1.1875rem) / 1.2 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
 
-.ai__card-text {
-  margin-top: 8px;
+.ai__plate-text {
+  margin: 0;
   font-size: 0.9375rem;
   line-height: 1.45;
-  color: #b6baae;
+  color: var(--ink-2);
+  text-wrap: pretty;
+}
+
+/* the head on top, the plates under it two by two */
+@media (max-width: 1080px) {
+  .ai__map {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ai__face {
+    grid-row: 1;
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: min(70%, 420px);
+  }
+
+  .ai__plates--left .ai__plate:nth-child(2),
+  .ai__plates--right .ai__plate:nth-child(2) {
+    margin: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ai__map {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ai__face {
+    width: min(80%, 340px);
+  }
+}
+
+/* ——— Алекс, live: the copy on the paper, the chat as the one dark object beside it ——— */
+.ai__ask {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(28px, 5vw, 88px);
+  align-items: center;
+  width: min(100%, 1120px);
+  margin: clamp(56px, 7vw, 104px) auto 0;
+}
+
+.ai__ask-title {
+  margin-top: clamp(14px, 1.6vw, 22px);
+  font: 540 clamp(1.75rem, 3vw, 2.75rem) / 1.05 var(--font-display);
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.ai__ask-title span {
+  color: var(--ink-quiet);
+}
+
+.ai__ask-lead {
+  max-width: 28rem;
+  margin-top: clamp(14px, 1.6vw, 22px);
+  font-size: clamp(1rem, 1.2vw, 1.125rem);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.alex--inline {
+  height: clamp(460px, 44vw, 560px);
+}
+
+@media (max-width: 900px) {
+  .ai__ask {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .alex--inline {
+    height: 520px;
+  }
 }
 
 .ai__cta {
   display: flex;
   justify-content: center;
   margin-top: clamp(28px, 3vw, 44px);
-}
-
-/* on a phone the names would cover the picture: points only, the card under it */
-@media (max-width: 760px) {
-  .ai__tag {
-    display: none;
-  }
-
-  .ai__card-slot {
-    position: relative;
-    inset: auto;
-    display: grid;
-    padding: 12px;
-  }
-
-  .ai__card,
-  .ai__card--left {
-    position: relative;
-    grid-area: 1 / 1;
-    left: auto !important;
-    top: auto !important;
-    width: auto;
-    translate: none;
-  }
 }

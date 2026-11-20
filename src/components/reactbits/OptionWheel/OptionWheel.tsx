@@ -10,6 +10,8 @@
 // and the owner decides how to get there. Row height comes from the CSS font size,
 // so the wheel is sized in CSS. Options beyond the visible arc are not painted.
 // The tick sound is not loaded from a file here: the page synthesises it (motion/tick.ts).
+// Added for Alex Media: `lockedFrom` — options from that index are shown behind a lock (keys and drags
+// stop before them, a click asks the owner to open them through `onLocked`); `marked` sets one option apart.
 import { useCallback, useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import type { MotionValue } from 'motion/react';
 import './OptionWheel.css';
@@ -37,6 +39,12 @@ export interface OptionWheelProps {
   minOpacity?: number;
   /** Options further than this from the selection are not painted. */
   reach?: number;
+  /** Options from this index on are locked: on the wheel, but out of reach. */
+  lockedFrom?: number;
+  /** A click on a locked option. */
+  onLocked?: (index: number) => void;
+  /** One option set apart (the visitor's own slot). */
+  marked?: number;
   className?: string;
   style?: CSSProperties;
 }
@@ -56,6 +64,9 @@ const OptionWheel = ({
   fade = 0.24,
   minOpacity = 0,
   reach = 5,
+  lockedFrom,
+  onLocked,
+  marked,
   className = '',
   style
 }: OptionWheelProps) => {
@@ -116,7 +127,7 @@ const OptionWheel = ({
     };
   }, [layout, position, spacing]);
 
-  const last = items.length - 1;
+  const last = (lockedFrom ?? items.length) - 1;
   const clampIndex = (index: number) => Math.min(Math.max(index, 0), last);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -178,21 +189,31 @@ const OptionWheel = ({
       onPointerUp={onPointerEnd}
       onPointerCancel={onPointerEnd}
     >
-      {items.map((item, index) => (
-        <div
-          key={`${item}-${index}`}
-          id={`${id}-${index}`}
-          ref={(el) => {
-            itemRefs.current[index] = el;
-          }}
-          role="option"
-          aria-selected={selected === index}
-          className={`option-wheel__item${selected === index ? ' option-wheel__item--selected' : ''}`}
-          onClick={() => onSeek(index)}
-        >
-          {item}
-        </div>
-      ))}
+      {items.map((item, index) => {
+        const isLocked = lockedFrom !== undefined && index >= lockedFrom;
+        return (
+          <div
+            key={`${item}-${index}`}
+            id={`${id}-${index}`}
+            ref={(el) => {
+              itemRefs.current[index] = el;
+            }}
+            role="option"
+            aria-selected={selected === index}
+            aria-disabled={isLocked || undefined}
+            className={`option-wheel__item${selected === index ? ' option-wheel__item--selected' : ''}${isLocked ? ' option-wheel__item--locked' : ''}${marked === index ? ' option-wheel__item--marked' : ''}`}
+            onClick={() => (isLocked ? onLocked?.(index) : onSeek(index))}
+          >
+            {isLocked ? (
+              <svg className="option-wheel__lock" viewBox="0 0 16 16" aria-hidden="true">
+                <rect x="3" y="7" width="10" height="7.5" rx="1.6" />
+                <path d="M5.4 7V5.2a2.6 2.6 0 0 1 5.2 0V7" />
+              </svg>
+            ) : null}
+            {item}
+          </div>
+        );
+      })}
     </div>
   );
 };

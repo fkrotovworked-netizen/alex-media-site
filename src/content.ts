@@ -1,6 +1,6 @@
 // Every word on the page lives here.
-// `confirm: true` marks a figure the client has not confirmed yet: it is shown with a
-// «уточнить» tag and must be replaced before launch. Nothing here is estimated.
+// `confirm: true` would mark a figure the client has not confirmed yet (shown with a «уточнить» tag).
+// Since 2026-11-20 everything on the page is confirmed (Рома) and no figure carries it. Nothing here is estimated.
 
 const telegram = 'https://t.me/alex13girin';
 
@@ -24,7 +24,9 @@ export const content = {
   hero: {
     eyebrow: 'Digital-маркетинг × AI · с\u00a02017\u00a0года',
     title: ['Агентство', 'лидогенерации'],
-    lead: 'Объединяем маркетинговую экспертизу, digital-инструменты и возможности AI, создавая комплексные решения для привлечения клиентов: от запуска рекламы и разработки сайтов до построения воронок и автоматизации бизнес-процессов.',
+    lead: 'Объединяем маркетинговую экспертизу, digital-инструменты и возможности AI, создавая комплексные решения для привлечения клиентов.',
+    // the second half of the lead, set apart as the range of work so the paragraph is not one wall of text
+    scope: ['Запуск рекламы', 'Разработка сайтов', 'Построение воронок', 'Автоматизация бизнес\u2011процессов'],
     primary: { label: 'Обсудить проект', href: '#contact' },
     secondary: { label: 'Смотреть кейсы', href: '#cases' },
     photo: {
@@ -32,31 +34,33 @@ export const content = {
       alt: 'Александр Гирин, основатель Alex Media',
       name: 'Александр Гирин',
       role: 'основатель Alex Media',
-      line: 'Первая рекламная кампания — в 15 лет, в 2016 году',
+      line: 'В маркетинге — с\u00a02017\u00a0года',
       quote: 'Лично участвую в разработке стратегии, погружаюсь в задачи бизнеса и контролирую реализацию проектов'
     }
   },
-  // Clients' own logos, made one-colour (white in the alpha channel) so they sit on the graphite
-  // without bringing their brand colours. `h` is the drawn height: wordmarks low, compact marks taller.
+  // Clients' own logos. At rest one ink — white in the alpha, dimmed into the graphite; under the pointer the
+  // brand's own colours come up (`color`; without it the mark just brightens). `ratio` is width / height,
+  // `h` the drawn height: wordmarks low, compact marks taller.
+  // Sources: yobidoyobi.ru, sushisell-franshiza.ru, balconlounge.ru and fortboyard56.ru (their files),
+  // the KVANTA letterhead, VK avatars («Океан», «Руки Вверх!»). CLUB500 — waiting for the file from Саня.
   trust: {
     label: 'Нам доверяют',
     logos: [
-      { src: 'logos/kvanta.png', name: 'KVANTA', w: 187, h: 40 },
-      { src: 'logos/yobidoyobi.png', name: 'Ёбидоёби', w: 67, h: 42 },
-      { src: 'logos/sushisell.png', name: 'Сушиселл', w: 1074, h: 17 },
-      { src: 'logos/autosim.png', name: 'Автосим', w: 953, h: 17 },
-      { src: 'logos/fort-boyard.png', name: 'Форт Боярд', w: 186, h: 40 },
-      { src: 'logos/okean.png', name: 'Ресторан «Океан»', w: 117, h: 40 },
-      { src: 'logos/balcon.png', name: 'Балкон', w: 451, h: 30 },
-      { src: 'logos/ruki-vverh.png', name: 'Руки Вверх! Бар', w: 178, h: 40 }
+      { src: 'logos/kvanta.png', color: 'logos/kvanta-color.png', name: 'KVANTA', ratio: 188 / 128, h: 42 },
+      { src: 'logos/yobidoyobi.svg', color: 'logos/yobidoyobi-color.svg', name: 'Ёбидоёби', ratio: 130 / 40, h: 40 },
+      { src: 'logos/sushisell.svg', color: 'logos/sushisell-color.svg', name: 'Сушиселл', ratio: 738 / 88, h: 18 },
+      { src: 'logos/fort-boyard.png', color: 'logos/fort-boyard-color.png', name: 'Форт Боярд', ratio: 231 / 128, h: 40 },
+      { src: 'logos/okean.png', color: null, name: 'Ресторан «Океан»', ratio: 117 / 128, h: 40 },
+      { src: 'logos/balcon.svg', color: null, name: 'Balcon Lounge Bar', ratio: 1, h: 50 },
+      { src: 'logos/ruki-vverh.png', color: null, name: 'Руки Вверх! Бар', ratio: 178 / 128, h: 40 }
     ]
   },
   stats: {
     label: 'Alex Media в цифрах',
     items: [
-      { prefix: 'с ', value: 2016, suffix: '', text: 'в digital-маркетинге', icon: 'calendar', confirm: false },
+      { prefix: 'с ', value: 2017, suffix: '', text: 'года в маркетинге', icon: 'calendar', confirm: false },
       { prefix: '', value: 100, suffix: '+', text: 'проектов в разных нишах', icon: 'stack', confirm: false },
-      { prefix: '', value: 400, suffix: '+', text: 'учеников прошли обучение', icon: 'cap', confirm: true },
+      { prefix: '', value: 400, suffix: '+', text: 'учеников прошли обучение', icon: 'cap', confirm: false },
       { prefix: '', value: 360, suffix: '°', text: 'комплексный подход', icon: 'orbit', confirm: false }
     ],
     confirm: 'уточнить'
@@ -101,9 +105,12 @@ export const content = {
     label: 'AI-решения',
     title: ['AI — не игрушка.', 'Это новый слой бизнеса.'],
     lead: 'От AI-сайтов и виртуальных менеджеров до автоматизации бизнес-процессов и разработки собственных AI-инструментов.',
-    android: {
-      src: 'brand/ai-android.webp',
-      alt: 'AI-андроид среди панелей: диалог, клиенты, контент, задачи, аналитика'
+    // Рома, 2026-11-20: just the head, the six directions on plates either side of it, all in sight at once
+    head: {
+      src: 'brand/ai-head.webp',
+      alt: 'Голова андроида из чёрного стекла с лаймовыми бликами, в профиль',
+      width: 1100,
+      height: 1107
     },
     duties: [
       {
@@ -131,6 +138,35 @@ export const content = {
       footnote: 'история диалога уходит в CRM'
     }
   },
+  // Алекс, the site's AI assistant (src/assistant/): a button in the corner on the whole page and a live chat
+  // in the AI section, one conversation for both. Answers come from worker/chat.js; what it knows is built
+  // from these texts by `npm run knowledge`.
+  assistant: {
+    name: 'Алекс',
+    role: 'AI-ассистент',
+    fab: 'Спросить Алекса',
+    open: 'Открыть чат с Алексом',
+    close: 'Свернуть чат',
+    greeting: 'Привет! Я Алекс, AI-ассистент агентства. Расскажу простыми словами про услуги, цены и кейсы — и, если нужно, передам заявку Александру.',
+    suggestions: ['Сколько стоит реклама?', 'Какие у вас кейсы?', 'С чего начать?'],
+    placeholder: 'Спросите про услуги, цены, кейсы',
+    send: 'Отправить',
+    thinking: 'думает',
+    online: 'в сети',
+    // shown instead of an answer while the worker has no model key, or cannot be reached
+    offline: 'Я пока учусь и скоро начну отвечать сам. А сейчас быстрее всего — написать Александру в Telegram или оставить заявку в форме внизу страницы.',
+    failed: 'Не получилось ответить — связь прервалась. Попробуйте ещё раз или напишите в Telegram.',
+    busy: 'Слишком много сообщений подряд — дайте мне минуту и спросите снова.',
+    leadSent: 'заявка передана',
+    leadFailed: 'заявка не ушла — напишите в Telegram',
+    telegram: { label: 'Написать в Telegram', href: telegram },
+    consent: ['Оставляя контакт в чате, вы соглашаетесь с', 'политикой конфиденциальности'],
+    clear: 'Начать заново',
+    inline: {
+      title: ['Спросите Алекса.', 'Он и есть AI-ассистент.'],
+      lead: 'Так работает виртуальный менеджер, которого мы делаем для бизнеса: отвечает по делу, знает услуги и цены и сам передаёт заявку менеджеру.'
+    }
+  },
   cases: {
     label: 'Кейсы',
     title: ['Реальные результаты', 'для реального бизнеса.'],
@@ -139,15 +175,19 @@ export const content = {
     read: 'Читать кейс',
     all: { label: 'Посмотреть все кейсы', href: 'https://vk.ru/@alexgirin_blog' },
     anti: 'анти-кейс',
-    // the last stop of the wheel is the visitor's own project
+    // after the first four the wheel stops on the visitor's own project — set apart, «Вы следующий»
     yours: {
-      name: 'Ваш кейс',
+      name: 'Вы следующий',
+      label: 'Ваш кейс',
       tag: 'следующий проект',
-      slot: 'место для вашего проекта',
+      slot: ['Вы', 'следующий'],
+      slotNote: 'место для вашего проекта',
       title: 'Ваш бизнес может стать следующим кейсом.',
       text: 'Расскажите о задаче — разберёмся в ситуации и предложим, с чего начать.',
       cta: 'Обсудить сотрудничество'
-    }
+    },
+    // the rest of the cases wait under a lock below that stop; the page scrolls on past them until opened
+    unlock: { label: 'Открыть остальные кейсы', locked: 'ещё кейсы — откройте' }
   },
   // The way in for those not ready to buy a service yet: a free look first, a full audit after (client's notes, 2026-11-06)
   audit: {
@@ -168,7 +208,7 @@ export const content = {
       {
         name: 'Комплексный аудит',
         price: 'от 9 990 ₽',
-        confirm: true,
+        confirm: false,
         format: 'PDF-отчёт, видеопрезентация и онлайн-встреча',
         service: 'Аудит — комплексный (от 9 990 ₽)'
       }
@@ -251,6 +291,8 @@ export const content = {
       text: 'На время сотрудничества мы становимся частью вашей команды. Погружаемся в задачи бизнеса, предлагаем решения и отвечаем за свою зону работы. За каждым действием — стратегия, практический опыт и ответственность за результат.',
       // the core of it, set large across the screen
       manifesto: ['Становимся', 'частью', 'вашей команды'],
+      // the words of the quote the eye should land on (variant «c» lights them)
+      key: 'мы становимся частью вашей команды',
       photo: 'brand/alexander-face.webp',
       name: 'Александр Гирин',
       role: 'основатель Alex Media'
@@ -263,7 +305,6 @@ export const content = {
     from: 'от',
     request: 'Оставить заявку',
     popular: 'чаще всего',
-    folder: 'Кейсы',
     confirm: 'уточнить',
     items: [
       {
@@ -274,34 +315,40 @@ export const content = {
         per: '₽/мес',
         confirm: false,
         text: 'Яндекс Директ, таргет ВКонтакте, еженедельные отчёты, работа с воронкой',
-        popular: true,
-        // the cases filed under the service: names from cases.ts, only where the article shows that work
-        cases: ['Ёбидоёби', 'Сушиселл', 'Balcon', 'City Beach Club']
+        popular: true
       },
-      { id: 'site', service: 'Разработка сайта', name: 'Сайт, лендинг или воронка', price: '40 000', per: '₽', confirm: true, text: 'Прототип, дизайн, моушн, разработка, аналитика', popular: false, cases: ['КЭФ', 'Автосим'] },
+      {
+        id: 'site',
+        service: 'Разработка сайта',
+        name: 'Сайт, лендинг или воронка',
+        price: '40 000',
+        per: '₽',
+        confirm: false,
+        text: 'Прототип, дизайн, моушн, разработка, аналитика',
+        note: 'Итоговая стоимость уточняется исходя из запроса',
+        popular: false
+      },
       {
         id: 'ai',
         service: 'AI-решения',
         name: 'AI-решения',
         price: '50 000',
         per: '₽',
-        confirm: true,
+        confirm: false,
         text: 'AI-ассистенты, автоматизация процессов, чат-боты, интеграции и внедрение AI-инструментов',
-        popular: false,
-        cases: []
+        popular: false
       },
-      { id: 'crm', service: 'CRM и автоматизация', name: 'CRM и автоматизация', price: 'индивидуально', per: '', confirm: false, text: 'Разработка или внедрение CRM, автоматизация заявок, интеграции', popular: false, cases: ['Автосим'] },
-      { id: 'maps', service: 'Продвижение на картах', name: 'Продвижение на картах', price: '25 000', per: '₽/мес', confirm: true, text: 'Яндекс Карты и 2ГИС: карточки, отзывы, репутация', popular: false, cases: ['Муза', 'Автосим'] },
+      { id: 'crm', service: 'CRM и автоматизация', name: 'CRM и автоматизация', price: 'индивидуально', per: '', confirm: false, text: 'Разработка или внедрение CRM, автоматизация заявок, интеграции', popular: false },
+      { id: 'maps', service: 'Продвижение на картах', name: 'Продвижение на картах', price: '25 000', per: '₽/мес', confirm: false, text: 'Яндекс Карты и 2ГИС: карточки, отзывы, репутация', popular: false },
       {
         id: 'audit',
         service: 'Аудит и консультации',
         name: 'Комплексный аудит маркетинга',
         price: '9 990',
         per: '₽',
-        confirm: true,
+        confirm: false,
         text: 'Сайт, реклама, воронка и аналитика: PDF-отчёт, видеоразбор, встреча и план на 30–60 дней. Стратегию оцениваем отдельно',
-        popular: false,
-        cases: []
+        popular: false
       }
     ],
     budget: 'Рекламный бюджет оплачивается отдельно и идёт напрямую в рекламные системы. Стартовый ориентир — от 60 000 ₽ в месяц с НДС площадок.',
@@ -321,7 +368,8 @@ export const content = {
     letters: [
       {
         scan: { src: 'reviews/letter-kvanta.webp', width: 1240, height: 1754 },
-        who: 'Дмитрий Шпарага, генеральный директор',
+        // Саня: sign it as both — the general director of KVANTA and the vice-president of CLUB500
+        who: 'Дмитрий Шпарага, генеральный директор KVANTA и вице-президент CLUB500',
         company: 'KVANTA · электромобили · Москва'
       },
       {
@@ -337,14 +385,18 @@ export const content = {
     ],
     // Videos: vertical clips from Sanya's VK, re-encoded to 720p (scripts: none — yt-dlp + ffmpeg by hand).
     // A video without `src` is not shown: «Океан» (YouTube Shorts m_xeupQvG08) is still to be added.
+    // First — Sanya's priority, the restaurateur from St Petersburg (the owner's clip from the «Марсала» case, VK clip-145053624_456240966).
     videos: [
+      { src: 'reviews/video-marsala.mp4', poster: 'reviews/video-marsala.webp', who: 'Собственник, ресторатор', company: 'Банкетный зал «Марсала» · Санкт-Петербург' },
       { src: 'reviews/video-prosto.mp4', poster: 'reviews/video-prosto.webp', who: 'Владелец магазина', company: 'Prosto Street Wear · Москва' },
       { src: 'reviews/video-bigmark.mp4', poster: 'reviews/video-bigmark.webp', who: 'Дима Красс, основатель BigMarkAgency', company: 'Небар, «Руки Вверх! Бар», Studio 57 · Самара' },
       { src: 'reviews/video-shameless.mp4', poster: 'reviews/video-shameless.webp', who: 'Анастасия, владелец клуба', company: 'SHAMELESS' },
       { src: 'reviews/video-bombinate.mp4', poster: 'reviews/video-bombinate.webp', who: 'Директор', company: 'Bombinate, клубничная мастерская · Оренбург' },
       { src: null, poster: null, who: 'Анастасия', company: 'Ресторан «Океан» · Калининград' }
     ],
-    open: 'Открыть письмо'
+    open: 'Открыть письмо',
+    play: 'Смотреть отзыв',
+    pause: 'Пауза'
   },
   faq: {
     label: 'FAQ',
@@ -482,12 +534,9 @@ export const content = {
     contacts: [
       { label: 'Telegram', value: '@alex13girin', href: telegram, confirm: false },
       { label: 'ВКонтакте', value: 'vk.com/alex13girin', href: 'https://vk.com/alex13girin', confirm: false },
-      { label: 'Телефон', value: '+7 (···) ··· ·· ··', href: '', confirm: true },
-      { label: 'Email', value: 'hello@···', href: '', confirm: true }
+      // phone, email and company details go here once Саня sends them — no placeholders on the page
     ],
     navTitle: 'разделы',
-    legal: 'ИП / ООО ··· · ИНН ··· · ОГРН ···',
-    legalConfirm: 'реквизиты — уточнить',
     policy: { label: 'Политика конфиденциальности', href: '/privacy' },
     rights: '© 2026 Alex Media'
   }

@@ -33,6 +33,19 @@ const ManifestLine = ({ text, index, progress, lit }: { text: string; index: num
   );
 };
 
+/** The full quote stays quiet; the words it is about are lit with a lime underline (Рома's pick, variant «c», 2026-11-20). */
+const KeyQuote = () => {
+  const at = q.text.indexOf(q.key);
+  if (at < 0) return <>«{q.text}»</>;
+  return (
+    <>
+      «{q.text.slice(0, at)}
+      <mark className="manifest__key">{q.key}</mark>
+      {q.text.slice(at + q.key.length)}»
+    </>
+  );
+};
+
 const Manifest = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
@@ -46,12 +59,15 @@ const Manifest = () => {
         ))}
       </div>
       <motion.div ref={tail.ref} className="manifest__tail wrap" style={{ opacity: tail.progress, y: tailY }}>
-        <img className="manifest__photo" src={asset(q.photo)} alt="" width={72} height={72} loading="lazy" decoding="async" />
-        <blockquote className="manifest__quote">«{q.text}»</blockquote>
+        <img className="manifest__photo" src={asset(q.photo)} alt="" width={96} height={96} loading="lazy" decoding="async" />
+        {/* who says it, over the words — not off in the far corner */}
         <figcaption className="manifest__who">
           {q.name}
           <span>{q.role}</span>
         </figcaption>
+        <blockquote className="manifest__quote">
+          <KeyQuote />
+        </blockquote>
       </motion.div>
     </figure>
   );

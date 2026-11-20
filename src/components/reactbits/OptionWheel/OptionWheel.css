@@ -40,3 +40,26 @@
   left: auto;
   transform-origin: right center;
 }
+
+/* behind the lock: the name is there, in a quieter ink, with the lock before it */
+.option-wheel__item--locked {
+  --ow-text-color: rgb(134 138 128 / 0.55);
+  --ow-active-color: var(--ink-3);
+}
+
+.option-wheel__lock {
+  width: 0.5em;
+  height: 0.5em;
+  margin-right: 0.3em;
+  vertical-align: 0.12em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* the visitor's own slot: lime is the light on it — text, not a fill */
+.option-wheel__item--marked {
+  --ow-text-color: color-mix(in srgb, var(--lime-text) 55%, var(--ink-3));
+  --ow-active-color: var(--lime-text);
+}

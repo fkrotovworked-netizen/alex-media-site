@@ -93,6 +93,22 @@ section.cases[id] {
   letter-spacing: -0.005em;
 }
 
+.cases__lock {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.cases__more {
+  margin-left: 8px;
+  font: 500 0.6875rem/1 var(--font-mono);
+  color: var(--ink-3);
+}
+
 /* ——— the preview ——— */
 .cases__right {
   display: grid;
@@ -205,14 +221,36 @@ section.cases[id] {
   font-size: clamp(1.375rem, 2vw, 1.875rem);
 }
 
-/* the empty slot is scored into the acrylic, not drawn on it */
+/* the empty slot is scored into the acrylic, not drawn on it — and in it, set large, who comes next */
 .preview__cover--empty {
   display: grid;
-  place-items: center;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(10px, 1.2vw, 16px);
+  padding: 16px;
   background: linear-gradient(160deg, rgb(255 255 255 / 0.035), transparent 60%), var(--g-900);
   box-shadow:
     inset 0 1px 2px rgb(0 0 0 / 0.5),
     inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  text-align: center;
+}
+
+.preview__next {
+  font: 560 min(3.6rem, 10.5cqi) / 0.95 var(--font-display);
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+/* lime is the light that falls on it, as on a case's figure */
+.preview__next-lit {
+  color: transparent;
+  background: linear-gradient(150deg, var(--lime-hi) 8%, var(--lime) 52%, var(--lime-mid) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.preview__slot-note {
   font: 500 0.6875rem/1 var(--font-mono);
   letter-spacing: 0.08em;
   text-transform: uppercase;

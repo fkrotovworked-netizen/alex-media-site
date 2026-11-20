@@ -5,7 +5,7 @@ import { asset } from '../asset';
 const external = (href: string) => (href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {});
 
 export const Footer = () => {
-  const { about, contactsTitle, contacts, navTitle, legal, legalConfirm, policy, rights } = content.footer;
+  const { about, contactsTitle, contacts, navTitle, policy, rights } = content.footer;
 
   return (
     <footer className="footer">
@@ -38,14 +38,9 @@ export const Footer = () => {
             {contacts.map((item) => (
               <li key={item.label}>
                 <span className="footer__key">{item.label}</span>
-                {item.href ? (
-                  <a href={item.href} {...external(item.href)}>
-                    {item.value}
-                  </a>
-                ) : (
-                  <span>{item.value}</span>
-                )}
-                {item.confirm ? <span className="confirm">уточнить</span> : null}
+                <a href={item.href} {...external(item.href)}>
+                  {item.value}
+                </a>
               </li>
             ))}
           </ul>
@@ -53,9 +48,6 @@ export const Footer = () => {
 
         <div className="footer__base">
           <p>{rights}</p>
-          <p className="footer__legal">
-            {legal} <span className="confirm">{legalConfirm}</span>
-          </p>
           <a href={policy.href}>{policy.label}</a>
         </div>
       </div>

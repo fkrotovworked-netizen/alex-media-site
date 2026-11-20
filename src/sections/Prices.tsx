@@ -1,8 +1,6 @@
 import { motion, useTransform } from 'motion/react';
 import { useState } from 'react';
 import { BorderBeam } from '../components/BorderBeam';
-import { CasesFolder } from '../components/CasesFolder';
-import { cases } from '../cases';
 import { SectionHead } from '../components/SectionHead';
 import { Sheet } from '../components/Sheet';
 import { content } from '../content';
@@ -16,7 +14,7 @@ import './Prices.css';
  * The most common one is a piece of black acrylic set into the paper.
  */
 export const Prices = () => {
-  const { label, title, lead, from, request, popular, folder, confirm, items, budget, budgetConfirm, pick } =
+  const { label, title, lead, from, request, popular, confirm, items, budget, budgetConfirm, pick } =
     content.prices;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
   const sheet = useReveal<HTMLDivElement>({ duration: 1 });
@@ -33,7 +31,6 @@ export const Prices = () => {
 
         <motion.div ref={sheet.ref} className="price-sheet" style={{ opacity: sheet.progress, y: sheetY }}>
           {items.map((item) => {
-            const filed = item.cases.map((name) => cases.find((c) => c.name === name)).filter((c) => c !== undefined);
             return (
               <article
                 key={item.id}
@@ -60,6 +57,7 @@ export const Prices = () => {
                 </p>
                 {item.confirm ? <span className="confirm price__confirm">{confirm}</span> : null}
                 <p className="price__text">{item.text}</p>
+                {'note' in item && item.note ? <p className="price__note">{item.note}</p> : null}
                 <a
                   className={`btn btn--sm price__cta ${item.popular ? 'btn--lime' : 'btn--acrylic'}`}
                   href="#contact"
@@ -68,7 +66,6 @@ export const Prices = () => {
                   <span className="btn__label">{request}</span>
                 </a>
                 <BorderBeam active={lit === item.id} />
-                {filed.length ? <CasesFolder open={lit === item.id} label={folder} files={filed} /> : null}
               </article>
             );
           })}

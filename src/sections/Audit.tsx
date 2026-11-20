@@ -97,7 +97,7 @@ export const Audit = () => {
           <div className="audit__row audit__row--foot">
             <span />
             <span />
-            <button className="btn btn--outline btn--sm audit__order" type="button" aria-haspopup="dialog" onClick={() => setDialog(1)}>
+            <button className="btn btn--lime btn--sm audit__order" type="button" aria-haspopup="dialog" onClick={() => setDialog(1)}>
               <span className="btn__label">{order.label}</span>
             </button>
           </div>

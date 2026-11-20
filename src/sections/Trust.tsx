@@ -9,17 +9,24 @@ import './Trust.css';
 
 type Logo = (typeof content.trust.logos)[number];
 
-const Mark = ({ logo }: { logo: Logo }) => (
-  <img
-    className="trust__mark"
-    style={{ '--h': `${logo.h}px` } as CSSProperties}
-    src={asset(logo.src)}
-    alt={logo.name}
-    width={Math.round((logo.w / 128) * logo.h)}
-    height={logo.h}
-    decoding="async"
-  />
-);
+/** One client: the mark in one ink, and over it the brand's own colours, which come up under the pointer. */
+const Mark = ({ logo }: { logo: Logo }) => {
+  const width = Math.round(logo.ratio * logo.h);
+  return (
+    <span className="trust__logo" style={{ '--h': `${logo.h}px` } as CSSProperties}>
+      <img className="trust__mark" src={asset(logo.src)} alt={logo.name} width={width} height={logo.h} decoding="async" />
+      <img
+        className="trust__mark trust__mark--color"
+        src={asset(logo.color ?? logo.src)}
+        alt=""
+        aria-hidden="true"
+        width={width}
+        height={logo.h}
+        decoding="async"
+      />
+    </span>
+  );
+};
 
 /** The label on a plate of black acrylic, a band of lime light running round its rim: the one moving light on the strip. */
 const Label = ({ text }: { text: string }) => (

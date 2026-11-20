@@ -1,7 +1,12 @@
-# Lead receiver (see lead.js). Deploy: npx wrangler deploy --config worker/wrangler.toml
+# The site's backend: form requests and the assistant Алекс (see index.js).
+# Deploy: npx wrangler deploy --config worker/wrangler.toml
+# Secrets: TG_TOKEN, TG_CHAT_ID, RESEND_KEY, LEAD_EMAIL, AI_KEY (npx wrangler secret put NAME --config worker/wrangler.toml)
 name = "alex-media-lead"
-main = "lead.js"
+main = "index.js"
 compatibility_date = "2026-10-01"
 
 [vars]
-ALLOWED_ORIGINS = "https://fkrotovworked-netizen.github.io,http://localhost:5183"
+ALLOWED_ORIGINS = "https://fkrotovworked-netizen.github.io,http://localhost:5183,http://localhost:5184"
+# any OpenAI-compatible API; ProxyAPI takes rubles and passes requests on to OpenAI
+AI_BASE_URL = "https://api.proxyapi.ru/openai/v1"
+AI_MODEL = "gpt-4o-mini"

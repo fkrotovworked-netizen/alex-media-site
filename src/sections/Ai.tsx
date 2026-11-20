@@ -1,100 +1,66 @@
-import { AnimatePresence, motion, useInView, useTransform, type MotionValue } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { motion, useTransform, type MotionValue } from 'motion/react';
 import { asset } from '../asset';
+import { AssistantInline } from '../assistant/AssistantInline';
 import { SectionHead } from '../components/SectionHead';
 import { Sheet } from '../components/Sheet';
 import { content } from '../content';
 import { chooseService } from '../lead';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
-import { clamp01, settle, springs, toMotion } from '../motion/tokens';
+import { clamp01, settle } from '../motion/tokens';
 import './Ai.css';
 
-/** Seconds each direction stays open while nobody chooses. */
-const DWELL = 4.5;
-
-/**
- * Where each direction sits on the picture (share of its width and height): on the panel of
- * Sanya's android that shows that kind of work.
- */
-const SPOTS: readonly { x: number; y: number }[] = [
-  { x: 0.16, y: 0.64 }, // AI-сайты — the window with a picture and lines
-  { x: 0.17, y: 0.3 }, // ассистенты и чат-боты — the speech bubble
-  { x: 0.75, y: 0.39 }, // автоматизация — the checklist
-  { x: 0.84, y: 0.15 }, // приложения — the chart panel
-  { x: 0.72, y: 0.64 }, // креативы — the wave
-  { x: 0.11, y: 0.46 } // интеграции — the people (CRM)
-];
-
 const num = (i: number) => String(i + 1).padStart(2, '0');
-const spring = { type: 'spring', ...toMotion(springs.glide) } as const;
-const fade = { duration: 0.24, ease: [0.2, 0.8, 0.2, 1] } as const;
 
-interface SpotProps {
+interface PlateProps {
   index: number;
-  open: boolean;
+  /** -1 on the left of the head, 1 on the right: the plate comes in from its own side. */
+  side: -1 | 1;
+  /** Its place in its column, top to bottom. */
+  row: number;
   progress: MotionValue<number>;
-  onPick: (index: number, hover: boolean) => void;
 }
 
-/** A point of light on its panel, with the direction's name beside it; the points come up one by one. */
-const Spot = ({ index, open, progress, onPick }: SpotProps) => {
-  const { x, y } = SPOTS[index];
-  const opacity = useTransform(progress, (p) => clamp01((p - 0.45 - index * 0.07) / 0.25));
+/** One direction on a plate of black acrylic: number, name and the whole text, readable without a click. */
+const Plate = ({ index, side, row, progress }: PlateProps) => {
+  const { title, text } = content.ai.duties[index];
+  const t = useTransform(progress, (p) => settle(p * 1.5 - 0.25 - row * 0.12, 0.7));
+  const x = useTransform(t, (v) => (1 - v) * 24 * side);
+  const opacity = useTransform(t, (v) => clamp01(v * 1.4));
   return (
-    <motion.button
-      type="button"
-      className="ai__spot"
-      data-open={open || undefined}
-      style={{ left: `${x * 100}%`, top: `${y * 100}%`, opacity }}
-      aria-pressed={open}
-      onPointerEnter={(e) => e.pointerType === 'mouse' && onPick(index, true)}
-      onFocus={() => onPick(index, false)}
-      onClick={() => onPick(index, false)}
-    >
-      <span className="ai__dot" aria-hidden="true" />
-      <span className="ai__tag">{content.ai.duties[index].title}</span>
-    </motion.button>
+    <motion.li className="ai__plate acrylic" style={{ x, opacity }}>
+      <span className="ai__num">{num(index)}</span>
+      <h3 className="ai__plate-title">{title}</h3>
+      <p className="ai__plate-text">{text}</p>
+    </motion.li>
   );
 };
 
 /**
- * Item 3 of Рома's list: the six directions are not a wall of text around the picture, they live
- * on it. Sanya's android is the map — each direction is a point on the panel that shows it, and
- * the open one unfolds a card of smoked glass beside its point. While nobody chooses, the points
- * take turns; a pointer over the picture pauses that, a click or the keyboard stops it.
+ * Рома, 2026-11-20: the android became just its head, and the six directions stand on plates either side
+ * of it — three and three, all of them in sight at once (the map with points and one open card hid five of six).
  */
 export const Ai = () => {
   const stage = useStage();
-  const { label, title, lead, android, duties, cta } = content.ai;
+  const { label, title, lead, head: pic, duties, cta } = content.ai;
   const head = useReveal<HTMLDivElement>({ duration: 1.3 });
-  const map = useReveal<HTMLDivElement>({ duration: 1.6, margin: '0px 0px -25% 0px' });
-  const inView = useInView(map.ref, { amount: 0.4 });
+  const map = useReveal<HTMLDivElement>({ duration: 1.6, margin: '0px 0px -20% 0px' });
 
-  const [open, setOpen] = useState(0);
-  const [chosen, setChosen] = useState(false);
-  const [held, setHeld] = useState(false);
-  const pick = (index: number, hover: boolean) => {
-    setOpen(index);
-    if (!hover) setChosen(true);
-  };
-
-  useEffect(() => {
-    if (!inView || chosen || held || stage.reduced) return;
-    const id = window.setInterval(() => setOpen((v) => (v + 1) % duties.length), DWELL * 1000);
-    return () => window.clearInterval(id);
-  }, [inView, chosen, held, stage.reduced, duties.length]);
-
-  // the picture leans with the camera, as everything the cursor's light falls on
-  const rotateY = useTransform(stage.cam.x, (v) => v * 4);
-  const rotateX = useTransform(stage.cam.y, (v) => 2 - v * 3);
+  // the head leans with the camera, as everything the cursor's light falls on
+  const rotateY = useTransform(stage.cam.x, (v) => v * 5);
+  const rotateX = useTransform(stage.cam.y, (v) => 1 - v * 3);
   const picIn = useTransform(map.progress, (p) => settle(p * 1.6, 0.7));
   const picY = useTransform(picIn, (v) => (1 - v) * 28);
-  const cardIn = useTransform(map.progress, (p) => clamp01((p - 0.85) / 0.15));
   const ctaIn = useTransform(map.progress, (p) => clamp01((p - 0.7) / 0.3));
 
-  const spot = SPOTS[open];
-  const toLeft = spot.x > 0.5;
+  const half = Math.ceil(duties.length / 2);
+  const column = (from: number, to: number, side: -1 | 1) => (
+    <ol className={`ai__plates ai__plates--${side < 0 ? 'left' : 'right'}`} start={from + 1}>
+      {duties.slice(from, to).map((_, i) => (
+        <Plate key={from + i} index={from + i} side={side} row={i} progress={map.progress} />
+      ))}
+    </ol>
+  );
 
   return (
     <Sheet id="ai" className="ai">
@@ -104,37 +70,17 @@ export const Ai = () => {
         </div>
 
         <div ref={map.ref} className="ai__map">
+          {column(0, half, -1)}
           <motion.figure
-            className="ai__android"
+            className="ai__face"
             style={stage.reduced ? undefined : { rotateX, rotateY, opacity: picIn, y: picY, transformPerspective: 1600 }}
-            onPointerEnter={() => setHeld(true)}
-            onPointerLeave={() => setHeld(false)}
           >
-            {/* the points are placed in shares of the picture, so they live in a box of its size alone */}
-            <div className="ai__pic">
-              <img src={asset(android.src)} alt={android.alt} width={1448} height={1086} loading="lazy" decoding="async" />
-              {duties.map((_, i) => (
-                <Spot key={i} index={i} open={open === i} progress={map.progress} onPick={pick} />
-              ))}
-            </div>
-            <motion.div className="ai__card-slot" style={{ opacity: cardIn }} aria-live="polite">
-              <AnimatePresence initial={false}>
-                <motion.div
-                  key={open}
-                  className={`ai__card${toLeft ? ' ai__card--left' : ''}`}
-                  style={{ left: `${spot.x * 100}%`, top: `${spot.y * 100}%` }}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1, transition: { scale: spring, opacity: fade } }}
-                  exit={{ opacity: 0, transition: fade }}
-                >
-                  <span className="ai__num">{num(open)}</span>
-                  <h3 className="ai__card-title">{duties[open].title}</h3>
-                  <p className="ai__card-text">{duties[open].text}</p>
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
+            <img src={asset(pic.src)} alt={pic.alt} width={pic.width} height={pic.height} loading="lazy" decoding="async" />
           </motion.figure>
+          {column(half, duties.length, 1)}
         </div>
+
+        <AssistantInline />
 
         <motion.div className="ai__cta" style={{ opacity: ctaIn }}>
           <a className="btn btn--acrylic" href={cta.href} onClick={() => chooseService(cta.service)}>

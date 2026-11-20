@@ -9,18 +9,35 @@
   align-items: center;
 }
 
-/* one ink for every client: the marks are white in their alpha, dimmed into the graphite */
+/* At rest one ink for every client: the marks are white in their alpha, dimmed into the graphite.
+   Under the pointer the brand's own colours come up over it — a short ease, colour does not travel. */
+.trust__logo {
+  position: relative;
+  display: block;
+  height: calc(var(--h) * var(--logo-k, 1));
+}
+
 .trust__mark {
   display: block;
   width: auto;
-  height: calc(var(--h) * var(--logo-k, 1));
+  height: 100%;
   opacity: 0.56;
-  transition: opacity 200ms var(--ease-out);
+  transition: opacity 240ms var(--ease-out);
+}
+
+.trust__mark--color {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 
 @media (hover: hover) {
-  .trust__mark:hover {
-    opacity: 0.9;
+  .trust__logo:hover .trust__mark {
+    opacity: 0;
+  }
+
+  .trust__logo:hover .trust__mark--color {
+    opacity: 1;
   }
 }
 

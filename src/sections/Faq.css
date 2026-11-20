@@ -84,6 +84,11 @@
   overflow: hidden;
 }
 
+/* the list holds its own room: what moves inside it never reaches the sheet, the form or the page */
+.faq__list[data-boxed] {
+  contain: size layout;
+}
+
 .faq__body {
   display: grid;
   gap: 12px;
