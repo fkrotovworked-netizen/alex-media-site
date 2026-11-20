@@ -112,49 +112,6 @@
   }
 }
 
-/* ——— Алекс, live: the copy on the paper, the chat as the one dark object beside it ——— */
-.ai__ask {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(28px, 5vw, 88px);
-  align-items: center;
-  width: min(100%, 1120px);
-  margin: clamp(56px, 7vw, 104px) auto 0;
-}
-
-.ai__ask-title {
-  margin-top: clamp(14px, 1.6vw, 22px);
-  font: 540 clamp(1.75rem, 3vw, 2.75rem) / 1.05 var(--font-display);
-  letter-spacing: -0.045em;
-  text-wrap: balance;
-}
-
-.ai__ask-title span {
-  color: var(--ink-quiet);
-}
-
-.ai__ask-lead {
-  max-width: 28rem;
-  margin-top: clamp(14px, 1.6vw, 22px);
-  font-size: clamp(1rem, 1.2vw, 1.125rem);
-  line-height: 1.5;
-  color: var(--ink-2);
-}
-
-.alex--inline {
-  height: clamp(460px, 44vw, 560px);
-}
-
-@media (max-width: 900px) {
-  .ai__ask {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .alex--inline {
-    height: 520px;
-  }
-}
-
 .ai__cta {
   display: flex;
   justify-content: center;

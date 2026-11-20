@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import { AssistantDock } from './assistant/AssistantDock';
 import { Footer } from './components/Footer';
 import { Nav } from './components/Nav';
 import { StageProvider, useStage } from './motion/stage';
@@ -54,7 +53,6 @@ const Page = () => {
         <Final />
       </main>
       <Footer />
-      <AssistantDock />
     </>
   );
 };

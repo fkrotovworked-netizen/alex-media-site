@@ -42,11 +42,12 @@ export const content = {
   // brand's own colours come up (`color`; without it the mark just brightens). `ratio` is width / height,
   // `h` the drawn height: wordmarks low, compact marks taller.
   // Sources: yobidoyobi.ru, sushisell-franshiza.ru, balconlounge.ru and fortboyard56.ru (their files),
-  // the KVANTA letterhead, VK avatars («Океан», «Руки Вверх!»). CLUB500 — waiting for the file from Саня.
+  // the KVANTA letterhead, VK avatars («Океан», «Руки Вверх!»), CLUB500 from the file Рома sent (white on black → alpha).
   trust: {
     label: 'Нам доверяют',
     logos: [
       { src: 'logos/kvanta.png', color: 'logos/kvanta-color.png', name: 'KVANTA', ratio: 188 / 128, h: 42 },
+      { src: 'logos/club500.png', color: null, name: 'CLUB500', ratio: 232 / 128, h: 42 },
       { src: 'logos/yobidoyobi.svg', color: 'logos/yobidoyobi-color.svg', name: 'Ёбидоёби', ratio: 130 / 40, h: 40 },
       { src: 'logos/sushisell.svg', color: 'logos/sushisell-color.svg', name: 'Сушиселл', ratio: 738 / 88, h: 18 },
       { src: 'logos/fort-boyard.png', color: 'logos/fort-boyard-color.png', name: 'Форт Боярд', ratio: 231 / 128, h: 40 },

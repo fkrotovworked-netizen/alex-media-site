@@ -212,3 +212,51 @@
     padding-top: 0;
   }
 }
+
+/* ——— decorative pieces beside the quote (components/Deco) ——— */
+.manifest__tail {
+  position: relative;
+}
+
+.manifest__tail > :not(.deco) {
+  position: relative;
+  z-index: 1;
+}
+
+.deco--quote-wave {
+  top: -12%;
+  right: 2%;
+  width: clamp(240px, 27vw, 420px);
+}
+
+.deco--quote-drop {
+  top: -16%;
+  right: 33%;
+  width: 46px;
+}
+
+.deco--quote-bead {
+  bottom: -18%;
+  right: 25%;
+  width: 34px;
+}
+
+@media (max-width: 1100px) {
+  .deco--quote-wave {
+    width: 220px;
+    top: -22%;
+    right: -4%;
+    opacity: 0.85;
+  }
+
+  .deco--quote-drop,
+  .deco--quote-bead {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .deco--quote-wave {
+    display: none;
+  }
+}

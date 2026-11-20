@@ -7,6 +7,7 @@ import { content } from '../content';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
 import { clamp01 } from '../motion/tokens';
+import { Deco } from '../components/Deco';
 import './About.css';
 
 const q = content.about.quote;
@@ -68,6 +69,10 @@ const Manifest = () => {
         <blockquote className="manifest__quote">
           <KeyQuote />
         </blockquote>
+        {/* the empty right of the quote: one glossy wave in focus, two drops further back */}
+        <Deco name="wave" className="deco--quote-wave" depth={50} rotate={-8} />
+        <Deco name="bubble-lime" className="deco--quote-drop" depth={90} blur={2} />
+        <Deco name="bubble" className="deco--quote-bead" depth={130} blur={4} />
       </motion.div>
     </figure>
   );

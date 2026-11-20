@@ -1,0 +1,15 @@
+/* A decorative piece: placed by its section, lit like everything else (its shadow falls down-right). */
+.deco {
+  position: absolute;
+  z-index: 0;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  filter: blur(var(--deco-blur, 0px)) drop-shadow(10px 18px 22px rgb(0 0 0 / 0.35));
+  will-change: transform;
+}
+
+/* sharp pieces keep only their shadow; the blur filter is not built for them */
+.deco--sharp {
+  filter: drop-shadow(10px 18px 22px rgb(0 0 0 / 0.35));
+}

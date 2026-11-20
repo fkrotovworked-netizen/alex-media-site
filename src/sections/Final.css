@@ -451,3 +451,39 @@
   height: 1px;
   opacity: 0;
 }
+
+/* ——— decorative pieces on the lime sheet (components/Deco) ——— */
+.final .sheet__body {
+  position: relative;
+}
+
+.deco--final-sphere {
+  top: 64%;
+  left: 43.5%;
+  width: clamp(110px, 10vw, 160px);
+}
+
+.deco--final-hook {
+  bottom: 5%;
+  left: 60%;
+  width: clamp(70px, 6vw, 96px);
+  filter: drop-shadow(10px 16px 16px rgb(40 50 0 / 0.35));
+}
+
+.final__grid {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .deco--final-sphere {
+    top: 2%;
+    left: auto;
+    right: 4%;
+    width: 90px;
+  }
+
+  .deco--final-hook {
+    display: none;
+  }
+}

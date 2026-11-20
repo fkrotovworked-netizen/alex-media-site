@@ -7,6 +7,7 @@ import { chooseService, LEAD_ENDPOINT, sendLead, useService } from '../lead';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
 import { clamp01, springs, toMotion } from '../motion/tokens';
+import { Deco } from '../components/Deco';
 import './Final.css';
 
 type Step = 'contact' | 'details' | 'thanks';
@@ -78,6 +79,9 @@ export const Final = () => {
 
   return (
     <Sheet tone="lime" id="contact" className="final">
+      {/* two glossy pieces on the lime: a black sphere close to the eye, out of focus, and a hook further in */}
+      <Deco name="sphere" className="deco--final-sphere" depth={140} blur={6} />
+      <Deco name="hook" className="deco--final-hook" depth={60} rotate={18} />
       <div ref={head.ref} className="final__grid wrap block block--final">
         <div className="final__copy">
           <p className="eyebrow eyebrow--dot">{f.label}</p>

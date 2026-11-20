@@ -1,6 +1,5 @@
 import { motion, useTransform, type MotionValue } from 'motion/react';
 import { asset } from '../asset';
-import { AssistantInline } from '../assistant/AssistantInline';
 import { SectionHead } from '../components/SectionHead';
 import { Sheet } from '../components/Sheet';
 import { content } from '../content';
@@ -79,8 +78,6 @@ export const Ai = () => {
           </motion.figure>
           {column(half, duties.length, 1)}
         </div>
-
-        <AssistantInline />
 
         <motion.div className="ai__cta" style={{ opacity: ctaIn }}>
           <a className="btn btn--acrylic" href={cta.href} onClick={() => chooseService(cta.service)}>
