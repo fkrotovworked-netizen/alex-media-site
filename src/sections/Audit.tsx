@@ -5,7 +5,6 @@ import { SectionHead } from '../components/SectionHead';
 import { content } from '../content';
 import { useReveal } from '../motion/reveal';
 import { clamp01 } from '../motion/tokens';
-import { Deco } from '../components/Deco';
 import './Audit.css';
 
 type Cell = boolean | string;
@@ -66,8 +65,6 @@ export const Audit = () => {
               <span className="btn__label">{cta.label}</span>
             </button>
           </motion.div>
-          {/* the room under the button: a cross out of focus, as if nearer the eye than the page */}
-          <Deco name="cross" className="deco--audit" depth={110} blur={3} rotate={14} />
         </div>
 
         <motion.div

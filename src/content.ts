@@ -486,8 +486,10 @@ export const content = {
     lead: 'Расскажите, что хотите изменить. Мы подскажем, с чего начать.',
     field: 'Телефон или Telegram',
     submit: 'Обсудить проект',
-    consent: ['Согласен на обработку персональных данных и принимаю', 'политику конфиденциальности'],
-    policy: '/privacy',
+    // public/consent.html and public/policy.html: the operator is ИП Гирин А. В. (requisites as on Sanya's ПРОГИБ site)
+    consent: ['Даю', 'согласие на обработку персональных данных', 'и принимаю', 'политику обработки персональных данных'],
+    policy: 'policy.html',
+    consentPage: 'consent.html',
     service: 'Услуга',
     servicePick: 'Выберите услугу',
     contactLabel: 'Связь',
@@ -538,7 +540,11 @@ export const content = {
       // phone, email and company details go here once Саня sends them — no placeholders on the page
     ],
     navTitle: 'разделы',
-    policy: { label: 'Политика конфиденциальности', href: '/privacy' },
-    rights: '© 2026 Alex Media'
+    legal: [
+      { label: 'Политика обработки персональных данных', href: 'policy.html' },
+      { label: 'Согласие на обработку данных', href: 'consent.html' }
+    ],
+    rights: '© 2026 Alex Media',
+    requisites: 'ИП Гирин А. В. · ОГРНИП 324565800043865 · ИНН 561102939234'
   }
 } as const;

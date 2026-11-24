@@ -191,27 +191,3 @@
     width: 100%;
   }
 }
-
-/* ——— a decorative piece under the button (components/Deco) ——— */
-.audit__head {
-  position: relative;
-  align-self: stretch;
-}
-
-.audit__head > :not(.deco) {
-  position: relative;
-  z-index: 1;
-}
-
-.deco--audit {
-  bottom: 4%;
-  left: 38%;
-  width: clamp(120px, 11vw, 170px);
-  opacity: 0.9;
-}
-
-@media (max-width: 1100px) {
-  .deco--audit {
-    display: none;
-  }
-}

@@ -125,18 +125,3 @@
     transition: none;
   }
 }
-
-/* ——— a decorative drop under the heading (components/Deco) ——— */
-.faq__head .deco--faq {
-  position: relative;
-  display: block;
-  width: clamp(70px, 6vw, 96px);
-  margin: clamp(36px, 5vw, 64px) 0 0 clamp(40px, 8vw, 120px);
-  filter: drop-shadow(10px 16px 16px rgb(20 21 19 / 0.22));
-}
-
-@media (max-width: 860px) {
-  .faq__head .deco--faq {
-    display: none;
-  }
-}

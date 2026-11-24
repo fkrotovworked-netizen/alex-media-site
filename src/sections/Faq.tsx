@@ -6,7 +6,6 @@ import { content } from '../content';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
 import { springs, toMotion } from '../motion/tokens';
-import { Deco } from '../components/Deco';
 import './Faq.css';
 
 /*
@@ -96,8 +95,6 @@ export const Faq = () => {
       <div className="faq__grid wrap block">
         <div ref={head.ref} className="faq__head">
           <SectionHead label={label} title={title} lead={lead} progress={head.progress} />
-          {/* a drop that hangs under the heading and travels down with it */}
-          <Deco name="drip" className="deco--faq" depth={30} rotate={-6} />
         </div>
         <ul ref={listRef} className="faq__list" style={room ? { height: room } : undefined} data-boxed={room ? '' : undefined}>
           {items.map((item, i) => (

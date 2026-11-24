@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type FormEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { content } from '../content';
+import { ConsentText } from './ConsentText';
 import { LEAD_ENDPOINT, sendLead } from '../lead';
 import { useStage } from '../motion/stage';
 import { springs, toMotion } from '../motion/tokens';
@@ -192,12 +193,7 @@ const Panel = ({ initial, onClose }: { initial: number; onClose: () => void }) =
                 }}
               />
               <span className="consent__box" aria-hidden="true" />
-              <span>
-                {f.consent[0]}{' '}
-                <a href={f.policy} target="_blank" rel="noreferrer">
-                  {f.consent[1]}
-                </a>
-              </span>
+              <ConsentText />
             </label>
             <p className="audit-dialog__status" id={`${id}-status`} role="status">
               {problem === 'empty' ? f.empty : problem === 'consent' ? f.noConsent : problem === 'send' ? f.sendFailed : ''}

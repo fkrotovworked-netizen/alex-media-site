@@ -101,7 +101,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
+  gap: 8px 24px;
 }
 
 .footer__base a {
