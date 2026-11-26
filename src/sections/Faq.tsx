@@ -12,8 +12,10 @@ import './Faq.css';
  * The answer opens on a spring, as before — but the sheet never feels it. Animating the height used to resize
  * the whole FAQ sheet on every frame: the plate behind it (grain, gradients) and the lime form sheet below were
  * repainted, and every ResizeObserver on the page re-measured it, so Safari froze (Рома, 2026-11-20).
- * Now the list is given, up front, the height it has with its longest answer open, and is its own layout
- * boundary (`contain: size layout`): the spring moves the answers inside that box, nothing outside it changes.
+ * Now the list is its own layout boundary (`contain: size layout`) with a height set in steps, never per frame:
+ * on a toggle it takes room for the larger of the answer closing and the answer opening, the spring moves the
+ * answers inside that box, and once it settles the list shrinks to what is open. (Until 2026-11-26 the room was
+ * always the longest answer: on a phone that left a screen of empty sheet under the questions — Рома.)
  */
 const OPEN = { type: 'spring' as const, ...toMotion(springs.ui) };
 
@@ -24,9 +26,10 @@ interface ItemProps {
   a: Answer;
   open: boolean;
   onToggle: () => void;
+  onSettled: () => void;
 }
 
-const Item = ({ q, a, open, onToggle }: ItemProps) => {
+const Item = ({ q, a, open, onToggle, onSettled }: ItemProps) => {
   const { reduced } = useStage();
   const id = useId();
   return (
@@ -45,6 +48,7 @@ const Item = ({ q, a, open, onToggle }: ItemProps) => {
         animate={open ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
         transition={reduced ? { duration: 0 } : OPEN}
         inert={!open}
+        onAnimationComplete={onSettled}
       >
         <div className="faq__body">
           {a.map((block, i) =>
@@ -70,25 +74,37 @@ export const Faq = () => {
   const [open, setOpen] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
   const [room, setRoom] = useState<number | null>(null);
+  // the questions' total height and each answer body's natural height, at the current width
+  const sizes = useRef<{ rows: number; bodies: number[] }>({ rows: 0, bodies: [] });
+  const openRef = useRef(open);
+  const body = (i: number) => (i >= 0 ? sizes.current.bodies[i] ?? 0 : 0);
+  const fit = (...shown: number[]) => setRoom(Math.ceil(sizes.current.rows + Math.max(0, ...shown.map(body)) + 2));
 
-  // The list's height with every question closed and the longest answer open: measured from the questions and
-  // the answers' bodies (their natural height, whatever their box shows), again whenever the width changes.
   useLayoutEffect(() => {
     const list = listRef.current;
     if (!list) return;
-    let width = -1;
     const measure = () => {
-      if (list.clientWidth === width) return;
-      width = list.clientWidth;
       const rows = [...list.querySelectorAll<HTMLElement>('.faq__item > h3')].reduce((sum, el) => sum + el.offsetHeight, 0);
-      const longest = Math.max(0, ...[...list.querySelectorAll<HTMLElement>('.faq__body')].map((el) => el.offsetHeight));
-      setRoom(Math.ceil(rows + longest + 2));
+      const bodies = [...list.querySelectorAll<HTMLElement>('.faq__body')].map((el) => el.offsetHeight);
+      sizes.current = { rows, bodies };
+      fit(openRef.current);
     };
     measure();
+    // the questions and the answers themselves: a new width or the display font arriving re-wraps them
     const observer = new ResizeObserver(measure);
-    observer.observe(list.parentElement ?? list);
+    list.querySelectorAll('.faq__item > h3, .faq__body').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+
+  const toggle = (i: number) => {
+    const next = open === i ? -1 : i;
+    // room for both while the spring runs, so nothing inside ever spills out of the box
+    fit(open, next);
+    openRef.current = next;
+    setOpen(next);
+  };
+  // the answers have settled: the list takes just what is open
+  const settled = () => fit(openRef.current);
 
   return (
     <Sheet id="faq" className="faq">
@@ -98,7 +114,7 @@ export const Faq = () => {
         </div>
         <ul ref={listRef} className="faq__list" style={room ? { height: room } : undefined} data-boxed={room ? '' : undefined}>
           {items.map((item, i) => (
-            <Item key={item.q} q={item.q} a={item.a} open={open === i} onToggle={() => setOpen(open === i ? -1 : i)} />
+            <Item key={item.q} q={item.q} a={item.a} open={open === i} onToggle={() => toggle(i)} onSettled={settled} />
           ))}
         </ul>
       </div>

@@ -152,6 +152,8 @@ const Yours = () => {
 export const Cases = () => {
   const stage = useStage();
   const { scrollY, reduced } = stage;
+  // one column (Cases.css ≤ 860): the names under the reading line stay legible, so they blur less
+  const narrow = typeof window !== 'undefined' && window.matchMedia('(max-width: 860px)').matches;
   const { label, title, lead, hint, all, unlock } = content.cases;
 
   // the cases after the visitor's slot are locked until asked for
@@ -313,7 +315,7 @@ export const Cases = () => {
                 onSeek={scrollTo}
                 onDrag={onDrag}
                 label={`${label}: выберите проект`}
-                blur={reduced ? 0 : 1.6}
+                blur={reduced ? 0 : narrow ? 0.7 : 1.6}
                 lockedFrom={open ? undefined : YOURS + 1}
                 onLocked={openRest}
                 marked={YOURS}

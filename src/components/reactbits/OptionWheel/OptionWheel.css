@@ -25,7 +25,8 @@
    transform / opacity / filter as the position changes. */
 .option-wheel__item {
   position: absolute;
-  top: 50%;
+  /* the reading line; an owner can raise it to show more of what comes next */
+  top: var(--ow-anchor, 50%);
   left: var(--ow-inset);
   white-space: nowrap;
   transform-origin: left center;

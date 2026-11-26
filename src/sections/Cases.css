@@ -362,7 +362,7 @@ section.cases[id] {
   }
 
   .cases__left {
-    grid-template-rows: auto minmax(110px, 1fr);
+    grid-template-rows: auto minmax(150px, 1fr);
   }
 
   .head--compact .head__title {
@@ -380,11 +380,20 @@ section.cases[id] {
     margin-top: 6px;
   }
 
+  /* Рома, 2026-11-26: at least three names in sight, so it reads as a list that turns —
+     the reading line moves up to a third, the next two cases show under it */
+  .cases__wheel {
+    -webkit-mask-image: linear-gradient(transparent 0%, #000 14%, #000 74%, transparent 100%);
+    mask-image: linear-gradient(transparent 0%, #000 14%, #000 74%, transparent 100%);
+  }
+
   .cases__wheel .option-wheel {
+    --ow-anchor: 30%;
     font-size: clamp(1.25rem, 5.6vw, 1.75rem);
   }
 
   .cases__mark {
+    top: 30%;
     height: 1.4rem;
     margin-top: -0.7rem;
   }
@@ -414,11 +423,64 @@ section.cases[id] {
 }
 
 @media (max-width: 860px) and (max-height: 700px) {
+  /* three names still fit: the reading line higher, the cover lower */
+  .cases__left {
+    grid-template-rows: auto minmax(118px, 1fr);
+  }
+
+  .cases__wheel .option-wheel {
+    --ow-anchor: 24%;
+  }
+
+  .cases__mark {
+    top: 24%;
+  }
+
   .preview__cover {
-    aspect-ratio: 5 / 2;
+    aspect-ratio: 3 / 1;
   }
 
   .preview__note {
+    display: none;
+  }
+}
+
+/* A short phone (in-app browsers, toolbars shown): the stack would run under the card — the label goes,
+   the cover and the figure get lower, so the lock button stays clear above the preview */
+@media (max-width: 860px) and (max-height: 680px) {
+  .cases .head--compact .eyebrow {
+    display: none;
+  }
+
+  .cases .head--compact .head__title {
+    margin-top: 0;
+  }
+
+  .preview__cover {
+    aspect-ratio: 4 / 1;
+  }
+
+  .preview__value {
+    margin-top: 8px;
+    font-size: min(2.5rem, 11cqi);
+  }
+}
+
+@media (max-width: 860px) and (max-height: 600px) {
+  .cases__left {
+    grid-template-rows: auto minmax(100px, 1fr);
+  }
+
+  .cases__wheel .option-wheel {
+    --ow-anchor: 20%;
+    font-size: 1.125rem;
+  }
+
+  .cases__mark {
+    top: 20%;
+  }
+
+  .preview__cover {
     display: none;
   }
 }

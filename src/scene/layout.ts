@@ -57,7 +57,8 @@ export function measureLayout(stage: HTMLElement, formAspect: number): SceneLayo
 
   // The form is no longer the landscape: it stands behind the portrait, wider than
   // the pane so its peaks frame it, and its lime catches the figure from behind.
-  const formW = Math.min(pane.w * (narrow ? 1.45 : 2.15), stageW * (narrow ? 2 : 1.25), 2400);
+  // on a phone the form must also end inside the pane's height (formY below + 90% of it), or its lime runs onto the lead
+  const formW = Math.min(pane.w * (narrow ? 1.45 : 2.15), stageW * (narrow ? 2 : 1.25), 2400, narrow ? pane.h * 0.88 * formAspect : Infinity);
   const formH = formW / formAspect;
   const formX = pane.x + pane.w / 2 - formW * 0.5;
   // on a phone the copy sits right under the pane, so the form has to stay inside it

@@ -266,7 +266,8 @@
 
   .hero__photo {
     aspect-ratio: auto;
-    height: clamp(220px, 34svh, 300px);
+    /* Рома, 2026-11-26: taller, so the form ends behind the glass and the lead sits on plain graphite */
+    height: clamp(300px, 46svh, 400px);
     margin-top: 18px;
     border-radius: 24px;
   }
