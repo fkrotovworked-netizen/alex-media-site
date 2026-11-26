@@ -10,6 +10,8 @@
 
 Проверено: 390×844/700/640/580/540, 1440 (hero, FAQ); typecheck и build чистые. В настоящем Safari не проверено.
 
+**Выложено 2026-11-26 (~15:45)** вместе с SEO: малый архив `alexmediaagency-update.zip` распакован в `public_html` (сборка `index-Cmzx6F6L.js`). Проверено curl: robots, sitemap, og.jpg, favicon.ico, manifest, ключ IndexNow — 200; http и www → 301 на https без www; html — no-cache, gzip (кэш `/assets/` отдаёт nginx Бегета: 7 дней). IndexNow отправлен — Яндекс и indexnow.org ответили 202. **Архив в `public_html` не удалён** (удаление заблокировано автопроверкой) — удалить руками: он открыт по ссылке.
+
 ## 2026-11-26 (вечер) — SEO и быстрая индексация
 
 - `scripts/seo.ts` — плагин Vite (подключён в `vite.config.ts`, в `index.html` метка `<!--seo-->`). Тексты берёт из `content.ts`. В `<head>`: title, description, robots, canonical на `https://alexmediaagency.ru/`, Open Graph (превью в ВК/Telegram: `public/og.jpg` 1200×630 — снимок hero), иконки, manifest, JSON-LD (Organization с ИП и ИНН, основатель, услуги с ценами «от»; WebSite; FAQPage из FAQ). В `#root` — весь текст страницы обычным HTML для роботов без JS; React заменяет его при запуске, без JS он проявляется через 2 с (не скрытый текст).
