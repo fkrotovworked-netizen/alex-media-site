@@ -4,7 +4,7 @@ import { Sheet } from '../components/Sheet';
 import BlurText from '../components/reactbits/BlurText/BlurText';
 import { content } from '../content';
 import { ConsentText } from '../components/ConsentText';
-import { chooseService, LEAD_ENDPOINT, sendLead, useService } from '../lead';
+import { chooseService, currentOrigin, LEAD_ENDPOINT, sendLead, useService } from '../lead';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
 import { clamp01, springs, toMotion } from '../motion/tokens';
@@ -57,7 +57,7 @@ export const Final = () => {
     setProblem('');
     setSending(true);
     try {
-      await sendLead({ stage: 'contact', contact: contact.trim(), service, task: task.trim(), website: trapRef.current?.value });
+      await sendLead({ stage: 'contact', form: f.form, origin: currentOrigin(), contact: contact.trim(), service, task: task.trim(), website: trapRef.current?.value });
       setStep('details');
     } catch {
       setProblem('send');
@@ -69,7 +69,7 @@ export const Final = () => {
   const onDetails = (event: FormEvent) => {
     event.preventDefault();
     // the answers come as an addition to the request already sent; a failure here loses nothing essential
-    if (niche.trim() || budget) sendLead({ stage: 'details', contact: contact.trim(), niche: niche.trim(), budget }).catch(() => {});
+    if (niche.trim() || budget) sendLead({ stage: 'details', form: f.form, origin: currentOrigin(), contact: contact.trim(), service, niche: niche.trim(), budget }).catch(() => {});
     setStep('thanks');
   };
 

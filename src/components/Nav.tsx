@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform, type MotionStyle, type MotionValue } from 'motion/react';
 import { content } from '../content';
+import { markOrigin } from '../lead';
 import { useStage } from '../motion/stage';
 import { lerp, settle, springs, toMotion } from '../motion/tokens';
 import GlassSurface from './reactbits/GlassSurface/GlassSurface';
@@ -212,7 +213,7 @@ export const Nav = () => {
           </nav>
 
           <motion.div className="nav__end" style={{ opacity: enter }}>
-            <a className="btn btn--lime btn--sm nav__cta" href={cta.href}>
+            <a className="btn btn--lime btn--sm nav__cta" href={cta.href} onClick={() => markOrigin(`Шапка: «${cta.label}»`)}>
               <span className="btn__label">{cta.label}</span>
             </a>
             <a className="btn btn--acrylic btn--sm nav__tg" href={telegram.href} target="_blank" rel="noreferrer">
@@ -263,7 +264,14 @@ export const Nav = () => {
                   </li>
                 ))}
               </ul>
-              <a className="btn btn--lime menu__cta" href={cta.href} onClick={go}>
+              <a
+                className="btn btn--lime menu__cta"
+                href={cta.href}
+                onClick={(event) => {
+                  markOrigin(`Меню: «${cta.label}»`);
+                  go(event);
+                }}
+              >
                 <span className="btn__label">{cta.label}</span>
               </a>
               <a className="btn btn--acrylic menu__cta menu__tg" href={telegram.href} target="_blank" rel="noreferrer" onClick={go}>

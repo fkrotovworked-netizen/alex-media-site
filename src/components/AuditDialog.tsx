@@ -74,7 +74,16 @@ const Panel = ({ initial, onClose }: { initial: number; onClose: () => void }) =
     setProblem('');
     setSending(true);
     try {
-      await sendLead({ stage: 'contact', contact: contact.trim(), service: a.plans[plan].service, task: task.trim(), website: trapRef.current?.value });
+      await sendLead({
+        stage: 'contact',
+        form: d.form,
+        // the button that opened the window: the free plan's or the paid one's
+        origin: `Аудит: «${initial === 0 ? a.cta.label : a.order.label}»`,
+        contact: contact.trim(),
+        service: a.plans[plan].service,
+        task: task.trim(),
+        website: trapRef.current?.value
+      });
       setDone(true);
     } catch {
       setProblem('send');

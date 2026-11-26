@@ -73,12 +73,15 @@ $contact = field($body, 'contact', $LIMIT);
 if ($contact === '') finish(422, 'contact required');
 
 $rows = array();
-foreach (array('Контакт' => 'contact', 'Услуга' => 'service', 'Задача' => 'task', 'Ниша' => 'niche', 'Бюджет' => 'budget') as $label => $key) {
+// first what was chosen and where, then the person and the task
+foreach (array('Форма' => 'form', 'Услуга / тариф' => 'service', 'Нажатая кнопка' => 'origin', 'Контакт' => 'contact', 'Задача' => 'task', 'Ниша' => 'niche', 'Бюджет' => 'budget') as $label => $key) {
   $value = field($body, $key, $LIMIT);
   if ($value !== '') $rows[$label] = $value;
 }
 
 $title = $details ? 'Дополнение к заявке' : 'Новая заявка с сайта';
+$choice = field($body, 'service', 200);
+$form = field($body, 'form', 200);
 $page = field($body, 'page', 300);
 $when = new DateTime('now', new DateTimeZone('Europe/Moscow'));
 
@@ -88,8 +91,9 @@ foreach ($rows as $k => $v) {
 }
 $html .= '<p style="font-family:sans-serif;color:#888;font-size:13px">' . safe($page !== '' ? $page : 'alexmediaagency.ru') . ' · ' . $when->format('d.m.Y H:i') . ' МСК</p>';
 
-// the subject carries the contact, so the inbox list already says who wrote
-$subject = '=?UTF-8?B?' . base64_encode($title . ': ' . cut(str_replace(array("\r", "\n"), ' ', $contact), 80)) . '?=';
+// the subject carries the choice and the contact, so the inbox list already says what and who
+$what = $choice !== '' ? $choice : ($form !== '' ? $form : 'услуга не выбрана');
+$subject = '=?UTF-8?B?' . base64_encode(($details ? 'Дополнение' : 'Заявка') . ': ' . $what . ' — ' . cut(str_replace(array("\r", "\n"), ' ', $contact), 80)) . '?=';
 $fromName = '=?UTF-8?B?' . base64_encode('Сайт Alex Media') . '?=';
 $headers = implode("\r\n", array(
   'MIME-Version: 1.0',

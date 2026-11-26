@@ -5,6 +5,7 @@ import GlassSurface from '../components/reactbits/GlassSurface/GlassSurface';
 import ShinyText from '../components/reactbits/ShinyText/ShinyText';
 import { asset } from '../asset';
 import { content } from '../content';
+import { markOrigin } from '../lead';
 import { useStage } from '../motion/stage';
 import { clamp01, easeInOut, lerp, settle } from '../motion/tokens';
 import './Hero.css';
@@ -101,7 +102,7 @@ export const Hero = () => {
         </div>
 
         <motion.div className="hero__actions" style={{ opacity: actionsIn, y: actionsY }}>
-          <a className="btn btn--lime" href={primary.href}>
+          <a className="btn btn--lime" href={primary.href} onClick={() => markOrigin(`Первый экран: «${primary.label}»`)}>
             <span className="btn__label">{primary.label}</span>
           </a>
           <a className="btn btn--outline" href={secondary.href}>

@@ -25,8 +25,10 @@ export const cors = (origin) => ({
 /** The same request in two forms: rows for Telegram's HTML and for the letter. */
 const describe = (lead) => {
   const rows = [
+    ['Форма', lead.form],
+    ['Услуга / тариф', lead.service],
+    ['Нажатая кнопка', lead.origin],
     ['Контакт', lead.contact],
-    ['Услуга', lead.service],
     ['Задача', lead.task],
     ['Ниша', lead.niche],
     ['Бюджет', lead.budget],
@@ -51,7 +53,7 @@ const toEmail = async (env, { title, rows }, ref) => {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: 'Alex Media <onboarding@resend.dev>', to: [env.LEAD_EMAIL], subject: `${title}: ${rows[0]?.[1] ?? ''}`, html })
+    body: JSON.stringify({ from: 'Alex Media <onboarding@resend.dev>', to: [env.LEAD_EMAIL], subject: `${title}: ${lead.service || lead.form || 'услуга не выбрана'} — ${lead.contact}`, html })
   });
   if (!res.ok) throw new Error(`email ${res.status}`);
 };
@@ -79,6 +81,8 @@ export const handleLead = async (request, env, origin) => {
 
   const lead = {
     stage: body.stage === 'details' ? 'details' : 'contact',
+    form: clean(body.form),
+    origin: clean(body.origin),
     contact: clean(body.contact),
     service: clean(body.service),
     task: clean(body.task),

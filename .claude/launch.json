@@ -4,9 +4,27 @@
     {
       "name": "alex-media",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5183,
       "autoPort": true
+    },
+    {
+      "name": "alex-media-lead",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "VITE_LEAD_ENDPOINT=/send.php",
+        "npm",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5185",
+        "--strictPort"
+      ],
+      "port": 5185
     }
   ]
 }

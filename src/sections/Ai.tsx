@@ -80,7 +80,7 @@ export const Ai = () => {
         </div>
 
         <motion.div className="ai__cta" style={{ opacity: ctaIn }}>
-          <a className="btn btn--acrylic" href={cta.href} onClick={() => chooseService(cta.service)}>
+          <a className="btn btn--acrylic" href={cta.href} onClick={() => chooseService(cta.service, `Блок AI: «${cta.label}»`)}>
             <span className="btn__dot" aria-hidden="true" />
             <span className="btn__label">{cta.label}</span>
           </a>

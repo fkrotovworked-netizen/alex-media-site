@@ -219,6 +219,8 @@ export const content = {
     // the sign-up window: the plan, a line about the business, a contact; fields and consent as in the final form
     dialog: {
       label: 'Запись на разбор',
+      // the name of this form in the letter
+      form: 'Окно записи на аудит',
       title: 'Какой разбор нужен?',
       close: 'Закрыть',
       plan: 'Формат',
@@ -482,6 +484,8 @@ export const content = {
   },
   final: {
     label: 'Старт',
+    // the name of this form in the letter
+    form: 'Форма внизу страницы («Есть задача?»)',
     title: ['Есть задача?', 'Давайте сделаем из неё работающую систему.'],
     lead: 'Расскажите, что хотите изменить. Мы подскажем, с чего начать.',
     field: 'Телефон или Telegram',

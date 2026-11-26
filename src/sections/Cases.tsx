@@ -4,6 +4,7 @@ import { SectionHead } from '../components/SectionHead';
 import OptionWheel from '../components/reactbits/OptionWheel/OptionWheel';
 import { locked as lockedCases, wheel, type CaseStudy } from '../cases';
 import { content } from '../content';
+import { markOrigin } from '../lead';
 import { useReveal } from '../motion/reveal';
 import { useStage } from '../motion/stage';
 import { tick } from '../motion/tick';
@@ -140,7 +141,7 @@ const Yours = () => {
       <p className="preview__headline preview__headline--yours">{yours.title}</p>
       <p className="preview__note">{yours.text}</p>
       <div className="preview__foot preview__foot--yours">
-        <a className="btn btn--lime btn--sm" href="#contact">
+        <a className="btn btn--lime btn--sm" href="#contact" onClick={() => markOrigin(`Кейсы: «${yours.cta}»`)}>
           <span className="btn__label">{yours.cta}</span>
         </a>
       </div>

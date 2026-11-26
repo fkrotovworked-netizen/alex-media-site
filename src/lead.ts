@@ -4,12 +4,25 @@ import { useSyncExternalStore } from 'react';
 // so the request says what it is about.
 
 let service = '';
+// the button that brought the visitor to the form ("Цены: «Лидогенерация под ключ» — от 35 000 ₽/мес"):
+// it goes into the request, so the letter says what exactly was chosen and where
+let origin = '';
 const listeners = new Set<() => void>();
+const notify = () => listeners.forEach((listener) => listener());
 
-export const chooseService = (next: string) => {
+/** A price, a section or the form's own select sets the service; `from` marks the button, if there was one. */
+export const chooseService = (next: string, from?: string) => {
   service = next;
-  listeners.forEach((listener) => listener());
+  if (from !== undefined) origin = from;
+  notify();
 };
+
+/** A button that leads to the form without choosing a service (the header, the first screen, the cases). */
+export const markOrigin = (from: string) => {
+  origin = from;
+};
+
+export const currentOrigin = () => origin;
 
 const subscribe = (listener: () => void) => {
   listeners.add(listener);
@@ -27,6 +40,10 @@ export const LEAD_ENDPOINT: string | null = import.meta.env.VITE_LEAD_ENDPOINT |
 
 export type Lead = {
   stage: 'contact' | 'details';
+  /** which form on the page: the letter's first line */
+  form: string;
+  /** the button that led to the form, with the plan and price it showed */
+  origin?: string;
   contact: string;
   service?: string;
   task?: string;

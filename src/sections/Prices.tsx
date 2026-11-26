@@ -61,7 +61,7 @@ export const Prices = () => {
                 <a
                   className={`btn btn--sm price__cta ${item.popular ? 'btn--lime' : 'btn--acrylic'}`}
                   href="#contact"
-                  onClick={() => chooseService(item.service)}
+                  onClick={() => chooseService(item.service, `Цены: «${item.name}» — ${item.per ? `${from} ${item.price} ${item.per}` : item.price}`)}
                 >
                   <span className="btn__label">{request}</span>
                 </a>
@@ -79,7 +79,7 @@ export const Prices = () => {
             <p className="pick__copy">
               <strong>{pick.title}</strong> <span>{pick.text}</span>
             </p>
-            <a className="btn btn--lime btn--sm" href="#contact" onClick={() => chooseService(pick.service)}>
+            <a className="btn btn--lime btn--sm" href="#contact" onClick={() => chooseService(pick.service, `Цены: «${pick.title}» → ${pick.cta}`)}>
               <span className="btn__label">{pick.cta}</span>
             </a>
           </div>
