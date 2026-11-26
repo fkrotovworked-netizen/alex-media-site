@@ -3,3 +3,6 @@ dist
 .DS_Store
 *.local
 tools/shots
+
+# the archive for uploading to Beget
+alexmediaagency-site.zip

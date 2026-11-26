@@ -19,7 +19,8 @@ const subscribe = (listener: () => void) => {
 export const useService = () => useSyncExternalStore(subscribe, () => service);
 
 /**
- * Where requests go: the Cloudflare Worker in `worker/`, which passes them to Telegram and email.
+ * Where requests go: on Beget it is `server/send.php` beside the site (`npm run beget` sets `/send.php`),
+ * which mails them to the agency; `worker/` is the older Cloudflare receiver, unused.
  * The address comes from the build (VITE_LEAD_ENDPOINT); without it nothing is sent — and the forms say so.
  */
 export const LEAD_ENDPOINT: string | null = import.meta.env.VITE_LEAD_ENDPOINT || null;
