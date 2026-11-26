@@ -2,6 +2,15 @@
 
 Состояние на 2026-11-06. Правила и карта кода — в [CLAUDE.md](CLAUDE.md).
 
+## 2026-11-26 (вечер) — SEO и быстрая индексация
+
+- `scripts/seo.ts` — плагин Vite (подключён в `vite.config.ts`, в `index.html` метка `<!--seo-->`). Тексты берёт из `content.ts`. В `<head>`: title, description, robots, canonical на `https://alexmediaagency.ru/`, Open Graph (превью в ВК/Telegram: `public/og.jpg` 1200×630 — снимок hero), иконки, manifest, JSON-LD (Organization с ИП и ИНН, основатель, услуги с ценами «от»; WebSite; FAQPage из FAQ). В `#root` — весь текст страницы обычным HTML для роботов без JS; React заменяет его при запуске, без JS он проявляется через 2 с (не скрытый текст).
+- Сборка для корня (`BASE_PATH=/`) кладёт `robots.txt` (закрыт только `/send.php`) и `sitemap.xml` (lastmod — день сборки). Копия на GitHub Pages — `noindex, nofollow`, canonical на домен, без robots/sitemap: дубля в поиске не будет.
+- Иконки: `npm run icons` (`scripts/build-icons.mjs`) из логотипа — `favicon.ico` (16+32), `favicon.png`, `icon-192/512.png`, `apple-touch-icon.png`; `public/site.webmanifest`.
+- IndexNow: ключ `public/349f1d9accad3948c18e599af16a857d.txt`; после каждой выкладки — `npm run indexnow` (Яндекс + Bing; сам проверяет, что ключ уже на сайте).
+- `server/.htaccess`: сжатие, кэш `/assets/` на год (имена с хэшем), медиа на месяц, html/xml/txt — no-cache. **Новый `.htaccess` надо выложить на сервер** (он в архиве `npm run beget`).
+- Не сделано (нужны аккаунты Ромы/Сани): Яндекс Вебмастер и Google Search Console — подтвердить права (мета-тег добавить в `head` в `seo.ts`), отправить sitemap, «Переобход страниц»; Яндекс Бизнес (карточка организации); Метрика — номер счётчика ждём от Сани.
+
 ## 2026-11-26 (позже) — пометки в заявках
 
 - Рома: в письмах не видно, что именно выбрал человек. Теперь каждая заявка несёт `form` (какая форма) и `origin` (какая кнопка привела, с тарифом и ценой); `service` — как раньше. Письмо начинается со строк «Форма», «Услуга / тариф», «Нажатая кнопка»; тема — «Заявка: <услуга/тариф> — <контакт>» (дополнение — «Дополнение: …», в нём тоже форма, услуга и кнопка).
