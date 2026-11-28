@@ -14,7 +14,9 @@ export const springs = {
   ui: { response: 0.4, damping: 1 },
   // a long, soft travel: the lens of the process track
   glide: { response: 0.55, damping: 1 },
-  reveal: { response: 0.3, damping: 1 }
+  reveal: { response: 0.3, damping: 1 },
+  // the Krotov Work reel trailing the scroll: soft, no overshoot
+  reel: { response: 0.75, damping: 1 }
 } satisfies Record<string, SpringToken>;
 
 /** Physical spring options for Motion's `useSpring`. */

@@ -1,0 +1,870 @@
+/* ——— Krotov Work: its own world inside the page ———
+   Black, not graphite; the red of the signature instead of lime; English heads.
+   The red is ink and light — lines, the pen, a band under the cursor, a light round the button. */
+
+.kw {
+  --kw-black: #070606;
+  --kw-ink: #ede6dc;
+  --kw-ink-2: rgb(237 230 220 / 0.66);
+  --kw-ink-3: rgb(237 230 220 / 0.42);
+  --kw-line: rgb(237 230 220 / 0.12);
+  --kw-red: #d7191f;
+  --kw-hot: #ff6a58;
+
+  /* type: the heading face of GIRIN × ROMAN (Рома's pick, 2026-11-28) — capitals, tight;
+     the small type is the page's own text face in spaced capitals */
+  --kw-d: 'Dela Gothic One', 'Arial Black', Impact, sans-serif;
+  --kw-d-w: 400;
+  --kw-d-t: -0.025em;
+  --kw-d-case: uppercase;
+  --kw-d-k: 0.62;
+  --kw-l: var(--font-text);
+  --kw-l-w: 500;
+  --kw-l-t: 0.12em;
+
+  position: relative;
+  isolation: isolate;
+  color: var(--kw-ink);
+  background: var(--kw-black);
+}
+
+/* Dela Gothic's own space is narrow: the words of a name run together without this */
+.kw-who__name,
+.kw-craft__en,
+.kw-craft__w,
+.kw-works__title,
+.kw-shot__name {
+  word-spacing: 0.16em;
+}
+
+/* film grain over the black, finer than the graphite's */
+.kw::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: url('/brand/grain.png') 0 0 / 180px 180px;
+  opacity: 0.28;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.kw-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.kw-red {
+  color: var(--kw-red);
+}
+
+/* the signature (from the deck): canvas while the pen moves, the vector fill at rest */
+.sig {
+  display: block;
+  position: relative;
+}
+.sig canvas,
+.sig svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.sig.is-writing canvas,
+.sig.is-done svg {
+  display: block;
+}
+
+.kw-rec {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--kw-red);
+  animation: kw-rec 1.6s steps(1, end) infinite;
+}
+@keyframes kw-rec {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* small capitals in the label face — the only small type of these scenes */
+.kw-kicker,
+.kw-who__role,
+.kw-craft__num,
+.kw-craft__ru,
+.kw-count__all,
+.kw-shot__hud,
+.kw-here,
+.kw-shot__link,
+.kw-tab,
+.kw-btn__label {
+  font-family: var(--kw-l);
+  font-weight: var(--kw-l-w);
+  letter-spacing: var(--kw-l-t);
+  text-transform: uppercase;
+}
+
+.kw-rise {
+  display: inline-block;
+  overflow: clip;
+  overflow-clip-margin: 0.12em;
+  padding: 0.02em 0.08em 0.1em 0;
+  margin-bottom: -0.1em;
+  vertical-align: top;
+}
+.kw-rise__in {
+  display: inline-block;
+}
+
+/* ═══════════ Scene 01 — the maker ═══════════ */
+
+.kw-intro {
+  /* the graphite of the page goes dark before the scene starts */
+  background: linear-gradient(var(--g-900), var(--kw-black) min(22vh, 220px));
+  padding-top: clamp(40px, 6vh, 80px);
+  overflow: clip;
+}
+
+.kw-cursor-field {
+  /* the light fades out toward the section's top and bottom instead of being cut by them */
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(transparent, #000 140px, #000 calc(100% - 200px), transparent);
+  mask-image: linear-gradient(transparent, #000 140px, #000 calc(100% - 200px), transparent);
+}
+.kw-cursor-light {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  width: 900px;
+  height: 900px;
+  margin: -450px 0 0 -450px;
+  border-radius: 50%;
+  /* a notch brighter, with a warmer core (Рома, 2026-11-28) */
+  background: radial-gradient(closest-side, rgb(235 40 40 / 0.2), rgb(215 25 31 / 0.08) 45%, rgb(215 25 31 / 0.025) 72%, transparent);
+  transition: opacity 0.6s var(--ease-out);
+  pointer-events: none;
+}
+
+.kw-intro__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  min-height: min(92svh, 1000px);
+}
+
+/* the portrait runs from the left edge; its own dark ground dissolves into the black */
+.kw-portrait {
+  position: relative;
+  overflow: clip;
+  -webkit-mask-image:
+    linear-gradient(90deg, #000 70%, transparent 99%),
+    linear-gradient(transparent 0, #000 10%, #000 78%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, #000 70%, transparent 99%),
+    linear-gradient(transparent 0, #000 10%, #000 78%, transparent 100%);
+  mask-composite: intersect;
+}
+.kw-portrait img {
+  position: absolute;
+  inset: -4% 0;
+  width: 100%;
+  height: 108%;
+  object-fit: cover;
+  object-position: 50% 24%;
+  /* develops in the dark: the lights come up once it is on screen */
+  opacity: 0;
+  filter: brightness(0.35) contrast(1.1);
+  transition:
+    opacity 1.4s var(--ease-out),
+    filter 2.2s var(--ease-out);
+}
+.kw-portrait[data-lit] img {
+  opacity: 1;
+  filter: brightness(1) contrast(1.04);
+}
+/* the red behind the shoulders, carried a little further into the black */
+.kw-portrait__glow {
+  position: absolute;
+  left: 8%;
+  right: -10%;
+  top: 46%;
+  height: 44%;
+  background: radial-gradient(closest-side, rgb(215 25 31 / 0.2), transparent);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 2.4s var(--ease-out) 0.4s;
+  pointer-events: none;
+}
+.kw-portrait[data-lit] .kw-portrait__glow {
+  opacity: 1;
+}
+
+.kw-intro__body {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  padding: clamp(28px, 5vh, 64px) var(--gutter) clamp(56px, 9vh, 110px) 0;
+  max-width: 860px;
+}
+
+.kw-kicker {
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: var(--kw-ink-2);
+}
+.kw-kicker::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  margin-right: 12px;
+  vertical-align: middle;
+  background: var(--kw-red);
+}
+
+/* the signature crosses onto the photograph, as an autograph would */
+.kw-sig-box {
+  position: relative;
+  width: min(48vw, 860px);
+  margin: clamp(4px, 1vh, 16px) 0 0 clamp(-200px, -13vw, -80px);
+}
+.kw-sig {
+  width: 100%;
+  /* the ink's own light on the black, like the neon of the logo */
+  filter: drop-shadow(0 0 0.5px rgb(255 90 80 / 0.5)) drop-shadow(0 0 14px rgb(215 25 31 / 0.42)) drop-shadow(0 0 44px rgb(215 25 31 / 0.2));
+}
+
+.kw-who {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: clamp(4px, 1vh, 14px);
+}
+.kw-who__name {
+  font-family: var(--kw-d);
+  font-weight: var(--kw-d-w);
+  letter-spacing: calc(var(--kw-d-t) * 0.5);
+  text-transform: var(--kw-d-case);
+  font-size: calc(clamp(1.4rem, 1.9vw, 1.9rem) * var(--kw-d-k) * 1.05);
+  line-height: 1;
+}
+.kw-who__role {
+  font-size: 0.625rem;
+  line-height: 1;
+  color: var(--kw-red);
+}
+
+.kw-lead {
+  max-width: 34rem;
+  margin-top: clamp(14px, 2vh, 22px);
+  color: var(--kw-ink-2);
+  font-size: 1rem;
+  text-wrap: pretty;
+}
+
+/* ——— the crafts: four lines set large, hairlines between ——— */
+.kw-crafts {
+  margin: clamp(26px, 4vh, 46px) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--kw-line);
+}
+
+.kw-craft {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr) minmax(0, 11rem);
+  align-items: center;
+  gap: 16px;
+  padding: clamp(8px, 1.3vh, 13px) 0;
+  border-bottom: 1px solid var(--kw-line);
+  overflow: clip;
+  cursor: default;
+}
+
+.kw-craft__num {
+  font-size: 0.625rem;
+  line-height: 1;
+  color: var(--kw-red);
+}
+
+.kw-craft__en,
+.kw-craft__w {
+  font-family: var(--kw-d);
+  font-weight: var(--kw-d-w);
+  letter-spacing: var(--kw-d-t);
+  text-transform: var(--kw-d-case);
+  /* sized so the longest, PRESENTATIONS, fits its column; a notch smaller (Рома, 2026-11-28) */
+  font-size: calc(clamp(2.4rem, 4.6vw, 4.6rem) * var(--kw-d-k) * 0.76);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.kw-craft__side {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+.kw-craft__ru {
+  font-size: 0.625rem;
+  line-height: 1;
+}
+.kw-craft__line {
+  font-size: 0.75rem;
+  line-height: 1.35;
+  color: var(--kw-ink-3);
+  text-wrap: pretty;
+}
+
+/* the band under the cursor (FlowingMenu's idea): red, a marquee of the craft in black */
+.kw-craft__band {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: clip;
+  background: var(--kw-red);
+  pointer-events: none;
+}
+.kw-craft__band-in {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+}
+.kw-craft__track {
+  display: flex;
+  width: max-content;
+  animation: kw-marquee 16s linear infinite;
+  animation-play-state: paused;
+}
+.kw-craft[data-hot] .kw-craft__track {
+  animation-play-state: running;
+}
+.kw-craft__half {
+  display: flex;
+  flex: none;
+}
+.kw-craft__w {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding-right: 0.4em;
+  color: var(--kw-black);
+}
+.kw-craft__w--ru {
+  font-family: var(--kw-l);
+  font-weight: 600;
+  font-size: clamp(1rem, 1.4vw, 1.3rem);
+  letter-spacing: var(--kw-l-t);
+  text-transform: uppercase;
+}
+.kw-craft__w i {
+  font: 400 0.36em/1 var(--font-text);
+  font-style: normal;
+}
+@keyframes kw-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ═══════════ the button: dark lacquer, a red light running round it ═══════════ */
+
+.kw-btn {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 19px 26px 19px 30px;
+  border-radius: 999px;
+  overflow: clip;
+  color: #f7efe6;
+  text-decoration: none;
+  box-shadow:
+    0 18px 36px -20px rgb(215 25 31 / 0.35),
+    0 3px 8px rgb(0 0 0 / 0.7);
+  transition: box-shadow 0.4s var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+.kw-btn[data-hot] {
+  box-shadow:
+    0 26px 60px -16px rgb(215 25 31 / 0.7),
+    0 3px 8px rgb(0 0 0 / 0.7);
+}
+.kw-btn:focus-visible {
+  outline: 2px solid var(--kw-hot);
+  outline-offset: 3px;
+}
+/* the rim: light gathered where the cursor is; faint at rest */
+.kw-btn__rim {
+  position: absolute;
+  z-index: -3;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0.35;
+  transition: opacity 0.3s var(--ease-out);
+}
+/* the lacquer: deep red-black, lit from the top left, red light under it at the bottom */
+.kw-btn__body {
+  position: absolute;
+  z-index: -2;
+  inset: 1.5px;
+  border-radius: inherit;
+  background:
+    radial-gradient(90% 120% at 50% 130%, rgb(215 25 31 / 0.42), transparent 60%),
+    radial-gradient(120% 160% at 22% -30%, #3a1b1b 0%, #160a0a 48%, #070505 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    inset 0 -1px 0 rgb(255 120 100 / 0.18),
+    inset 0 -12px 22px rgb(0 0 0 / 0.55);
+}
+/* the gloss: a hard highlight across the upper half, as on lacquer */
+.kw-btn__body::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 2px;
+  height: 46%;
+  border-radius: 999px 999px 40% 40% / 999px 999px 100% 100%;
+  background: linear-gradient(rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.02));
+}
+/* the red light the cursor carries inside the lacquer */
+.kw-btn__glow {
+  position: absolute;
+  z-index: -1;
+  inset: 1.5px;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+.kw-btn[data-hot] .kw-btn__rim,
+.kw-btn[data-hot] .kw-btn__glow {
+  opacity: 1;
+}
+.kw-btn__label {
+  /* the button speaks in the Krotov Work face, not the small-caps label face */
+  font-family: var(--kw-d);
+  font-weight: var(--kw-d-w);
+  font-size: 0.8125rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 0 rgb(0 0 0 / 0.6);
+}
+.kw-btn__arrow {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin: -6px -10px -6px 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #ff3a30, #b0101a);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.35),
+    0 0 0 1px rgb(0 0 0 / 0.4);
+  font: 500 0.875rem/1 var(--font-text);
+  transition: transform 0.3s var(--ease-out);
+}
+.kw-btn:hover .kw-btn__arrow {
+  transform: translateX(3px);
+}
+
+/* ═══════════ Scene 02 — selected works ═══════════ */
+
+.kw-works {
+  --shot-h: clamp(220px, calc(100svh - 380px), 660px);
+  --shot-w: min(64vw, calc(var(--shot-h) * 1.912));
+}
+/* black back into the page's graphite, under the last frame */
+.kw-works::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(80px, 14vh, 160px);
+  background: linear-gradient(var(--kw-black), var(--g-900));
+  pointer-events: none;
+}
+
+.kw-works__track {
+  position: relative;
+  height: calc(100svh + 260svh);
+}
+
+.kw-works__pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  /* the reel is far wider than the screen: it must not widen the column */
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(12px, 2vh, 24px);
+  padding: calc(var(--nav-h) + clamp(6px, 1.6vh, 18px)) 0 clamp(20px, 3.4vh, 38px);
+  overflow: clip;
+}
+
+.kw-works__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 22rem) auto;
+  align-items: end;
+  gap: clamp(20px, 3vw, 56px);
+  width: 100%;
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+.kw-works__title {
+  margin-top: clamp(12px, 1.8vh, 20px);
+  font-family: var(--kw-d);
+  font-weight: var(--kw-d-w);
+  letter-spacing: var(--kw-d-t);
+  text-transform: var(--kw-d-case);
+  font-size: calc(clamp(2.8rem, 6vw, 6.4rem) * var(--kw-d-k));
+  line-height: 0.95;
+}
+.kw-works__title .kw-red .kw-rise__in {
+  /* the red word goes from red into black, softly, the black only at the very foot */
+  color: var(--kw-red);
+  background: linear-gradient(180deg, #e01c22 0%, #d7191f 34%, #a3121a 62%, #4d080c 84%, #120304 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.kw-works__lead {
+  color: var(--kw-ink-2);
+  font-size: 0.9375rem;
+  text-wrap: pretty;
+}
+
+.kw-count {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.kw-count__now {
+  font-family: var(--kw-d);
+  font-weight: var(--kw-d-w);
+  letter-spacing: var(--kw-d-t);
+  font-size: calc(clamp(2.8rem, 5vw, 5rem) * var(--kw-d-k));
+  line-height: 0.8;
+}
+.kw-count__all {
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: var(--kw-ink-3);
+}
+
+/* the reel: shots side by side, carried by the scroll */
+.kw-reel-box {
+  position: relative;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+}
+.kw-reel {
+  display: flex;
+  column-gap: clamp(28px, 4vw, 72px);
+  will-change: transform;
+}
+
+.kw-shot {
+  flex: none;
+  width: var(--shot-w);
+  margin: 0;
+  transform-origin: 50% 40%;
+}
+
+.kw-shot__screen {
+  position: relative;
+  aspect-ratio: 1040 / 544;
+  overflow: clip;
+  border-radius: 8px;
+  background: #000;
+  box-shadow:
+    0 0 0 1px rgb(237 230 220 / 0.1),
+    0 40px 90px -30px rgb(0 0 0 / 0.9);
+}
+.kw-shot__screen video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.kw-shot__screen::after {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 2;
+  height: 64px;
+  background: linear-gradient(rgb(0 0 0 / 0.62), transparent);
+  pointer-events: none;
+}
+.kw-shot__dim {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: var(--kw-black);
+  pointer-events: none;
+}
+
+.kw-shot__hud {
+  position: absolute;
+  z-index: 3;
+  top: 18px;
+  left: 22px;
+  right: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.625rem;
+  line-height: 1;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+.kw-shot__hud > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.kw-here {
+  position: absolute;
+  z-index: 3;
+  left: 22px;
+  bottom: 18px;
+  padding: 7px 10px 6px;
+  border-radius: 999px;
+  background: var(--kw-red);
+  font-size: 0.5625rem;
+  line-height: 1;
+  color: #fff;
+}
+
+.kw-shot__cap {
+  /* flex, not an auto grid track: Safari sized the track before Dela Gothic arrived and the name ran into the line */
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  margin-top: clamp(14px, 2vh, 22px);
+}
+.kw-shot__name {
+  font-family: var(--kw-d);
+  font-weight: var(--kw-d-w);
+  letter-spacing: calc(var(--kw-d-t) * 0.6);
+  text-transform: var(--kw-d-case);
+  font-size: calc(clamp(1.5rem, 2.2vw, 2.2rem) * var(--kw-d-k) * 1.1);
+  line-height: 1;
+  white-space: nowrap;
+  flex: none;
+  padding-right: 0.08em;
+}
+.kw-shot__what {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 0.875rem;
+  color: var(--kw-ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.kw-shot__link {
+  flex: none;
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: var(--kw-ink);
+  text-decoration: none;
+  padding: 8px 0;
+  background: linear-gradient(var(--kw-red), var(--kw-red)) 0 100% / 100% 1px no-repeat;
+  transition: color 0.2s var(--ease-out);
+}
+.kw-shot__link:hover {
+  color: var(--kw-hot);
+}
+
+/* ——— under the reel: the four names on one rail, a red marker travelling with the reel ——— */
+.kw-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  width: 100%;
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.kw-tl {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  max-width: 760px;
+}
+.kw-tab {
+  padding: 0 0 14px;
+  border: 0;
+  background: none;
+  font-size: 0.6875rem;
+  line-height: 1;
+  color: var(--kw-ink-3);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.25s var(--ease-out);
+}
+.kw-tab:hover,
+.kw-tab[aria-selected='true'] {
+  color: var(--kw-ink);
+}
+.kw-tab:focus-visible {
+  outline: 2px solid var(--kw-hot);
+  outline-offset: 4px;
+}
+.kw-tl__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--kw-line);
+  pointer-events: none;
+}
+.kw-tl__marker {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: var(--kw-red);
+  box-shadow: 0 0 10px rgb(215 25 31 / 0.6);
+}
+
+.kw-cta {
+  display: flex;
+  justify-self: end;
+}
+
+/* ═══════════ narrow screens ═══════════ */
+
+@media (max-width: 899px) {
+  .kw-intro__grid {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+  .kw-portrait {
+    height: min(92vw * 1.25, 74svh);
+    -webkit-mask-image: linear-gradient(transparent 0, #000 8%, #000 70%, transparent 100%);
+    mask-image: linear-gradient(transparent 0, #000 8%, #000 70%, transparent 100%);
+  }
+  .kw-portrait img {
+    object-position: 50% 30%;
+  }
+  .kw-intro__body {
+    margin-top: -26vw;
+    padding: 0 var(--gutter) 64px;
+  }
+  .kw-sig-box {
+    width: 100%;
+    margin: 10px 0 0 -2vw;
+  }
+  .kw-craft {
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 6px 12px;
+    padding: 16px 0;
+  }
+  .kw-craft__en {
+    font-size: calc(clamp(2.3rem, 11vw, 3.4rem) * var(--kw-d-k) * 0.87);
+  }
+  .kw-craft__side {
+    grid-column: 2;
+  }
+  .kw-craft__band {
+    display: none;
+  }
+
+  .kw-works__track {
+    height: auto;
+  }
+  .kw-works__pin {
+    position: relative;
+    height: auto;
+    display: block;
+    padding: 24px 0 120px;
+  }
+  .kw-works__head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+  .kw-works__lead {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .kw-reel-box {
+    display: block;
+    margin-top: 32px;
+  }
+  .kw-reel {
+    flex-direction: column;
+    row-gap: 40px;
+    padding: 0 var(--gutter);
+  }
+  .kw-shot {
+    width: 100%;
+  }
+  .kw-shot__hud {
+    top: 14px;
+    left: 16px;
+    right: 16px;
+  }
+  .kw-here {
+    left: 16px;
+    bottom: 14px;
+  }
+  .kw-shot__cap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .kw-shot__what {
+    flex: none;
+    white-space: normal;
+  }
+  .kw-foot {
+    display: block;
+    margin-top: 40px;
+  }
+  .kw-tl {
+    display: none;
+  }
+  .kw-cta {
+    justify-content: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kw-rec {
+    animation: none;
+  }
+  .kw-portrait img,
+  .kw-portrait__glow {
+    transition: none;
+  }
+}

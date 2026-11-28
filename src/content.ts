@@ -535,6 +535,35 @@ export const content = {
       offline: 'Форма пока не подключена — заявка никуда не ушла. Напишите в Telegram, ответим там.'
     }
   },
+  // Krotov Work — the agency's production (Рома). Its own world: black, red ink, a serif, English heads.
+  krotov: {
+    kicker: 'Co-Founder · Alex Media',
+    name: 'Роман Коротков',
+    role: 'Co-Founder Alex Media',
+    // the text is Рома's own (2026-11-28), «до 80%» is his figure
+    lead: 'Разработка сайтов с «вау»-эффектом, презентации с CV в сделку до 80%, монтаж, настройка и разработка CRM. Всё под ключ.',
+    crafts: [
+      { en: 'Websites', ru: 'Сайты', line: 'Лендинги и сайты с характером — от идеи до домена' },
+      { en: 'Presentations', ru: 'Презентации', line: 'Коммерческие предложения, которые долистывают до конца' },
+      { en: 'CRM', ru: 'CRM', line: 'Заявки, сделки и напоминания — в одной системе' },
+      { en: 'Editing', ru: 'Монтаж', line: 'Рилсы, моушн-обложки и ролики' }
+    ],
+    works: {
+      eyebrow: 'Krotov Work — сайты',
+      title: 'Works',
+      lead: 'Записи экрана четырёх сайтов. Каждый открывается — посмотрите живьём.',
+      here: 'Вы здесь',
+      open: 'Открыть сайт',
+      // order — Рома, 2026-11-28
+      items: [
+        { key: 'ocean', name: 'Океанариум', what: 'Концепция сайта Оренбургского океанариума', href: 'https://fkrotovworked-netizen.github.io/oceanarium/site/', here: false },
+        { key: 'lime', name: 'Lime Fitness', what: 'Сайт фитнес-клуба, Оренбург', href: 'https://fkrotovworked-netizen.github.io/oceanarium/projects/lime/', here: false },
+        { key: 'plemya', name: 'Племя Героев', what: 'Квест-шоу для детей, Оренбург', href: 'https://plemya-geroev.ru/', here: false },
+        { key: 'alex', name: 'Alex Media', what: 'Сайт агентства — тот, на котором вы сейчас', href: 'https://alexmediaagency.ru/', here: true }
+      ],
+      cta: { label: 'Обсудить проект' }
+    }
+  },
   footer: {
     about: 'Агентство лидогенерации Александра Гирина. Заявки, сайты, CRM и AI — в одной системе.',
     contactsTitle: 'контакты',

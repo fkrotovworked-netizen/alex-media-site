@@ -10,6 +10,8 @@ import { Cases } from './sections/Cases';
 import { Faq } from './sections/Faq';
 import { Final } from './sections/Final';
 import { Hero } from './sections/Hero';
+import { KrotovIntro, KrotovWorks } from './sections/krotov/Krotov';
+import { KrotovCut } from './sections/krotov/KrotovCut';
 import { Prices } from './sections/Prices';
 import { Process } from './sections/Process';
 import { Reviews } from './sections/Reviews';
@@ -47,6 +49,9 @@ const Page = () => {
         <Audit />
         <Process />
         <About />
+        <KrotovCut />
+        <KrotovIntro />
+        <KrotovWorks />
         <Prices />
         <Reviews />
         <Faq />

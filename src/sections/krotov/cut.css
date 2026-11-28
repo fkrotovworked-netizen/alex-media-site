@@ -1,0 +1,113 @@
+/* ——— «Росчерк»: the cut from Alex Media into Krotov Work ——— */
+
+.kw.cut {
+  height: 230svh;
+  background: transparent;
+}
+/* the scene after the cut starts on black already */
+.cut + .kw-intro {
+  background: var(--kw-black);
+}
+
+.cut-pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: clip;
+}
+
+.cut-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--gutter);
+}
+.cut-layer--am {
+  background: var(--g-900);
+  color: var(--ink);
+}
+.cut-layer--kw {
+  color: var(--kw-ink);
+  /* a little red ink bleeding in from the cut */
+  background:
+    radial-gradient(60% 50% at 50% 60%, rgb(215 25 31 / 0.1), transparent),
+    var(--kw-black);
+}
+
+/* the agency's own voice: mono eyebrow, Unbounded */
+.cut-eyebrow {
+  font: 500 0.6875rem/1 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.cut-eyebrow--under {
+  margin-top: clamp(18px, 3vh, 30px);
+}
+.cut-am-word {
+  margin-top: clamp(16px, 2.4vh, 26px);
+  font: 560 clamp(3rem, 11vw, 11rem) / 0.95 var(--font-display);
+  letter-spacing: -0.06em;
+  color: var(--ink-satin);
+  white-space: nowrap;
+}
+
+/* Krotov Work's voice: Dela Gothic capitals, spaced small capitals */
+.cut-kw-eyebrow {
+  font: var(--kw-l-w) 0.6875rem/1 var(--kw-l);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--kw-ink-2);
+}
+.cut-kw-word {
+  margin-top: clamp(16px, 2.4vh, 26px);
+  font: 400 clamp(2.4rem, 8.4vw, 8.6rem) / 0.9 var(--kw-d);
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  color: var(--kw-ink);
+  white-space: nowrap;
+}
+
+.cut-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* W × the diagonal (see KrotovCut.tsx) */
+  width: 160vmax;
+  height: 150vmax;
+  margin: -75vmax 0 0 -80vmax;
+  overflow: clip;
+  will-change: transform;
+}
+.cut-inner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100vw;
+  height: 100svh;
+  margin: -50svh 0 0 -50vw;
+  will-change: transform;
+}
+.cut-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 150vmax;
+  margin: -75vmax 0 0 -1px;
+  background: linear-gradient(transparent, var(--kw-hot) 16%, var(--kw-red) 50%, var(--kw-hot) 84%, transparent);
+  box-shadow:
+    0 0 14px rgb(215 25 31 / 0.8),
+    0 0 48px rgb(215 25 31 / 0.4);
+  will-change: transform;
+}
+
+@media (max-width: 899px) {
+  .kw.cut {
+    height: 200svh;
+  }
+}
